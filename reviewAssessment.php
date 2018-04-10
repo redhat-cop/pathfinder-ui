@@ -236,8 +236,6 @@ print "<tr><td>" . $allQuestions[$i] . "</td><td>" . $allAnswers[$i] . "</td><td
 <option value="MEDIUM">Medium</option>
 <option value="LARGE">Large</option>
 <option value="XLarge">Extra Large</option>
-<option value="XXLarge">Extra Extra Large</option>
-<option value="XXXLarge">Extra Extra Extra Large</option>
 </select> 
 <h4>Supporting Notes</h4>
 <input type="text" name="supportingNotes">
