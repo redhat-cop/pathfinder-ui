@@ -49,7 +49,7 @@ putMenu();
 						<section>
 							<div class="content">
 								<header>
-									<a href="http://pathtest-pathfinder.6923.rh-us-east-1.openshiftapps.com/" target=_blank class="icon fa-files-o"><span class="label">Icon</span></a>
+									<a href="survey.php" target=_blank class="icon fa-files-o"><span class="label">Icon</span></a>
 									<h3>Run the assessment questionnaire.</h3>
 								</header>
 								<p>Questions to start you on your way.</p>
