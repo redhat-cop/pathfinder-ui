@@ -197,9 +197,23 @@ $bubbleData .= '{text: "' . $key . '", count: "' . $value . '"},';
 <tbody>     
     
 <?php 
-for($i = 0, $l = count($allQuestions); $i < $l; ++$i) {
 
-print "<tr><td>" . $allQuestions[$i] . "</td><td>" . $allAnswers[$i] . "</td><td>" . $allRatings[$i] . "</td></tr>"; 
+for($i = 0, $l = count($allQuestions); $i < $l; ++$i) {
+switch ($allRatings[$i]) {
+ case "RED":
+ 		$fontCol = "#FF0000";
+ 		break;
+ case "AMBER":
+ 		$fontCol = "#FCC200";
+ 		break;
+ case "GREEN":
+ 		$fontCol = "#006400";
+ 		break;
+ case "UNKNOWN":
+ 		$fontCol = "#808080";
+ 		break;
+}
+print "<tr><td>" . $allQuestions[$i] . "</td><td>" . $allAnswers[$i] . "</td><td><font color='" . $fontCol . "'>" . $allRatings[$i] . "</font></td></tr>"; 
 
 }
 
@@ -288,7 +302,7 @@ $(document).ready(function () {
 });
 </script>  
 
-  <script src="http://phuonghuynh.github.io/js/bower_components/d3/d3.min.js"></script>
+<!--   <script src="http://phuonghuynh.github.io/js/bower_components/d3/d3.min.js"></script>
   <script src="http://phuonghuynh.github.io/js/bower_components/d3-transform/src/d3-transform.js"></script>
   <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/extarray.js"></script>
   <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/misc.js"></script>
@@ -296,7 +310,18 @@ $(document).ready(function () {
   <script src="http://phuonghuynh.github.io/js/bower_components/microplugin/src/microplugin.js"></script>
   <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/bubble-chart.js"></script>
   <script src="assets/js/central-click.js"></script>
-  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/plugins/lines/lines.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/plugins/lines/lines.js"></script> -->
+
+  <script src="assets/js/d3.min.js"></script>
+  <script src="assets/js/d3-transform.js"></script>
+  <script src="assets/js/extarray.js"></script>
+  <script src="assets/js/misc.js"></script>
+  <script src="assets/js/micro-observer.js"></script>
+  <script src="assets/js/microplugin.js"></script>
+  <script src="assets/js/bubble-chart.js"></script>
+  <script src="assets/js/central-click.js"></script>
+  <script src="assets/js/lines.js"></script>
+
 
 	</body>
 </html>
