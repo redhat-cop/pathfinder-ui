@@ -13,6 +13,8 @@
 		<meta name="keywords" content="" />
 		<link rel="stylesheet" href="assets/css/main.css" />
       <link rel="stylesheet" type="text/css" href="http://overpass-30e2.kxcdn.com/overpass.css"/>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 	</head>
 	<body class="is-preload">
 
@@ -67,10 +69,18 @@ $custId = $_REQUEST['customer'];
 if (isset($_REQUEST['customer'])) {
 
 print "<a href=reviewTableView.php?customer=" . $_REQUEST['customer'] . "><button type='button'>Get Pane View</button></a>";
+
+print '<br><br>
+Assessed: 
+<div id="jqmeter-horizontal2"></div>
+Reviewed:
+<div id="jqmeter-horizontal3"></div>
+<br>';
 }
 ?>
-    <div id="piechartAss" style="width: 500px; height: 500px; float: left;"></div>
-<!--      <div id="piechartReview" style="width: 300px; height: 300px;"></div>  -->
+
+<!--     <div id="piechartAss" style="width: 500px; height: 500px; float: left;"></div>
+ --><!--      <div id="piechartReview" style="width: 300px; height: 300px;"></div>  -->
 
 		</form>	
 	
@@ -116,7 +126,7 @@ $uurl = "http://pathtest-pathfinder.6923.rh-us-east-1.openshiftapps.com/api/path
 #print $uurl . "<br>";
 $aData = file_get_contents($uurl);
 $a = json_decode($aData, true);
-$businessPriority = $a['payload']['BUSPRIORITY'];
+$businessPriority = $a['payload']["BUSPRIORITY"];
 
 
 
@@ -152,7 +162,8 @@ print "</tr>";
 }
 print "	 </table>";
 }
-
+$allReviewed = $totalReviewed + $totalNotReviewed;
+$allAssessments = $totalAssessed + $totalUnassessed;
 	 ?>
 
 	 </div>
@@ -168,14 +179,17 @@ print "	 </table>";
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.tablesorter.js"></script>
-<!-- 			<script src="assets/js/jquery.tablesorter.pager.js"></script> -->
+
 			<script src="assets/js/browser.min.js"></script>
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
          <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
          <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script> 
+			<script src="assets/js/jquery.tablesorter.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+ 
  
   <script type="text/javascript" >
 $(document).ready(function() 
@@ -238,7 +252,27 @@ $(document).ready(function()
  
 </script> 
 
-	 
+			<script src="assets/js/jqmeter.min.js"></script>
+
+<script>
+$(document).ready(function(e) {
+	var goal = <?php echo $allAssessments; ?>;
+	var assessed = <?php echo $totalAssessed; ?>;
+	var reviewed = <?php echo $totalReviewed;?>
+//	console.log("Assessed: " + assessed);
+	goal = goal.toString();
+	assessed = assessed.toString();
+	reviewed = reviewed.toString();
+//  $('#jqmeter-horizontal').jQMeter({goal:'100',raised: '50',width:'300px'});
+  $('#jqmeter-horizontal2').jQMeter({goal:goal,raised: assessed,width:'290px',height:'40px',bgColor:'#dadada',barColor:'#9b9793',animationSpeed:100,displayTotal:true});
+  $('#jqmeter-horizontal3').jQMeter({goal:goal,raised: reviewed,width:'290px',height:'40px',bgColor:'#dadada',barColor:'#9b9793',animationSpeed:100,displayTotal:true});
+//  $('#jqmeter-horizontal3').jQMeter({goal:goal,raised:reviewed,width:'160px',height:'40px',bgColor:'#bfb345',barColor:'#f3e45b',animationSpeed:600});
+//  $('#jqmeter-vertical').jQMeter({goal:'10,000',raised:'9,000',meterOrientation:'vertical',width:'50px',height:'200px',barColor:'#d9235c'});
+//  $('#jqmeter-vertical2').jQMeter({goal:'10,000',raised:'4,000',meterOrientation:'vertical',width:'30px',height:'150px',barColor:'#93d5c7',bgColor:'#e1e1e1',displayTotal:false,animationSpeed:400});
+
+});
+</script>
+	 
 
 	</body>
 </html>
