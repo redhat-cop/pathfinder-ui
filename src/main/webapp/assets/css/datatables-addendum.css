@@ -1,0 +1,42 @@
+#exampleModal{
+	top:150px;
+}
+#wrapper{
+	width:90%;
+	margin: auto;
+}
+#buttonbar{
+	position:relative;
+	top:45px;
+	z-index: 2146013764;
+	width: 50%; /* so it doesnt go over the search filter box*/
+}
+table.dataTable tbody td {
+  padding: 0px 0px;
+  padding-right:  4px;
+  padding-left:   4px;
+  vertical-align: middle;
+}
+.progress{
+	margin-bottom: 0px;
+}
+.btn-edit{
+	width: 25px;
+	height:25px;
+	background-image: url(https://cdn2.iconfinder.com/data/icons/web/512/Wrench-32.png); 
+	background-repeat: no-repeat;
+}
+.btn-delete{
+	width: 25px;
+	height:25px;
+	background-image: url(https://cdn2.iconfinder.com/data/icons/web/512/Trash_Can-32.png);  
+	background-repeat: no-repeat;
+}
+
+@media print {
+	h1 {page-break-before: always;}
+}
+
+.progress-bar-success {
+     background: rgba(00, 250, 00, .1);
+}
