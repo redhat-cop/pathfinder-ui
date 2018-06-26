@@ -41,9 +41,9 @@ public class Controller{
 //      properties = new Properties();
 //      properties.load(Controller.class.getClassLoader().getResourceAsStream("pathfinder-ui.properties"));
 //    }
-    System.out.println("request for property '"+name+"'");
-    System.out.println(" - System.getProperty("+name+")='"+System.getProperty(name)+"'");
-    System.out.println(" - System.getenv("+name+")='"+System.getenv(name)+"'");
+//    System.out.println("request for property '"+name+"'");
+//    System.out.println(" - System.getProperty("+name+")='"+System.getProperty(name)+"'");
+    System.out.println("Request for System.getenv("+name+")='"+System.getenv(name)+"'");
     
     
 //    if (null!=properties.getProperty(name)){

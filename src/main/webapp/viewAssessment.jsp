@@ -156,11 +156,6 @@ function onClickHandlers(myChart) {
 						<h2>Assessment for: <span id="applicationName"></span></h2>
 						<script>
 						  
-						  //var dataTableColorCfg=new Object();
-							//dataTableColorCfg["UNKNOWN"]="#808080";
-							//dataTableColorCfg["RED"]="#cc0000";
-							//dataTableColorCfg["AMBER"]="#ec7a08";
-							//dataTableColorCfg["GREEN"]="#92d400";
 							$(document).ready(function() {
 								//var canvas = document.getElementById("pieChart");
 								var xhr = new XMLHttpRequest();
@@ -221,23 +216,6 @@ function onClickHandlers(myChart) {
 
     							onClickHandlers(myDoughnutChart);  
 									
-									// OnClick driving the table of data
-									//canvas.onclick=function(evt) {
-							    //  var activePoints=myDoughnutChart.getElementsAtEvent(evt);
-							    //  if (activePoints[0]) {
-							    //    var chartData=activePoints[0]['_chart'].config.data;
-							    //    var idx=activePoints[0]['_index'];
-									//		
-							    //    var label=chartData.labels[idx];
-							    //    var value=chartData.datasets[0].data[idx];
-									//		
-							    //    var table=$('#example').DataTable();
-							    //    table.columns(2).search(label).draw();
-							    //  }
-							    //};
-							    
-							    //console.log("data="+data);
-							    
 							    // ### LOAD DATATABLE DATA ###
 									$('#example').DataTable( {
 //							        "ajax": {
@@ -286,18 +264,13 @@ function onClickHandlers(myChart) {
 <%
 if ("true".equalsIgnoreCase(request.getParameter("review"))){
 %>
-<script>
-	if (null!=document.getElementById("AssessmentId")){
-		document.getElementById("AssessmentId").value=assessmentId;
-	}
-</script>
 
 <p><h2>Architect Review</h2></p>
 <p>Please use this section to provide your assessment of the possible migration/modernisation plan and an effort estimation.</p>
 
-<form action="#" id="form" method="post">
-	<input type="hidden" id="AssessmentId" name="AssessmentId" value="set by script"/>
-	<input type="hidden" id="ReviewTimestamp" name="ReviewTimestamp" value="2018-03-14 03:23:29pm"/>
+<form action="/api/pathfinder/customers/<%=request.getParameter("customer")%>/applications/<%=request.getParameter("app")%>/" id="form" method="post">
+	<input type="hidden" id="AssessmentId" name="AssessmentId" value="<%=request.getParameter("assessment")%>"/>
+	<!--input type="hidden" id="ReviewTimestamp" name="ReviewTimestamp" value="2018-03-14 03:23:29pm"/-->
 	<div class="row">
 		<div class="col-sm-3">
 			<h4>Proposed Action</h4>
@@ -374,6 +347,10 @@ if ("true".equalsIgnoreCase(request.getParameter("review"))){
 		</div>
 		<div class="col-sm-3">
 			<input type="button" onclick="postReview('form');" value="Submit Review">
+			<!--
+			<input type="submit" onclick="postReview('form');" value="Submit Review">
+			-->
+			
 		</div>
 
 	</div>
@@ -386,11 +363,12 @@ if ("true".equalsIgnoreCase(request.getParameter("review"))){
 		    if (form[i].name) data[form[i].name]=form[i].value;
 		  }
 		  
-		  console.log("POSTING: "+data);
+		  console.log("POSTING: "+JSON.stringify(data));
 	    postWait(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/review", data, new function(response){
 		    // wait for the post response before redirecting or else the post will be cancelled
 		    console.log("after post: response= "+response);
-		    //window.location.href = "assessments.jsp?customerId="+customerId;
+		    // TODO: this would be much nicer if the server provided a 302 so we could use a submit rather than an artificial wait
+		    window.location.href = "assessments.jsp?customerId="+customerId;
 	    });
 		}
 	</script>

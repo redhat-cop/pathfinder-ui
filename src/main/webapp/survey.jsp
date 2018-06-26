@@ -31,8 +31,7 @@
     <div id="surveyElement"></div>
     <div id="surveyResult"></div>
 		
-		<script type="text/javascript" src="datatables-functions.js"></script>
-		<script type="text/javascript" src="utils.jsp"></script>
+		<script src="utils.jsp"></script>
 		
 		<script>
 			var surveyJsUrl=Utils.SERVER+"/api/pathfinder/survey";
