@@ -63,8 +63,14 @@ jQuery.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnC
         /* Callback user function - for event handlers etc */
         if ( typeof fnCallback == 'function' && fnCallback !== null )
         {
-            fnCallback( oSettings );
+        		console.log("calling fnCallback()");
+            //fnCallback( oSettings );
+            fnCallback( oSettings, aData);
         }
+        
+        console.log("calling fnInitComplete()");
+        this.fnInitComplete( oSettings , aData );
+        
     }, oSettings );
 };
 //////////////////// END OF PLUGINS ///////////////////////

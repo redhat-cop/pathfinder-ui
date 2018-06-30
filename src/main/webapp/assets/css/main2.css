@@ -151,6 +151,15 @@ mark {
   background-color: transparent;
   color: inherit; }
 
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0; }
+
+input, select, textarea {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  appearance: none; }
 
 /* Typography */
 html {
@@ -500,7 +509,7 @@ input[type="radio"] {
   display: block;
   float: left;
   margin-right: -2rem;
-  opacity: 1;
+  opacity: 0;
   width: 1rem;
   z-index: -1; }
   input[type="checkbox"] + label,

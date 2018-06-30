@@ -13,8 +13,29 @@ function send(action, uri, data){
     xhr.send();
   }
   xhr.onloadend = function () {
-    $('#example').dataTable().fnReloadAjax();
+  	//var table1=$('#example').DataTable();
+  	//var oSettings=table1.fnSettings();
+  	//console.log("table="+JSON.stringify(table1));
+  	//console.log("oSettings="+JSON.stringify(oSettings));
+  	
+  	$('#example').DataTable().ajax.reload(
+  		function(json){
+  		  // ideally we'd just call fnInitComplete but sadly i can't find that function embedded in the datatable object yet
+  			onDatatableRefresh(json);
+  			//table.fnSettings.fnInitComplete(null, json);
+  		}
+  	);
+  	
+    //$('#example').dataTable().ajax.reload();// new function(json){console.log("json="+json);}, true );
+    //$('#example').dataTable().fnReloadAjax(null, onDatatableRefresh, null);
+//    if (undefined!=postAction){
+//    	postAction();
+//    }
   };
+}
+
+function afterRefresh(json){
+	console.log("afterRefresh: "+json);
 }
 
 function post(uri, data){
@@ -28,6 +49,14 @@ function postWait(url, data, callback){
 	xhr.onloadend = function () {
 	  callback(xhr.responseText);
 	};
+}
+
+function deleteItem(id){
+	if (!confirm("Are you sure?")){
+		return false;
+	}else{
+  	httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+id);
+	}
 }
 
 function httpDelete(uri, data){

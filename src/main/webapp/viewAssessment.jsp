@@ -56,7 +56,7 @@
 					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
 						// ### Populate the header with the Customer Name
 						document.getElementById("customerName").innerHTML=customer.CustomerName;
-						document.getElementById("breadcrumb1").innerHTML="<a href='assessments.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
+						document.getElementById("breadcrumb1").innerHTML="<a href='assessments-v2.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
 
 					});
 					
@@ -230,6 +230,7 @@ function onClickHandlers(myChart) {
 							        "paging":         false,
 							        "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
 							        "pageLength" : 10, // default page entries
+							        "bInfo" : false, // removes "Showing N entries" in the table footer
 							        "searching" : true,
 							        //"order" : [[1,"desc"],[2,"desc"],[0,"asc"]],
 							        "columns": [
@@ -368,7 +369,7 @@ if ("true".equalsIgnoreCase(request.getParameter("review"))){
 		    // wait for the post response before redirecting or else the post will be cancelled
 		    console.log("after post: response= "+response);
 		    // TODO: this would be much nicer if the server provided a 302 so we could use a submit rather than an artificial wait
-		    window.location.href = "assessments.jsp?customerId="+customerId;
+		    window.location.href = "assessments-v2.jsp?customerId="+customerId;
 	    });
 		}
 	</script>

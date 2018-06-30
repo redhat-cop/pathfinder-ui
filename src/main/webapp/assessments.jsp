@@ -47,7 +47,6 @@
 				
 				<script>
 					var customerId=Utils.getParameterByName("customerId");
-					//var customerGuid;
 					var appsCount=assessed=unassessed=notReviewed=reviewed=0;
 					
 					$(document).ready(function() {
@@ -58,27 +57,19 @@
 							// ### Populate the header with the Customer Name
 							document.getElementById("customerName").innerHTML=customer.CustomerName;
 							document.getElementById("breadcrumb").innerHTML=customer.CustomerName;
-							//customerGuid=customer.CustomerId;
 						});
 						
 						// ### Populate the progress bar
 						httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applicationAssessmentProgress", function(progress){
-						  //console.log("app.count="+progress.Appcount+", assessed="+progress.Assessed+", reviewed="+progress.Reviewed);
-						  progress.Appcount=progress.Appcount.toString();
-						  progress.Assessed=progress.Assessed.toString();
-						  progress.Reviewed=progress.Reviewed.toString();
-						  if (progress.Appcount == progress.Assessed && progress.Appcount == progress.Reviewed) {
-								console.log("App Count is the same as assessed");			
-								document.getElementById("allDone").innerHTML="<img src=images/ok-48.png>";		  
+						  if (progress.Appcount.toString() == progress.Assessed.toString() && progress.Appcount.toString() == progress.Reviewed.toString()) {
+								document.getElementById("allDone").innerHTML="<img src=images/ok-48.png>";
 						  }
-						  $('#jqmeter-assessed').jQMeter({goal:progress.Appcount,raised:progress.Assessed,width:'290px',height:'40px',bgColor:'#dadada',barColor:'#9b9793',animationSpeed:100,displayTotal:true});
-						  $('#jqmeter-reviewed').jQMeter({goal:progress.Appcount,raised:progress.Reviewed,width:'290px',height:'40px',bgColor:'#dadada',barColor:'#9b9793',animationSpeed:100,displayTotal:true});
+						  //$('#jqmeter-assessed').jQMeter({goal:progress.Appcount,raised:progress.Assessed,width:'290px',height:'40px',bgColor:'#dadada',barColor:'#9b9793',animationSpeed:100,displayTotal:true});
+						  //$('#jqmeter-reviewed').jQMeter({goal:progress.Appcount,raised:progress.Reviewed,width:'290px',height:'40px',bgColor:'#dadada',barColor:'#9b9793',animationSpeed:100,displayTotal:true});
 							
+							setProgress("assessedProgress", (100/progress.Appcount.toString())*progress.Assessed.toString(), "Assessed");
+							setProgress("reviewedProgress", (100/progress.Appcount.toString())*progress.Reviewed.toString(), "Reviewed");
 						});
-						
-						
-						
-						
 						
 					});
 				
@@ -89,6 +80,7 @@
 						
 						<!-- ### Progress -->
 						
+						<!--
 						<script src="assets/js/jqmeter.min.js"></script>
 						Assessed
 						<div id="jqmeter-assessed"></div>
@@ -102,9 +94,61 @@
 							.vertical.outer-therm{position:relative;}
 							.vertical.inner-therm{position:absolute;bottom:0;}
 						</style>
+						-->
 						<div id="allDone"></div>
-						<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Report</button></a>
 						
+						
+						
+						<script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
+						<style>
+							.progress-bar {
+							  margin: 20px;
+							  width: 90%;
+							  height: 30px;
+							  background-color: #ccc;
+							}
+						</style>
+						
+						<h2>Progress</h2>
+						<div id="assessedProgress" class="progress-bar"></div>
+						<div id="reviewedProgress" class="progress-bar"></div>
+						
+						<script>
+							function setProgress(progressBar, percentage, text){
+								var bar = new ProgressBar.Line(document.getElementById(progressBar), {
+								  strokeWidth: 100,
+								  easing: 'easeInOut',
+								  duration: 1400,
+								  color: '#FFEA82',
+								  trailColor: '#ccc',
+								  trailWidth: 300,
+								  svgStyle: {width: '100%', height: '100%'},
+								  text: {
+								    style: {
+								      // Text color.
+								      // Default: same as stroke color (options.color)
+								      color: '#333',
+								      position: 'relative',
+								      right: '0px',
+								      top: '-28px',
+								      padding: 0,
+								      margin: 0,
+								      transform: null
+								    },
+								    autoStyleContainer: false
+								  },
+								  from: {color: '#cc0000'},
+								  to: {color: '#32CD32'},
+								  step: (state, bar) => {
+								    bar.path.setAttribute('stroke', state.color);
+								    bar.setText(Math.round(bar.value() * 100) + '% '+text);
+								  }
+								});
+								bar.animate(percentage/100);  // Number from 0.0 to 1.0
+							}
+						</script>
+						
+						<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>View Report</button></a>
 						
 						<!-- ### Pie Chart Canvas -->
 						<div id="piechartAss" style="width: 500px; height: 500px; float: left;"></div>

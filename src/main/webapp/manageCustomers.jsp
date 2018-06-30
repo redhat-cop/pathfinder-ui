@@ -34,13 +34,7 @@
 		<!-- #### DATATABLES ### -->
 		<script>
 
-			function deleteItem(id){
-				if (!confirm("Are you sure?")){
-					return false;
-				}else{
-			  	httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+id);
-				}
-			}
+			
 			// mat - move this to the edit form script, this is not datatable code
 			function load(id){
 			  document.getElementById("edit-ok").innerHTML="Update";
@@ -74,6 +68,7 @@
 			        "paging":         false,
 			        "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
 			        "pageLength" : 10, // default page entries
+			        "bInfo" : false, // removes "Showing N entries" in the table footer
 			        "columns": [
 			            { "data": "CustomerName" },
 			            { "data": "CustomerDescription" },
@@ -87,11 +82,11 @@
 			              return "<a href='#' onclick='load(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>"+row["CustomerName"]+"</a>";
 									}}
 								 ,{ "targets": 2, "orderable": false, "render": function (data,type,row){
-										return "<a href='report.jsp?customerId="+row["CustomerId"]+"'>Report</a>";
+										return "";//<a href='report.jsp?customerId="+row["CustomerId"]+"'>Report</a>";
 									}}
 								 ,{ "targets": 3, "orderable": false, "render": function (data,type,row){
 								 		var percentComplete=row['CustomerPercentageComplete'];
-								 		var link="<a href='assessments.jsp?customerId="+row["CustomerId"]+"'>Assessments&nbsp;("+percentComplete+"%)</a>";
+								 		var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>Assessments&nbsp;("+percentComplete+"%)</a>";
 										return "<div class='progress'><div class='progress-bar-success' role='progressbar' aria-valuenow='"+percentComplete+"' aria-valuemin='0' aria-valuemax='100' style='width:"+percentComplete+"%'><center>"+link+"</center></div></div>";
 									}}
 			           ,{ "targets": 4, "orderable": false, "render": function (data,type,row){
