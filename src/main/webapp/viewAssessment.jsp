@@ -25,13 +25,7 @@
 			</div>
 		</section>
 		
-  	<div id="breadcrumbs">
-			<ul class="breadcrumb">
-				<li><a href="manageCustomers.jsp">Customers</a></li>
-				<li><span id="breadcrumb1"></span></li>
-				<li><span id="breadcrumb2"></span></li>
-			</ul>
-		</div>
+  	<%@include file="breadcrumbs.jsp"%>
 		
 		<section class="wrapper">
 			<div class="inner">
@@ -42,13 +36,13 @@
 				var customerId=Utils.getParameterByName("customer");
 				var appId=Utils.getParameterByName("app");
 				var assessmentId=Utils.getParameterByName("assessment");
-				var beenReviewed=false;
+				//var beenReviewed=false;
 				
 				$(document).ready(function() {
 					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId, function(application){
-						document.getElementById("breadcrumb2").innerHTML=application.Name;
+						//document.getElementById("breadcrumb2").innerHTML=application.Name;
 						document.getElementById("applicationName").innerHTML=application.Name;
-						beenReviewed=application.Review!=null;
+						//beenReviewed=application.Review!=null;
 					  //console.log("app.count="+progress.Appcount+", assessed="+progress.Assessed+", reviewed="+progress.Reviewed);
 					});
 					
@@ -56,8 +50,12 @@
 					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
 						// ### Populate the header with the Customer Name
 						document.getElementById("customerName").innerHTML=customer.CustomerName;
-						document.getElementById("breadcrumb1").innerHTML="<a href='assessments-v2.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
-
+						//document.getElementById("breadcrumb1").innerHTML="<a href='assessments-v2.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
+						
+				    if (undefined!=setBreadcrumbs){
+				      setBreadcrumbs("assessments", customer);
+				    }
+						
 					});
 					
 				});

@@ -2,13 +2,7 @@
 <html>
   
   <%@include file="head.jsp"%>
-  <!--
-  <link rel="import" href="head.jsp">
-  <link rel="import" href="nav.jsp">
-  -->
-  
 	
-	<link href="assets/css/main.css" rel="stylesheet" />
   <link href="assets/css/breadcrumbs.css" rel="stylesheet" />
   
   <!-- #### DATATABLES DEPENDENCIES ### -->
@@ -28,37 +22,29 @@
 				<p>Create customers and applications.</div>
 		</section>
 		
-  	<div id="breadcrumbs">
-			<ul class="breadcrumb">
-				<li><a href="manageCustomers.jsp">Customers</a></li>
-				<li><span id="breadcrumb"></span> Applications</li>
-			</ul>
-		</div>
+		<%@include file="breadcrumbs.jsp"%>
+  	
   	
   	<!-- #### DATATABLES ### -->
 		<script>
 			function deleteItem(custId, appId){
 			  httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+custId+"/applications/"+appId);
 			}
-			//function getParameterByName(name, url) {
-		  //  if (!url) url = window.location.href;
-		  //  name = name.replace(/[\[\]]/g, "\\$&");
-		  //  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-		  //      results = regex.exec(url);
-		  //  if (!results) return null;
-		  //  if (!results[2]) return '';
-		  //  return decodeURIComponent(results[2].replace(/\+/g, " "));
-			//}
 			$(document).ready(function() {
 					// ### Populate the breadcrumb customer names
-					var customerId=getParameterByName("customerId");
+					var customerId=Utils.getParameterByName("customerId");
 				  var xhr = new XMLHttpRequest();
-				  var url=Utils.SERVER+"/api/pathfinder/customers/"+getParameterByName("customerId");
+				  var url=Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId");
 				  xhr.open("GET", url, true);
 			    xhr.send();
 					xhr.onloadend = function () {
 					  var customer=JSON.parse(xhr.responseText);
-				    document.getElementById("breadcrumb").innerHTML=customer.CustomerName;
+				    //document.getElementById("breadcrumb").innerHTML=customer.CustomerName;
+				    
+				    if (undefined!=setBreadcrumbs){
+				      setBreadcrumbs("applications", customer);
+				    }
+				    
 				  };
 					// ### populate the customer applications in the datatable
 			    $('#example').DataTable( {

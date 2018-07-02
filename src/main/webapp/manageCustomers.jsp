@@ -6,7 +6,6 @@
   <link rel="import" href="nav.jsp">
   -->
 	
-	<link href="assets/css/main.css" rel="stylesheet" />
   <link href="assets/css/breadcrumbs.css" rel="stylesheet" />
   
   <!-- #### DATATABLES DEPENDENCIES ### -->
@@ -23,12 +22,14 @@
 				<h1>Pathfinder Admin</h1>
 				<p>Create customers and applications.</div>
 		</section>
-			
+		
+		<!--
 		<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><a href="manageCustomers.jsp">Customers</a></li>
 			</ul>
 		</div>
+		-->
 		
 		
 		<!-- #### DATATABLES ### -->

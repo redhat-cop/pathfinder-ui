@@ -15,19 +15,23 @@
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
   	
+
 		<section id="banner2">
 			<div class="inner">
-				<h1>Assessment Summary: <span id="customerName"></span></h1>
-				<p>View the results of an assessment and review output.</p>
+				<h1>Assessment Summary</h1>
+				<p>View the summary of assesssment results and review output.</p>
 			</div>
 		</section>
 		
+		<%@include file="breadcrumbs.jsp"%>
+		<!--
   	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><a href="manageCustomers.jsp">Customers</a></li>
-				<li><span id="breadcrumb"></span> / Assessments</li>
+				<li><span id="breadcrumb"></span></li>
 			</ul>
 		</div>
+		-->
 		
 		<section class="wrapper">
 			<div class="inner">
@@ -44,8 +48,12 @@
 						// ### Get Customer Details
 						httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
 							// ### Populate the header with the Customer Name
-							document.getElementById("customerName").innerHTML=customer.CustomerName;
-							document.getElementById("breadcrumb").innerHTML=customer.CustomerName;
+							//document.getElementById("customerName").innerHTML=customer.CustomerName;
+							//document.getElementById("breadcrumb").innerHTML=customer.CustomerName;
+							
+							if (undefined!=setBreadcrumbs){
+				        setBreadcrumbs("assessments", customer);
+				      }
 						});
 						
 					});
@@ -57,77 +65,16 @@
 						
 						<!-- ### Progress -->
 						
-						<!--
-						<script src="assets/js/jqmeter.min.js"></script>
-						Assessed
-						<div id="jqmeter-assessed"></div>
-						Reviewed
-						<div id="jqmeter-reviewed"></div>
-						<style>
-							.therm{height:30px;border-radius:5px;}
-							.outer-therm{margin:20px 0;}
-							.inner-therm span {color: #fff;display: inline-block;float: right;font-family: Overpass;font-size: 14px;font-weight: bold;}
-							.vertical.inner-therm span{width:100%;text-align:center;}
-							.vertical.outer-therm{position:relative;}
-							.vertical.inner-therm{position:absolute;bottom:0;}
-						</style>
-						-->
-						<div id="allDone"></div>
-						
-						
-						
-						<script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
-						<style>
-							.progress-bar {
-							  margin: 20px;
-							  width: 90%;
-							  height: 30px;
-							  background-color: #ccc;
-							}
-						</style>
-						
+						<script src="assets/js/progressbar-kimmobrunfeldt-1.0.0.js"></script>
+						<script src="assets/js/progressbar-functions.js"></script>
+						<link href="assets/css/progressbar.css" rel="stylesheet" />
 						<h2>Progress</h2>
 						<div id="assessedProgress" class="progress-bar"></div>
 						<div id="reviewedProgress" class="progress-bar"></div>
 						
-						<script>
-							function setProgress(progressBar, percentage, text){
-							  console.log("updating progress bar '"+text+"' to "+percentage+"%");
-							  document.getElementById(progressBar).innerHTML="";
-								var bar = new ProgressBar.Line(document.getElementById(progressBar), {
-								  strokeWidth: 100,
-								  easing: 'easeInOut',
-								  duration: 1400,
-								  color: '#FFEA82',
-								  trailColor: '#ccc',
-								  trailWidth: 300,
-								  svgStyle: {width: '100%', height: '100%'},
-								  text: {
-								    style: {
-								      // Text color.
-								      // Default: same as stroke color (options.color)
-								      color: '#333',
-								      position: 'relative',
-								      right: '0px',
-								      top: '-28px',
-								      padding: 0,
-								      margin: 0,
-								      transform: null
-								    },
-								    autoStyleContainer: false
-								  },
-								  from: {color: '#cc0000'},
-								  to: {color: '#32CD32'},
-								  step: (state, bar) => {
-								    bar.path.setAttribute('stroke', state.color);
-								    bar.setText(Math.round(bar.value() * 100) + '% '+text);
-								  }
-								});
-								bar.animate(percentage/100);  // Number from 0.0 to 1.0
-							}
-						</script>
-						
-						<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>View Report</button></a>
+						<center>
+							<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Generate Report</button></a>
+						</center>
 						
 						<!-- ### Pie Chart Canvas -->
 						<div id="piechartAss" style="width: 500px; height: 500px; float: left;"></div>
@@ -189,7 +136,7 @@
 					              return "<a href='viewAssessment.jsp?app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'>"+row["Name"]+"</a>";
 											}},
 					        		{ "targets": 2, "orderable": true, "render": function (data,type,row){
-					              return "<span class='"+(row["Assessed"]==true?"messageGreen'>Yes":"messageRed'><a href='survey.jsp?customerId="+customerId+"&applicationId="+row['Id']+"'>No</a>")+"</span>";
+					              return "<span class='"+(row["Assessed"]==true?"messageGreen'>Yes":"messageRed'><a href='survey-v2.jsp?customerId="+customerId+"&applicationId="+row['Id']+"'>No</a>")+"</span>";
 											}},
 											{ "targets": 3, "orderable": true, "render": function (data,type,row){
 												if (row["ReviewDate"]==null && row["Assessed"]==true){
@@ -215,22 +162,6 @@
 						    // ### END Datatable load
 
 							} );
-							
-							//var actionButton;
-							//function deleteApp(caller, appId){
-							//  actionButton=caller;
-							//  actionButton.disabled=true;
-							//	var url=Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId;
-							//	console.log("DELETE APP: "+url);
-							//	httpDelete(url);
-							//}
-							//function deleteApps(caller, appIds){
-							//  //actionButton=caller;
-							//  caller.disabled=true;
-							//	var url=Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/";
-							//	console.log("DELETE APPS: "+url+" ["+appIds+"]");
-							//	httpDelete(url, appIds);
-							//}
 							
 							
 							// ### Model form functions ###
