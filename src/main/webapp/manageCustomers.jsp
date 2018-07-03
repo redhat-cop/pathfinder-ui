@@ -57,6 +57,9 @@
 			    }
 			  }
 			}
+			function onDatatableRefresh(json){
+				buttonEnablement();
+			}
 			$(document).ready(function() {
 			    $('#example').DataTable( {
 			        "ajax": {
@@ -71,53 +74,86 @@
 			        "pageLength" : 10, // default page entries
 			        "bInfo" : false, // removes "Showing N entries" in the table footer
 			        "columns": [
+			            { "data": "CustomerId" },
 			            { "data": "CustomerName" },
 			            { "data": "CustomerDescription" },
 			            { "data": "CustomerId" },
 			            { "data": "CustomerPercentageComplete" },
 			            { "data": "CustomerId" },
-			            { "data": "CustomerId" },
 				        ]
 			        ,"columnDefs": [
 			           { "targets": 0, "orderable": true, "render": function (data,type,row){
+			              return "<input type='checkbox' name='id' value='"+row['CustomerId']+"'></input>";
+								 }},
+			           { "targets": 1, "orderable": true, "render": function (data,type,row){
 			              return "<a href='#' onclick='load(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>"+row["CustomerName"]+"</a>";
-									}}
-								 ,{ "targets": 2, "orderable": false, "render": function (data,type,row){
-										return "";//<a href='report.jsp?customerId="+row["CustomerId"]+"'>Report</a>";
-									}}
-								 ,{ "targets": 3, "orderable": false, "render": function (data,type,row){
-								 		var percentComplete=row['CustomerPercentageComplete'];
-								 		var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>Assessments&nbsp;("+percentComplete+"%)</a>";
-										return "<div class='progress'><div class='progress-bar-success' role='progressbar' aria-valuenow='"+percentComplete+"' aria-valuemin='0' aria-valuemax='100' style='width:"+percentComplete+"%'><center>"+link+"</center></div></div>";
-									}}
-			           ,{ "targets": 4, "orderable": false, "render": function (data,type,row){
-										return "<a href='manageCustomerApplications.jsp?customerId="+row["CustomerId"]+"'>Manage Applications</a>";
-									}}
-				         ,{ "targets": 5, "orderable": false, "render": function (data,type,row){
-										return "<div class='btn-image btn btn-edit' title='Edit' onclick='load(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
-									}}
-				         ,{ "targets": 6, "orderable": false, "render": function (data,type,row){
-										return "<div class='btn-image btn btn-delete' title='Delete' onclick='return deleteItem(\""+row["CustomerId"]+"\");'></div>";
-									}}
+								 }},
+								 { "targets": 3, "orderable": false, "render": function (data,type,row){
+								    return "";//<a href='report.jsp?customerId="+row["CustomerId"]+"'>Report</a>";
+								 }},
+								 { "targets": 4, "orderable": false, "render": function (data,type,row){
+							     var percentComplete=row['CustomerPercentageComplete'];
+							     var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>Assessments&nbsp;("+percentComplete+"%)</a>";
+							     return "<div class='progress'><div class='progress-bar-success' role='progressbar' aria-valuenow='"+percentComplete+"' aria-valuemin='0' aria-valuemax='100' style='width:"+percentComplete+"%'><center>"+link+"</center></div></div>";
+								  }},
+			           { "targets": 5, "orderable": false, "render": function (data,type,row){
+								    return "<a href='manageCustomerApplications.jsp?customerId="+row["CustomerId"]+"'>Manage Applications ("+row['CustomerAppCount']+")</a>";
+								  }}
+				         //,{ "targets": 6, "orderable": false, "render": function (data,type,row){
+								 //   return "<div class='btn-image btn btn-edit' title='Edit' onclick='load(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
+								 // }}
+				         //,{ "targets": 7, "orderable": false, "render": function (data,type,row){
+								 //   return "<div class='btn-image btn btn-delete' title='Delete' onclick='return deleteItem(\""+row["CustomerId"]+"\");'></div>";
+								 // }}
 			        ]
 			    } );
 			} );
+			
+			// ### enable/disable handlers for buttons on datatable buttonbar
+			$(document).on('click', "input[type=checkbox]", function() {
+				buttonEnablement();
+			});
+			buttonEnablement();
+			function buttonEnablement(){
+			  $('button[name="btnDelete"]').attr('disabled', $('#example input[name="id"]:checked').length<1);
+			}
+			// ### End: enable/disable handlers for buttons on buttonbar
+			
+			function btnDelete_onclick(caller){
+				if (!confirm("Are you sure? This will also remove any applications, assessments and/or associated reviews for the selected customers(s).")){
+						return false;
+				}else{
+				  var idsToDelete=[];
+					$('#example input[name="id"]').each(function() {
+						if ($(this).is(":checked")) {
+						  idsToDelete[idsToDelete.length]=$(this).val();
+						}
+					});
+					
+					caller.disabled=true;
+					httpDelete(Utils.SERVER+"/api/pathfinder/customers/", idsToDelete);
+				}
+			}
 		</script>
   	<div id="wrapper">
 	    <div id="buttonbar">
-	        <button style="position:relative;height:30px;width:75px;left:0px;top:0px;" class="btn" name="New"    onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+	        <button style="position:relative;height:30px;width:75px;left:0px;top:0px;"  class="btn" name="New"       onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+					<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove Customers(s)</button>
 	    </div>
 	    <div id="tableDiv">
 		    <table id="example" class="display" cellspacing="0" width="100%">
 		        <thead>
 		            <tr>
+		                <th align="left"></th>
 		                <th align="left">Customer Name</th>
 		                <th align="left">Customer Details</th>
 		                <th align="left"></th>
 		                <th align="left"></th>
 		                <th align="left"></th>
+		                <!--
 		                <th align="left">Edit</th>
 		                <th align="left">Delete</th>
+		                -->
 		            </tr>
 		        </thead>
 		    </table>

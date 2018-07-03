@@ -30,6 +30,9 @@
 			function deleteItem(custId, appId){
 			  httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+custId+"/applications/"+appId);
 			}
+			function onDatatableRefresh(json){
+				buttonEnablement();
+			}
 			$(document).ready(function() {
 					// ### Populate the breadcrumb customer names
 					var customerId=Utils.getParameterByName("customerId");
@@ -68,7 +71,7 @@
 			        ]
 			        ,"columnDefs": [
 			        	{ "targets": 0, "orderable": false, "render": function (data,type,row){
-									return "<input type='checkbox' name='appId' value='"+row['Id']+"'></input><input type='hidden' name='"+row['Id']+"_name' value='"+row['Name']+"'></input>";
+									return "<input type='checkbox' name='id' value='"+row['Id']+"'></input>";
 								}},
 				      	{ "targets": 1, "orderable": true, "render": function (data,type,row){
 									return "<a href='#' onclick='loadEntity(\""+row["Id"]+"\"); return false;' data-toggle='modal' data-target='#exampleModal'>"+row['Name']+"</a>";
@@ -89,7 +92,7 @@
 			});
 			buttonEnablement();
 			function buttonEnablement(){
-			  $('button[name="btnRemoveApps"]').attr('disabled', $('#example input[name="appId"]:checked').length<1);
+			  $('button[name="btnRemoveApps"]').attr('disabled', $('#example input[name="id"]:checked').length<1);
 			}
 			// ### End: enable/disable handlers for buttons on buttonbar
 			
@@ -97,15 +100,15 @@
 				if (!confirm("Are you sure? This will also remove any associated assessments and/or reviews for the selected application(s).")){
 						return false;
 				}else{
-				  var appIdsToDelete=[];
-					$('#example input[name="appId"]').each(function() {
+				  var idsToDelete=[];
+					$('#example input[name="id"]').each(function() {
 						if ($(this).is(":checked")) {
-						  appIdsToDelete[appIdsToDelete.length]=$(this).val();
+						  idsToDelete[idsToDelete.length]=$(this).val();
 						}
 					});
 					
 					caller.disabled=true;
-					httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameter("customerId")+"/applications/", appIdsToDelete);
+					httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameter("customerId")+"/applications/", idsToDelete);
 				}
 			}
 

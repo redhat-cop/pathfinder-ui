@@ -24,19 +24,18 @@
       </div>
       <div class="modal-body">
         <form id="form">
-        	<!-- ### Hidden ID field -->
         	<div id="form-id" class="form-group" style="display:none">
             <label for="Id" class="control-label">Customer Name:</label>
             <input id="Id" name="Id" type="text" class="form-control"/>
           </div>
-
           <div class="form-group">
             <label for="Name" class="control-label">Application Name:</label>
-            <input id="Name" name="Name" type="text" class="form-control">
+            <input id="Name" name="Name" type="text" class="form-control" onkeyup="validate()">
           </div>
           <div class="form-group">
             <label for="Stereotype" class="control-label">Application Profile:</label>
-						<select name="Stereotype" id="Stereotype" class="form-control">
+						<select name="Stereotype" id="Stereotype" class="xform-control" onchange="validate()">
+							<option value="" selected disabled hidden>Choose...</option>
 							<option value="TARGETAPP" selected>Target Application</option>
 							<option value="DEPENDENCY">Dependency</option>
 							<option value="PROFILE">Profile</option>
@@ -48,9 +47,20 @@
           </div>
         </form>
       </div>
+      <script>
+      function validate(){
+        console.log("Stereotype="+$('#Stereotype').val());
+        console.log("Name="+$('#Name').val());
+	      $('#edit-ok').attr('disabled', isEmpty($('#Stereotype').val()) || isEmpty($('#Name').val()))
+      }
+      function isEmpty(val){
+      	return val==null || val=="";
+      }
+      </script>
+      
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button id="edit-ok" type="button" data-dismiss="modal" onclick="save('form'); return false;">Create</button>
+        <button id="edit-ok" type="button" data-dismiss="modal" disabled onclick="save('form'); return false;">Create</button>
       </div>
     </div>
   </div>

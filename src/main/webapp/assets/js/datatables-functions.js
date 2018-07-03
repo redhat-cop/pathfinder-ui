@@ -21,7 +21,7 @@ function send(action, uri, data){
   	$('#example').DataTable().ajax.reload(
   		function(json){
   		  // ideally we'd just call fnInitComplete but sadly i can't find that function embedded in the datatable object yet
-  			onDatatableRefresh(json);
+  			if (undefined!=onDatatableRefresh) onDatatableRefresh(json);
   			//table.fnSettings.fnInitComplete(null, json);
   		}
   	);
@@ -60,7 +60,7 @@ function deleteItem(id){
 }
 
 function httpDelete(uri, data){
-  console.log("HTTP DELETE: "+url+" ["+data+"]");
+  console.log("HTTP DELETE: "+uri+" ["+data+"]");
   return send("DELETE", uri, data);
 }
 function put(uri, data){
