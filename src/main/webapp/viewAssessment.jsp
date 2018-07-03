@@ -20,7 +20,7 @@
   	
 		<section id="banner2">
 			<div class="inner">
-				<h1>Assessment Details for <span id="customerName"/></h1>
+				<h1>Assessment Details</h1>
 				<p>View the results of an assessment and review output.</p>
 			</div>
 		</section>
@@ -49,7 +49,7 @@
 					// ### Get Customer Details
 					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
 						// ### Populate the header with the Customer Name
-						document.getElementById("customerName").innerHTML=customer.CustomerName;
+						//document.getElementById("customerName").innerHTML=customer.CustomerName;
 						//document.getElementById("breadcrumb1").innerHTML="<a href='assessments-v2.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
 						
 				    if (undefined!=setBreadcrumbs){
@@ -151,7 +151,7 @@ function onClickHandlers(myChart) {
 					<div class="col-sm-4">
 						<!-- ### CHART GOES HERE -->
 						
-						<h2>Assessment for: <span id="applicationName"></span></h2>
+						<h2>Assessment: <span id="applicationName"></span></h2>
 						<script>
 						  
 							$(document).ready(function() {

@@ -7,7 +7,7 @@
   <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet"/>
   -->
   <link href="assets/css/bootstrap-3.3.7.min.css" rel="stylesheet" />
-	<link href="assets/css/datatables-addendum.css?v1" rel="stylesheet" />
+	<link href="assets/css/datatables-addendum.css?v2" rel="stylesheet" />
 	<!--
   <script src="assets/js/jquery-3.3.1.min.js"></script>
 	-->

@@ -60,6 +60,7 @@ function deleteItem(id){
 }
 
 function httpDelete(uri, data){
+  console.log("HTTP DELETE: "+url+" ["+data+"]");
   return send("DELETE", uri, data);
 }
 function put(uri, data){

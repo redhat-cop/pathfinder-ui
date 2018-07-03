@@ -60,35 +60,70 @@
 			        "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
 			        "pageLength" : 10, // default page entries
 			        "bInfo" : false, // removes "Showing N entries" in the table footer
+			        "order" : [[1,"asc"]],
 			        "columns": [
+			            { "data": "Id" },
 			            { "data": "Name" },
 			            { "data": "Description" },
-			            { "data": "Id" },
-			            { "data": "Id" },
 			        ]
 			        ,"columnDefs": [
-				      	 { "targets": 2, "orderable": false, "render": function (data,type,row){
-									return "<div class='btn btn-image btn-edit' title='Edit' onclick='loadEntity(\""+row["Id"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
-								}}
-			        	,{ "targets": 3, "orderable": false, "render": function (data,type,row){
-									return "<div class='btn btn-image btn-delete' title='Delete' onclick='deleteItem(\""+customerId+"\",\""+row["Id"]+"\");'></div>";
-								}}
+			        	{ "targets": 0, "orderable": false, "render": function (data,type,row){
+									return "<input type='checkbox' name='appId' value='"+row['Id']+"'></input><input type='hidden' name='"+row['Id']+"_name' value='"+row['Name']+"'></input>";
+								}},
+				      	{ "targets": 1, "orderable": true, "render": function (data,type,row){
+									return "<a href='#' onclick='loadEntity(\""+row["Id"]+"\"); return false;' data-toggle='modal' data-target='#exampleModal'>"+row['Name']+"</a>";
+								}},
+				      	//{ "targets": 3, "orderable": false, "render": function (data,type,row){
+								//	return "<div class='btn btn-image btn-edit' title='Edit' onclick='loadEntity(\""+row["Id"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
+								//}}
+			        	//,{ "targets": 4, "orderable": false, "render": function (data,type,row){
+								//	return "<div class='btn btn-image btn-delete' title='Delete' onclick='deleteItem(\""+customerId+"\",\""+row["Id"]+"\");'></div>";
+								//}}
 			        ]
 			    } );
 			} );
+			
+			// ### enable/disable handlers for buttons on datatable buttonbar
+			$(document).on('click', "input[type=checkbox]", function() {
+				buttonEnablement();
+			});
+			buttonEnablement();
+			function buttonEnablement(){
+			  $('button[name="btnRemoveApps"]').attr('disabled', $('#example input[name="appId"]:checked').length<1);
+			}
+			// ### End: enable/disable handlers for buttons on buttonbar
+			
+			function btnDelete_onclick(caller){
+				if (!confirm("Are you sure? This will also remove any associated assessments and/or reviews for the selected application(s).")){
+						return false;
+				}else{
+				  var appIdsToDelete=[];
+					$('#example input[name="appId"]').each(function() {
+						if ($(this).is(":checked")) {
+						  appIdsToDelete[appIdsToDelete.length]=$(this).val();
+						}
+					});
+					
+					caller.disabled=true;
+					httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameter("customerId")+"/applications/", appIdsToDelete);
+				}
+			}
+
 		</script>
     	<div id="wrapper">
 		    <div id="buttonbar">
-	        <button style="position:relative;height:30px;width:75px;left:0px;top:0px;" class="btn" name="New"    onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+	        <button style="position:relative;height:30px;width:75px;left:0px;top:0px;"  class="btn" name="New"    onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+					<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnRemoveApps"     disabled onclick="btnDelete_onclick(this);" type="button">Remove Application(s)</button>
 		    </div>
 		    <div id="tableDiv">
 			    <table id="example" class="display" cellspacing="0" width="100%">
 			        <thead>
 			            <tr>
+			                <th align="left"></th>
 			                <th align="left">Application Name</th>
-			                <th align="left">Application Description</th>
-			                <th align="left">Edit</th>
-			                <th align="left">Delete</th>
+			                <th align="left">Description</th>
+			                <!--th align="left">Edit</th-->
+			                <!--th align="left">Delete</th-->
 			            </tr>
 			        </thead>
 			    </table>

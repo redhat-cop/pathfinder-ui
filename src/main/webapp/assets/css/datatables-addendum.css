@@ -1,3 +1,6 @@
+tr td:first-child{
+  width: 15px;
+}
 #exampleModal{
 	top:150px;
 }
@@ -12,8 +15,7 @@
 	width: 50%; /* so it doesnt go over the search filter box*/
 }
 table.dataTable tbody td {
-  padding: 0px 0px;
-  padding-right:  4px;
+  padding: 3px 3px;
   padding-left:   4px;
   vertical-align: middle;
 }

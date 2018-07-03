@@ -158,9 +158,7 @@
 											}}
 					        ]
 						    });
-						    
 						    // ### END Datatable load
-
 							} );
 							
 							
@@ -173,12 +171,7 @@
 							  for (var i = 0, ii = form.length; i < ii; ++i) {
 							    if (form[i].name) data[form[i].name]=form[i].value;
 							  }
-							  
-							  
-							  var apps=$('#clone_newAppNames').val();
-							  console.log("apps="+apps);
-							  
-							  post(saveUrl, apps.split("\n"));
+							  post(saveUrl, $('#clone_newAppNames').val().split("\n"));
 							  form_reset();
 							}
 							
@@ -205,6 +198,9 @@
 									}
 								});
 							}
+							
+							// ### Datatable button functions ###
+							
 							function btnDelete_onclick(caller){
 								if (!confirm("Are you sure? This will remove all associated assessments and reviews.")){
 										return false;
@@ -213,31 +209,22 @@
 									$('#example input[name="appId"]').each(function() {
 										if ($(this).is(":checked")) {
 										  appIdsToDelete[appIdsToDelete.length]=$(this).val();
-											//deleteApp(caller, $(this).val());
 										}
 									});
-									//deleteApps(caller, appIdsToDelete);
 									
 									caller.disabled=true;
-									var url=Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/";
-									console.log("DELETE APPS: "+url+" ["+appIdsToDelete+"]");
-									httpDelete(url, appIdsToDelete);
-									
+									httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameter("customerId")+"/applications/", appIdsToDelete);
 								}
 							}
 							
-							
-							// ### enable/disable handlers for buttons on buttonbar
+							// ### enable/disable handlers for buttons on datatable buttonbar
 							$(document).on('click', "input[type=checkbox]", function() {
 								buttonEnablement();
 							});
 							buttonEnablement();
 							function buttonEnablement(){
-							  enabledIf($('button[name="btnCloneApps"]'),  $('#example input[name="appId"]:checked').length==1);
-							  enabledIf($('button[name="btnRemoveApps"]'), $('#example input[name="appId"]:checked').length>0);
-							}
-							function enabledIf(jqueryObj, condition){
-								jqueryObj.attr("disabled", !condition);
+							  $('button[name="btnCloneApps"]').attr('disabled', $('#example input[name="appId"]:checked').length!=1);
+							  $('button[name="btnRemoveApps"]').attr('disabled', $('#example input[name="appId"]:checked').length<1);
 							}
 							// ### End: enable/disable handlers for buttons on buttonbar
 							
