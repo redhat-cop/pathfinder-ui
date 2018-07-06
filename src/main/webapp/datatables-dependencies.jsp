@@ -15,6 +15,7 @@
   <script src="assets/js/jquery.dataTables-1.10.16.js"></script>
   <script src="assets/js/datatables-functions.js?v8"></script>
 	<script src="assets/js/datatables-plugins.js?v8"></script>
+	<script src="https://rawgit.com/phstc/jquery-dateFormat/master/dist/dateFormat.min.js"></script>
 	
 	<script src="utils.jsp"></script>
 	

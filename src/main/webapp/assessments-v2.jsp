@@ -83,10 +83,12 @@
 						<!-- potentially add pie charts for Decision & Effort? -->
 						
 						
+						
 					</div>
 					<div class="col-sm-8">
 						<h2>Assessments</h2>
 						<!-- #### DATATABLE ### -->
+						
 						<script>
 							function onDatatableRefresh(json){
 								console.log("onDatatableRefresh: apps/assessments.length="+json.length);
@@ -133,7 +135,7 @@
 					              return "<input type='checkbox' name='appId' value='"+row['Id']+"'></input><input type='hidden' name='"+row['Id']+"_name' value='"+row['Name']+"'></input>";
 											}},
 					        		{ "targets": 1, "orderable": true, "render": function (data,type,row){
-					              return "<a href='viewAssessment.jsp?app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'>"+row["Name"]+"</a>";
+					              return row['LatestAssessmentId']==null?row["Name"]:"<a href='viewAssessment.jsp?app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'>"+row["Name"]+"</a>";
 											}},
 					        		{ "targets": 2, "orderable": true, "render": function (data,type,row){
 					              return "<span class='"+(row["Assessed"]==true?"messageGreen'>Yes":"messageRed'><a href='survey-v2.jsp?customerId="+customerId+"&applicationId="+row['Id']+"'>No</a>")+"</span>";
@@ -152,6 +154,10 @@
 											}},
 											{ "targets": 6, "orderable": true, "render": function (data,type,row){
 					              return row['WorkEffort']==null?"":row['WorkEffort'];
+											}},
+											{ "targets": 7, "orderable": true, "render": function (data,type,row){
+											// formats are here: https://github.com/phstc/jquery-dateFormat
+					              return row['ReviewDate']==null?"":DateFormat.format.date(new Date(parseInt(row['ReviewDate'])), 'dd/MMM/yy HH:mm');
 											}},
 						          { "targets": 8, "orderable": false, "render": function (data,type,row){
 					            	return row["Assessed"]!=true?"":"<a href='viewAssessment.jsp?app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'><img src='images/details.png'/></a>";
