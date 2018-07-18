@@ -73,7 +73,7 @@
 						<div id="reviewedProgress" class="progress-bar"></div>
 						
 						<center>
-							<a href="report.jsp?customerId=<%=request.getParameterByName("customerId")%>"><button>Generate Report</button></a>
+							<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Generate Report</button></a>
 						</center>
 						
 						<!-- ### Pie Chart Canvas -->
@@ -219,7 +219,7 @@
 									});
 									
 									caller.disabled=true;
-									httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameter("customerId")+"/applications/", appIdsToDelete);
+									httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/", appIdsToDelete);
 								}
 							}
 							
