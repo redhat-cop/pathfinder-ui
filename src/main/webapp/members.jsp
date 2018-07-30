@@ -36,7 +36,7 @@
 			$(document).ready(function() {
 					// ### Get Customer Details
 					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
-						if (undefined!=setBreadcrumbs) setBreadcrumbs("applications", customer);
+						if (undefined!=setBreadcrumbs) setBreadcrumbs("members", customer);
 					});
 					
 					// ### populate the customer members in the datatable

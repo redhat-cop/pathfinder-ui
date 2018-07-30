@@ -46,7 +46,7 @@
 						
 						// ### Get Customer Details
 						httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
-							if (undefined!=setBreadcrumbs) setBreadcrumbs("applications", customer);
+							if (undefined!=setBreadcrumbs) setBreadcrumbs("assessments", customer);
 						});
 						
 					});

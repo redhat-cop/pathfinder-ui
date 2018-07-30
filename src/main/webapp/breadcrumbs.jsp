@@ -90,6 +90,6 @@ li:last-child {
 				<li id="breadcrumb-applications"><a href="#">Applications</a></li>
 				<li id="breadcrumb-assessments"><a href="#">Assessments</a></li>
 				<li id="breadcrumb-profiles" class="disabled"><a href="#">Profiles</a></li>
-				<li id="breadcrumb-members" class="disabled"><a href="#">Members</a></li>
+				<li id="breadcrumb-members"><a href="#">Members</a></li>
 			</ul>
   	</div>
