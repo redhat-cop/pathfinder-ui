@@ -1,5 +1,21 @@
 <%@ page import="com.redhat.pathfinder.Controller" %>
 
+
+function addAuthToken(url){
+  var separator;
+  if (!url.includes("_t=") && (jwtToken!="" || jwtToken!=undefined || jwtToken!=null)){
+	  if (null!=jwtToken && ""!=jwtToken){
+		  if (url.includes("?")){
+		  	separator="&";
+		  }else{
+		  	separator="?";
+		  }
+		  return url+separator+"_t="+jwtToken;
+		}
+	}
+	return url;
+}
+
 Utils = {
 //  SERVER: "http://localhost:8080", 
 //  SERVER: "http://pathtest-pathfinder.6923.rh-us-east-1.openshiftapps.com",

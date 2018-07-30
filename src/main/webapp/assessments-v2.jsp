@@ -43,17 +43,10 @@
 					var appsCount=assessed=unassessed=notReviewed=reviewed=0;
 					
 					$(document).ready(function() {
-						var done=false;
 						
 						// ### Get Customer Details
 						httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
-							// ### Populate the header with the Customer Name
-							//document.getElementById("customerName").innerHTML=customer.CustomerName;
-							//document.getElementById("breadcrumb").innerHTML=customer.CustomerName;
-							
-							if (undefined!=setBreadcrumbs){
-				        setBreadcrumbs("assessments", customer);
-				      }
+							if (undefined!=setBreadcrumbs) setBreadcrumbs("applications", customer);
 						});
 						
 					});
@@ -106,6 +99,7 @@
 								var dTable=$('#example').DataTable( {
 					        "ajax": {
 					            "url": Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applicationAssessmentSummary",
+					            "data":{"_t":jwtToken},
 					            "dataSrc": "",
 					            "dataType": "json"
 					        },

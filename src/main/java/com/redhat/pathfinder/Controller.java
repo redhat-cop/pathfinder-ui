@@ -1,6 +1,8 @@
 package com.redhat.pathfinder;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,9 +13,16 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Random;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
@@ -32,10 +41,19 @@ import com.mongodb.client.MongoDatabase;
 import com.redhat.pathfinder.charts.Chart2Json;
 import com.redhat.pathfinder.charts.DataSet2;
 
+import groovy.lang.Tuple;
+import groovy.lang.Tuple2;
+import io.restassured.http.Header;
+import io.restassured.response.ResponseBody;
+import io.restassured.specification.RequestSpecification;
+
+import static io.restassured.RestAssured.*;
+
+
 @Path("/pathfinder/")
 public class Controller{
   
-  static Properties properties=null;
+//  static Properties properties=null;
   public static String getProperty(String name) throws IOException{
 //    if (null==properties){
 //      properties = new Properties();
@@ -49,7 +67,11 @@ public class Controller{
 //    if (null!=properties.getProperty(name)){
 //      return properties.getProperty(name);
 //    }else{
-      return System.getenv(name);
+    if (null==System.getenv(name) && name.equals("PATHFINDER_SERVER")){
+      System.out.println("DEFAULTING SERVER TO: 'http://localhost:8080' because no environment variable '"+name+"' was found");
+      return "http://localhost:8080";
+    }
+    return System.getenv(name);
 //    }
   }
   
@@ -67,20 +89,43 @@ public class Controller{
     public String getRating(){return rating;}
   }
   
-  class dependencyTree{
-    String from;
-    String to;
-    public dependencyTree(String f, String t){
-      this.from=f;
-      this.to=t;
-    }
-    public String getQuestion(){return from;}
-    public String getAnswer(){return to;}
-  }  
   
+  @SuppressWarnings("rawtypes")
   public static void main(String[] asd) throws Exception{
-//    System.out.println(new Controller().viewAssessmentSummary("56f3529a-ed8f-4b07-a4f9-47fa3072d843", "44f51762-7f25-4694-bf69-e31432b6e501", "2d0f1f7f-6819-4439-be69-e114dd8c257b").getEntity());
-    new Controller().getApps();
+    
+    
+    Tuple2 admin=new Tuple2<String,String>("admin", "admin");
+    Tuple2 mallen=new Tuple2<String,String>("mallen", "123");
+    Tuple2 user=admin;
+    
+    
+    String jwtToken=null;
+    if (null!=user){
+      io.restassured.response.Response loginResp = given()
+        .body("{\"username\":\""+user.getFirst()+"\",\"password\":\""+user.getSecond()+"\"}")
+        .post("http://localhost:8080/auth");
+  
+      System.out.println("Login():: statusCode = "+loginResp.getStatusCode());
+      System.out.println("Login():: response = "+loginResp.asString());
+      jwtToken=mjson.Json.read(loginResp.asString()).at("token").asString();
+      System.out.println("Login():: jwtToken="+jwtToken);
+    }
+//    if (!loginResp.asString().contains("token")){
+//      System.out.println("Login()::ERROR:: headers = "+loginResp.getHeaders());
+//      System.err.println("Login()::ERROR:: response = "+loginResp.asString());
+//    }else{
+    RequestSpecification req=given();
+    if (null!=user)
+      req.header("Authorization", "Bearer "+jwtToken);
+    io.restassured.response.Response customersResp=req.get("http://localhost:8080/api/pathfinder/customers/");
+    
+      System.out.println("Customers():: statusCode = "+customersResp.getStatusCode());
+      System.out.println("Customers():: response = "+customersResp.asString());
+      System.out.println("Customers():: headers = "+customersResp.getHeaders());
+      
+//    }
+     
+    
   }
   public Response getApps(){
     MongoCredential credential = MongoCredential.createCredential("userS1K", "pathfinder", "JBf2ibxFbqYAmAv0".toCharArray());
@@ -117,6 +162,64 @@ public class Controller{
     return null;
   }
   
+
+  @GET
+  @Path("/logout")
+  public Response logout(@Context HttpServletRequest request, @Context HttpServletResponse response) throws URISyntaxException, IOException{
+    request.getSession().invalidate();
+    return Response.status(302).location(new URI("../login.jsp")).build();
+  }
+  
+  @POST
+  @Path("/login")
+  public Response login(@Context HttpServletRequest request, @Context HttpServletResponse response) throws URISyntaxException, IOException{
+    
+    System.out.println("Controller::login() called");
+    HttpSession session=request.getSession();
+    
+    String payload=IOUtils.toString(request.getInputStream());
+    
+    Map<String,String> keyValues=new HashMap<String, String>();
+    String[] parts=payload.split("&");
+    for (String part:parts){
+      String[] kv=part.split("=");
+      keyValues.put(kv[0], kv[1]);
+    }
+    
+    System.out.println("Controller::login():: username="+keyValues.get("username") +", password="+keyValues.get("password"));
+
+    io.restassured.response.Response loginResp = given()
+        .body("{\"username\":\""+keyValues.get("username")+"\",\"password\":\""+keyValues.get("password")+"\"}")
+        .post("http://localhost:8080/auth");
+    
+    if (loginResp.statusCode()!=200)
+      return Response.serverError().build();
+    
+    System.out.println("Controller:login():: loginResp.asString() = "+loginResp.asString());
+    mjson.Json jsonResp=mjson.Json.read(loginResp.asString());
+    String jwtToken=jsonResp.at("token").asString();
+    String username=jsonResp.at("username").asString();
+    String displayName=jsonResp.at("displayName").asString();
+    
+    System.out.println("Controller::login():: jwt json response="+jsonResp.toString(99999999));
+    System.out.println("Controller::login():: jwtToken="+jwtToken);
+    
+    
+    request.getSession().setAttribute("x-access-token", jwtToken);
+    request.getSession().setAttribute("x-username", username);
+    request.getSession().setAttribute("x-displayName", displayName);
+    
+    return Response.status(302).location(new URI("../manageCustomers.jsp")).header("x-access-token", jwtToken).build();
+  }
+  
+  @POST
+  @Path("/logout")
+  public Response logout(@Context HttpServletRequest request, @Context HttpServletResponse response, @Context HttpSession session) throws URISyntaxException{
+    session.removeAttribute("username");
+    session.invalidate();
+    // TODO: and invalidate it on the server end too!
+    return Response.status(302).location(new URI("/index.jsp")).build();
+  }
   
   /* called from "viewAssessment.jsp" to be displayed on the datatable */
   @GET
@@ -179,61 +282,5 @@ public class Controller{
 //    return tmpSurveyCache;
   }
   
-  /* pie chart where the aspects are grouped by color */
-  // NOT SURE THIS IS EVEN USED ANYMORE
-  @GET
-  @Path("/customers/{customerId}/applications/{appId}/assessments/{assessmentId}/chart2")
-  public Response chart2(@PathParam("customerId") String customerId, @PathParam("appId") String appId, @PathParam("assessmentId") String assessmentId) throws JsonGenerationException, JsonMappingException, IOException{
-    
-//    mjson.Json x=getSurvey();
-    List<String> d=new ArrayList<String>();
-    d.add("Architectural Suitability:1:GREEN");
-    d.add("Clustering:4:GREEN");
-    d.add("Communication:2:GREEN");
-    d.add("Compliance:3:GREEN");
-    d.add("Application Configuration:4:GREEN");
-    d.add("Existing containerisation:0:GREEN");
-    d.add("Deployment Complexity :4:GREEN");
-    d.add("Dependencies - 3rd party vendor:2:GREEN");
-    d.add("Dependencies - Hardware:1:GREEN");
-    d.add("Dependencies - (Incoming/Northbound):4:GREEN");
-    d.add("Dependencies - Operating system:2:GREEN");
-    d.add("Dependencies - (Outgoing/Southbound):5:AMBER");
-    d.add("Discovery:3:AMBER");
-    d.add("Observability - Application Health:4:AMBER");
-    d.add("Observability - Application Logs:3:AMBER");
-    d.add("Observability - Application Metrics:3:AMBER");
-    d.add("Level of ownership:5:AMBER");
-    d.add("Runtime profile:4:RED");
-    d.add("Application resiliency:4:RED");
-    d.add("Application Security:3:RED");
-    d.add("State Management:0:UNKNOWN");
-    d.add("Application Testing:3:UNKNOWN");
-        
-    Map<String,Integer> labels=new HashMap<String, Integer>();
-    
-    for(String x:d){
-      if (!labels.containsKey(x.split(":")[2])) labels.put(x.split(":")[2], 0);
-      labels.put(x.split(":")[2], labels.get(x.split(":")[2])+1);
-    }
-    
-    List<String> backgrounds=new ArrayList<String>();
-    
-    Chart2Json c=new Chart2Json();
-    DataSet2 ds=new DataSet2();
-    for(Entry<String, Integer> e:labels.entrySet()){
-      c.getLabels().add(e.getKey());
-      ds.getData().add(e.getValue());
-      
-      if (e.getKey().equals("RED")) backgrounds.add("rgb(255, 0, 0)");
-      if (e.getKey().equals("AMBER")) backgrounds.add("rgb(255, 205, 86)");
-      if (e.getKey().equals("GREEN")) backgrounds.add("rgb(0, 128, 0)");
-      if (e.getKey().equals("UNKNOWN")) backgrounds.add("rgb(220, 220, 220)");
-      
-    }
-    c.getDatasets().add(ds);
-    ds.setBackgroundColor(backgrounds);
-    return Response.status(200).entity(Json.newObjectMapper(true).writeValueAsString(c)).build();
-  }
   
 }

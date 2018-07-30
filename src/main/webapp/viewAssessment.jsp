@@ -155,18 +155,10 @@ function onClickHandlers(myChart) {
 						<script>
 						  
 							$(document).ready(function() {
-								//var canvas = document.getElementById("pieChart");
-								var xhr = new XMLHttpRequest();
-//								xhr.open("GET", "api/pathfinder/customers/"+customerId+"/applications/"+appId+"/assessments/"+assessmentId+"/chart2", true);
-//								xhr.open("GET", "http://pathfinder-frontend-vft-dashboard.int.open.paas.redhat.com/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/assessments/"+assessmentId+"/viewAssessmentSummary", true);
-//use this until the method is moved to server end
-								//xhr.open("GET", "api/pathfinder/customers/"+customerId+"/applications/"+appId+"/assessments/"+assessmentId+"/viewAssessmentSummary", true);
-								//xhr.open("GET", "http://localhost:8080/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/assessments/"+assessmentId+"/viewAssessmentSummary", true);
-//should use this one once the method is moved to the server end
-								xhr.open("GET", Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/assessments/"+assessmentId+"/viewAssessmentSummary", true);
-								xhr.send();
-								xhr.onloadend = function () {
-									var data=JSON.parse(xhr.responseText);
+								
+								httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/assessments/"+assessmentId+"/viewAssessmentSummary", function(viewAssessmentSummary){
+									
+									var data=viewAssessmentSummary
 									
 									var i;
 									var newdata={};
@@ -174,7 +166,6 @@ function onClickHandlers(myChart) {
 										if (newdata[data[i]['rating']]==undefined) newdata[data[i]['rating']]=0;
 									  newdata[data[i]['rating']]=newdata[data[i]['rating']]+1;
 									}
-									//console.log("newdata="+JSON.stringify(newdata));
 									
 									var result={};
 									result.labels=[];
@@ -188,9 +179,6 @@ function onClickHandlers(myChart) {
 									  result.datasets[0].backgroundColor[i]=Utils.chartColors[key];
 									  i=i+1;
 									}
-									//console.log(JSON.stringify(data));
-									
-									//data=result;
 									
 									// ### LOAD CHART DATA ###
 									var ctx = document.getElementById("pieChart").getContext("2d");
@@ -208,10 +196,6 @@ function onClickHandlers(myChart) {
 		            		}}
 									});
 									
-									//ctx.canvas.width
-									//ctx.canvas.height=400;
-									//var defaultRadiusMyChart = myDoughnutChart.outerRadius;
-
     							onClickHandlers(myDoughnutChart);  
 									
 							    // ### LOAD DATATABLE DATA ###
@@ -244,7 +228,7 @@ function onClickHandlers(myChart) {
 							    } );
 							    
 							    
-								}
+								});
 							});
 						</script>
 						<canvas id="pieChart"></canvas>

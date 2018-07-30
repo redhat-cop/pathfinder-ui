@@ -31,10 +31,8 @@
 		</div>
 		-->
 		
-		
 		<!-- #### DATATABLES ### -->
 		<script>
-
 			
 			// mat - move this to the edit form script, this is not datatable code
 			function load(id){
@@ -43,7 +41,6 @@
 			  var xhr = new XMLHttpRequest();
 			  var ctx = "${pageContext.request.contextPath}";
 			  xhr.open("GET", getLoadUrl(id), true);
-			  //xhr.open("GET", Utils.SERVER+"/api/pathfinder/customers/"+id+"/", true);
 			  xhr.send();
 			  xhr.onloadend = function () {
 			    var json=JSON.parse(xhr.responseText);
@@ -60,11 +57,15 @@
 			function onDatatableRefresh(json){
 				buttonEnablement();
 			}
+			
 			$(document).ready(function() {
 			    $('#example').DataTable( {
 			        "ajax": {
-			            //"url": '${pageContext.request.contextPath}/api/pathfinder/customers/',
 			            "url": Utils.SERVER+'/api/pathfinder/customers/',
+			            //"beforeSend": function(xhr){
+					        //    xhr.setRequestHeader(jwtToken);
+					        //},
+					        "data":{"_t":jwtToken},
 			            "dataSrc": "",
 			            "dataType": "json"
 			        },
@@ -79,6 +80,7 @@
 			            { "data": "CustomerDescription" },
 			            { "data": "CustomerId" },
 			            { "data": "CustomerPercentageComplete" },
+			            { "data": "CustomerId" },
 			            { "data": "CustomerId" },
 				        ]
 			        ,"columnDefs": [
@@ -95,10 +97,13 @@
 							     var percentComplete=row['CustomerPercentageComplete'];
 							     var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>Assessments&nbsp;("+percentComplete+"%)</a>";
 							     return "<div class='progress'><div class='progress-bar-success' role='progressbar' aria-valuenow='"+percentComplete+"' aria-valuemin='0' aria-valuemax='100' style='width:"+percentComplete+"%'><center>"+link+"</center></div></div>";
-								  }},
+								 }},
 			           { "targets": 5, "orderable": false, "render": function (data,type,row){
-								    return "<a href='manageCustomerApplications.jsp?customerId="+row["CustomerId"]+"'>Manage Applications ("+row['CustomerAppCount']+")</a>";
-								  }}
+								    return "<a href='manageCustomerApplications.jsp?customerId="+row["CustomerId"]+"'>Applications ("+row['CustomerAppCount']+")</a>";
+								 }},
+			           { "targets": 6, "orderable": false, "render": function (data,type,row){
+								    return "<a href='members.jsp?customerId="+row["CustomerId"]+"'>Members ("+row['CustomerMemberCount']+")</a>";
+								 }}
 				         //,{ "targets": 6, "orderable": false, "render": function (data,type,row){
 								 //   return "<div class='btn-image btn btn-edit' title='Edit' onclick='load(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
 								 // }}
@@ -147,6 +152,7 @@
 		                <th align="left"></th>
 		                <th align="left">Customer Name</th>
 		                <th align="left">Customer Details</th>
+		                <th align="left"></th>
 		                <th align="left"></th>
 		                <th align="left"></th>
 		                <th align="left"></th>

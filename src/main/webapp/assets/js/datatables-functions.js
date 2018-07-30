@@ -4,7 +4,7 @@ function send(action, uri, data){
   //var url=ctx+"/api"+uri;
   var url=uri;
   
-  xhr.open(action, url, true);
+  xhr.open(action, addAuthToken(url), true);
   if (data != undefined){
     xhr.setRequestHeader("Content-type", "application/json");
     console.log("send data = "+JSON.stringify(data));
@@ -43,7 +43,7 @@ function post(uri, data){
 }
 function postWait(url, data, callback){
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
+	xhr.open("POST", addAuthToken(url), true);
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.send(JSON.stringify(data));
 	xhr.onloadend = function () {
@@ -86,7 +86,7 @@ function loadEntity(id){
   document.getElementById("exampleModalLabel").innerHTML=document.getElementById("exampleModalLabel").innerHTML.replace("New", "Update");
   var xhr = new XMLHttpRequest();
   var ctx = "${pageContext.request.contextPath}";
-  xhr.open("GET", getLoadUrl(id), true);
+  xhr.open("GET", addAuthToken(getLoadUrl(id)), true);
   //xhr.open("GET", SERVER+"/api/pathfinder/customers/"+id+"/", true);
   xhr.send();
   xhr.onloadend = function () {
@@ -115,7 +115,7 @@ function save(formId){
 
 function httpGet(url, field, callback){
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", url, true);
+	xhr.open("GET", addAuthToken(url), true);
 	xhr.send();
 	xhr.onloadend = function () {
 	  callback(JSON.parse(xhr.responseText)[field]);
@@ -124,7 +124,7 @@ function httpGet(url, field, callback){
 
 function httpGetObject(url, callback){
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", url, true);
+	xhr.open("GET", addAuthToken(url), true);
 	xhr.send();
 	xhr.onloadend = function () {
 	  callback(JSON.parse(xhr.responseText));

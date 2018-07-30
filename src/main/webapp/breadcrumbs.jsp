@@ -72,7 +72,7 @@ li:last-child {
 		    $('#breadcrumb-applications>a').attr('href', 'manageCustomerApplications.jsp?customerId='+customer.CustomerId);
 		    $('#breadcrumb-assessments>a').attr('href', 'assessments-v2.jsp?customerId='+customer.CustomerId);
 		    $('#breadcrumb-profiles>a').attr('href', '#');
-		    $('#breadcrumb-members>a').attr('href', '#');
+		    $('#breadcrumb-members>a').attr('href', 'members.jsp?customerId='+customer.CustomerId);
 		    
 		    if (undefined!=$('#breadcrumb-'+active+'>a').get()){
 		    	$('#breadcrumb-'+active+'>a').addClass("active");
