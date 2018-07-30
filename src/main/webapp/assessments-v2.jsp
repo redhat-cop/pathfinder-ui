@@ -132,7 +132,12 @@
 					              return row['LatestAssessmentId']==null?row["Name"]:"<a href='viewAssessment.jsp?app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'>"+row["Name"]+"</a>";
 											}},
 					        		{ "targets": 2, "orderable": true, "render": function (data,type,row){
-					              return "<span class='"+(row["Assessed"]==true?"messageGreen'>Yes":"messageRed'><a href='survey-v2.jsp?customerId="+customerId+"&applicationId="+row['Id']+"'>No</a>")+"</span>";
+					              
+					              //return "<span class='"+(row["Assessed"]==true?"messageGreen'>Yes"+(row['IncompleteAnswersCount']>0?:"<span title=\""+row['CompleteAnswersCount']+" completed answers &amp; "+row['IncompleteAnswersCount']+" answered as 'UNKNOWN'\"> ("+row['CompleteAnswersCount']+"/<span class=\"messageRed\">"+row['IncompleteAnswersCount']+"</span>)</span>"):"messageRed'><a href='survey-v2.jsp?customerId="+customerId+"&applicationId="+row['Id']+"'>No</a>")+"</span>";
+					              
+					              var title=row['CompleteAnswersCount']+" completed answers &amp; "+row['IncompleteAnswersCount']+" answered as 'UNKNOWN'";
+					              var completeIncomplete=row['IncompleteAnswersCount']>0?"<span title=\""+title+"\">("+row['CompleteAnswersCount']+"/<span class=\"messageRed\">"+row['IncompleteAnswersCount']+"</span>)</span>":"";
+					              return "<span class='"+(row["Assessed"]==true?"messageGreen'>Yes "+completeIncomplete:"messageRed'><a href='survey-v2.jsp?customerId="+customerId+"&applicationId="+row['Id']+"'>No</a>")+"</span>";
 											}},
 											{ "targets": 3, "orderable": true, "render": function (data,type,row){
 												if (row["ReviewDate"]==null && row["Assessed"]==true){
@@ -245,8 +250,8 @@
 			                <th align="left"></th>
 			                <th align="left">Application</th>
 			                <th align="left">Assessed</th>
-			                <th align="left">Review</th>
-			                <th align="left">Business Priority</th>
+			                <th align="left">Reviewed</th>
+			                <th align="left">Priority</th>
 			                <th align="left">Decision</th>
 			                <th align="left">Effort</th>
 			                <th align="left">Review Date</th>
