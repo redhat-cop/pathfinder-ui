@@ -40,7 +40,7 @@
 			  document.getElementById("exampleModalLabel").innerHTML=document.getElementById("exampleModalLabel").innerHTML.replace("New", "Update");
 			  var xhr = new XMLHttpRequest();
 			  var ctx = "${pageContext.request.contextPath}";
-			  xhr.open("GET", getLoadUrl(id), true);
+			  xhr.open("GET", addAuthToken(getLoadUrl(id)), true);
 			  xhr.send();
 			  xhr.onloadend = function () {
 			    var json=JSON.parse(xhr.responseText);
