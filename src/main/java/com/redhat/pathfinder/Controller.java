@@ -175,7 +175,7 @@ public class Controller{
   public Response login(@Context HttpServletRequest request, @Context HttpServletResponse response) throws URISyntaxException, IOException{
     
     System.out.println("Controller::login() called");
-    HttpSession session=request.getSession();
+//    HttpSession session=request.getSession();
     
     String payload=IOUtils.toString(request.getInputStream());
     
@@ -190,10 +190,12 @@ public class Controller{
 
     io.restassured.response.Response loginResp = given()
         .body("{\"username\":\""+keyValues.get("username")+"\",\"password\":\""+keyValues.get("password")+"\"}")
-        .post("http://localhost:8080/auth");
+        .post(getProperty("PATHFINDER_SERVER")+"/auth");
     
-    if (loginResp.statusCode()!=200)
+    if (loginResp.statusCode()!=200){
+      
       return Response.serverError().build();
+    }
     
     System.out.println("Controller:login():: loginResp.asString() = "+loginResp.asString());
     mjson.Json jsonResp=mjson.Json.read(loginResp.asString());
@@ -222,65 +224,65 @@ public class Controller{
   }
   
   /* called from "viewAssessment.jsp" to be displayed on the datatable */
-  @GET
-  @Path("/customers/{customerId}/applications/{appId}/assessments/{assessmentId}/viewAssessmentSummary")
-  public Response viewAssessmentSummary(@PathParam("customerId") String customerId, @PathParam("appId") String appId, @PathParam("assessmentId") String assessmentId) throws JsonGenerationException, JsonMappingException, IOException{
-    
-    //parse the application-survey.js file into a json object structure
-    //get the answers from the assessment
-    //match the two as output to the datatable onscreen
-    
-    mjson.Json x=getSurvey();
-    
-    //MOCKED CODE, when the colors are put into the surveyjs source this can be removed
-    Random r=new Random();
-    String[] ratingsCfg=new String[]{"UNKNOWN","RED","AMBER","AMBER","GREEN","GREEN","GREEN","GREEN"};
-    
-    List<ApplicationAssessmentSummary> result=new ArrayList<ApplicationAssessmentSummary>();
-    for(mjson.Json p:x.asJsonList()){
-      for(mjson.Json q:p.at("questions").asJsonList()){
-        
-        String answerText="";
-        String answerRating="";
-        
-        if (q.at("type").asString().equals("radiogroup")){
-          List<String> answers=new ArrayList<String>();
-          for(mjson.Json a:q.at("choices").asJsonList())
-            answers.add(a.asString());
-          
-          //fix these mocked answers
-          int randomIndex=0 + r.nextInt((answers.size()-1 - 0) + 1);
-          String answerIdx=answers.get(randomIndex).split("\\|")[0];
-          if (answerIdx.contains("-")) answerIdx=answerIdx.split("-")[0];
-          answerText=answers.get(randomIndex).split("\\|")[1];
-          //
-          
-          answerRating=ratingsCfg[Integer.parseInt(answerIdx)];
-          
-          result.add(new ApplicationAssessmentSummary(q.at("title").asString(), answerText, answerRating));
-        }else if (q.at("type").asString().equals("rating")){
-          // leave this out since it's things like "Select the app..."
-        }
-      }
-    }
-    return Response.status(200).entity(Json.newObjectMapper(true).writeValueAsString(result)).build();
-  }
+//  @GET
+//  @Path("/customers/{customerId}/applications/{appId}/assessments/{assessmentId}/viewAssessmentSummary")
+//  public Response viewAssessmentSummary(@PathParam("customerId") String customerId, @PathParam("appId") String appId, @PathParam("assessmentId") String assessmentId) throws JsonGenerationException, JsonMappingException, IOException{
+//    
+//    //parse the application-survey.js file into a json object structure
+//    //get the answers from the assessment
+//    //match the two as output to the datatable onscreen
+//    
+//    mjson.Json x=getSurvey();
+//    
+//    //MOCKED CODE, when the colors are put into the surveyjs source this can be removed
+//    Random r=new Random();
+//    String[] ratingsCfg=new String[]{"UNKNOWN","RED","AMBER","AMBER","GREEN","GREEN","GREEN","GREEN"};
+//    
+//    List<ApplicationAssessmentSummary> result=new ArrayList<ApplicationAssessmentSummary>();
+//    for(mjson.Json p:x.asJsonList()){
+//      for(mjson.Json q:p.at("questions").asJsonList()){
+//        
+//        String answerText="";
+//        String answerRating="";
+//        
+//        if (q.at("type").asString().equals("radiogroup")){
+//          List<String> answers=new ArrayList<String>();
+//          for(mjson.Json a:q.at("choices").asJsonList())
+//            answers.add(a.asString());
+//          
+//          //fix these mocked answers
+//          int randomIndex=0 + r.nextInt((answers.size()-1 - 0) + 1);
+//          String answerIdx=answers.get(randomIndex).split("\\|")[0];
+//          if (answerIdx.contains("-")) answerIdx=answerIdx.split("-")[0];
+//          answerText=answers.get(randomIndex).split("\\|")[1];
+//          //
+//          
+//          answerRating=ratingsCfg[Integer.parseInt(answerIdx)];
+//          
+//          result.add(new ApplicationAssessmentSummary(q.at("title").asString(), answerText, answerRating));
+//        }else if (q.at("type").asString().equals("rating")){
+//          // leave this out since it's things like "Select the app..."
+//        }
+//      }
+//    }
+//    return Response.status(200).entity(Json.newObjectMapper(true).writeValueAsString(result)).build();
+//  }
   
   
 //  private mjson.Json tmpSurveyCache=null;
-  private mjson.Json getSurvey() throws JsonGenerationException, JsonMappingException, IOException{
-//    if (tmpSurveyCache==null){
-      String raw=IOUtils.toString(new URL("http://pathfinder-frontend-vft-dashboard.int.open.paas.redhat.com/pathfinder-ui/assets/js/application-survey.js").openStream());
-      int start=raw.indexOf("pages: [{")+7;
-      int end=raw.indexOf("}],")+2;
-      String x=raw.substring(start, end);
-      System.out.println(x);
-//      x="[]";
-      return mjson.Json.read(x);
-//      tmpSurveyCache=mjson.Json.read(raw.substring(start, end));
-//    }
-//    return tmpSurveyCache;
-  }
+//  private mjson.Json getSurvey() throws JsonGenerationException, JsonMappingException, IOException{
+////    if (tmpSurveyCache==null){
+//      String raw=IOUtils.toString(new URL("http://pathfinder-frontend-vft-dashboard.int.open.paas.redhat.com/pathfinder-ui/assets/js/application-survey.js").openStream());
+//      int start=raw.indexOf("pages: [{")+7;
+//      int end=raw.indexOf("}],")+2;
+//      String x=raw.substring(start, end);
+//      System.out.println(x);
+////      x="[]";
+//      return mjson.Json.read(x);
+////      tmpSurveyCache=mjson.Json.read(raw.substring(start, end));
+////    }
+////    return tmpSurveyCache;
+//  }
   
   
 }
