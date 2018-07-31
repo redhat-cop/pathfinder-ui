@@ -69,12 +69,6 @@
 				      	{ "targets": 1, "orderable": true, "render": function (data,type,row){
 									return "<a href='#' onclick='loadEntity(\""+row["Id"]+"\"); return false;' data-toggle='modal' data-target='#exampleModal'>"+row['Name']+"</a>";
 								}},
-				      	//{ "targets": 3, "orderable": false, "render": function (data,type,row){
-								//	return "<div class='btn btn-image btn-edit' title='Edit' onclick='loadEntity(\""+row["Id"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
-								//}}
-			        	//,{ "targets": 4, "orderable": false, "render": function (data,type,row){
-								//	return "<div class='btn btn-image btn-delete' title='Delete' onclick='deleteItem(\""+customerId+"\",\""+row["Id"]+"\");'></div>";
-								//}}
 			        ]
 			    } );
 			} );

@@ -4,12 +4,18 @@
 <!-- EDIT MODAL FORM -->
 <!--#################-->
 <script>
-	function getLoadUrl(id){
-		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/"+id+"/";
-	}
-	function getSaveUrl(id){
-		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/";
-	}
+  var entityManagementUrls={
+  	"get":			Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/$ID/",
+  	"create":		Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/",
+  	"update":		Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/$ID"
+  };
+  
+//	function getLoadUrl(id){
+//		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/"+id+"/";
+//	}
+//	function getCreateUrl(id){
+//		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/";
+//	}
 	function getIdFieldName(){
 		return "Id";
 	}
@@ -60,7 +66,7 @@
       
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button id="edit-ok" type="button" data-dismiss="modal" disabled onclick="save('form'); return false;">Create</button>
+        <button id="edit-ok" type="button" data-dismiss="modal" disabled onclick="save(this, 'form'); return false;">Create</button>
       </div>
     </div>
   </div>

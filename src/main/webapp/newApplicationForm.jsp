@@ -5,12 +5,18 @@
 <!--#################-->
 <script src="utils.jsp"></script>
 <script>
-	function getLoadUrl(id){
-		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/"+id;
-	}
-	function getSaveUrl(id){
-		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/";
-	}
+  var entityManagementUrls={
+  	"get":			Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/$ID",
+  	"create":		Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/",
+  	"update":		Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/$ID"
+  };
+  
+//	function getLoadUrl(id){
+//		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/"+id;
+//	}
+//	function getCreateUrl(id){
+//		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/";
+//	}
 	function getIdFieldName(){
 		return "Id";
 	}
@@ -25,7 +31,7 @@
       <div class="modal-body">
         <form id="form">
         	<div id="form-id" class="form-group" style="display:none">
-            <label for="Id" class="control-label">Customer Name:</label>
+            <label for="Id" class="control-label">Application Id:</label>
             <input id="Id" name="Id" type="text" class="form-control"/>
           </div>
           <div class="form-group">
@@ -53,27 +59,17 @@
       </div>
       <script>
       function validate(){
-        console.log("Stereotype="+$('#Stereotype').val());
-        console.log("Name="+$('#Name').val());
 	      $('#edit-ok').attr('disabled', isEmpty($('#Stereotype').val()) || isEmpty($('#Name').val()))
       }
       function isEmpty(val){
       	return val==null || val=="";
       }
       
-      console.log("Do something...");
-      $('Stereotype').val("TARGETAPP");
-      $('Stereotype').attr("value", "TARGETAPP");
-      
-      var country = document.getElementById("Stereotype");
-			country.options[country.options.selectedIndex].selected = true;
-
-      
       </script>
       
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button id="edit-ok" type="button" data-dismiss="modal" disabled onclick="save('form'); return false;">Create</button>
+        <button id="edit-ok" type="button" data-dismiss="modal" disabled onclick="save(this, 'form'); return false;">Create</button>
       </div>
     </div>
   </div>

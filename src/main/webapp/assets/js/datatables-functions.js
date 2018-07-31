@@ -82,18 +82,20 @@ function editFormReset(){
       input.value="";
     }
     
-    if (null==document.getElementById(getIdFieldName())){
-      console.log("Unable to find element named: "+getIdFieldName());
-    }
-    document.getElementById(getIdFieldName()).value="NEW";
+    //if (null==document.getElementById(getIdFieldName())){
+    //  console.log("Unable to find element named: "+getIdFieldName());
+    //}
+    //document.getElementById(getIdFieldName()).value="NEW";
 }
 function loadEntity(id){
   document.getElementById("edit-ok").innerHTML="Update";
   document.getElementById("exampleModalLabel").innerHTML=document.getElementById("exampleModalLabel").innerHTML.replace("New", "Update");
   var xhr = new XMLHttpRequest();
   var ctx = "${pageContext.request.contextPath}";
-  xhr.open("GET", addAuthToken(getLoadUrl(id)), true);
-  //xhr.open("GET", SERVER+"/api/pathfinder/customers/"+id+"/", true);
+  
+  xhr.open("GET", addAuthToken(entityManagementUrls["get"].replace("$ID", id)), true);
+  //xhr.open("GET", addAuthToken(getLoadUrl(id)), true);
+  
   xhr.send();
   xhr.onloadend = function () {
     var json=JSON.parse(xhr.responseText);
@@ -107,15 +109,24 @@ function loadEntity(id){
     }
   }
 }
-function save(formId){
+function save(sender, formId){
   var data = {};
   var op="";
   var form=document.getElementById(formId);
   for (var i = 0, ii = form.length; i < ii; ++i) {
     if (form[i].name) data[form[i].name]=form[i].value;
   }
-  post(getSaveUrl(), data);
-  //post(SERVER+"/api/pathfinder/customers/", data);
+  console.log("button sender="+sender);
+  var isUpdate=sender.innerHTML=="Update"; // don't like this, it's too "magic"
+  //var url=isUpdate?getUpdateUrl():getCreateUrl();
+  
+  //post(getSaveUrl(), data);
+  
+  var id=document.getElementById(getIdFieldName()).value;
+  var url=!isUpdate?entityManagementUrls["create"]:entityManagementUrls["update"].replace("$ID", id);
+  console.log("url is:"+url);
+  post(url, data);
+  
   editFormReset();
 }
 
