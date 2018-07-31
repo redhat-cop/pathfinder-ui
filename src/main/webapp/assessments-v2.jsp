@@ -112,7 +112,7 @@
 					        "pageLength" : 10, // default page entries
 					        "bInfo" : false, // removes "Showing N entries" in the table footer
 					        "searching" : false,
-					        "order" : [[2,"desc"],[3,"desc"],[1,"asc"]],  //reviewed, assessed then app name
+					        "order" : [[3,"desc"],[2,"desc"],[1,"asc"]],  //reviewed, assessed then app name
 					        "columns": [
 					            { "data": "Id" },
 					            { "data": "Name" },
@@ -241,7 +241,7 @@
 					    	<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnRemoveApps"     disabled onclick="btnDelete_onclick(this);" type="button">Remove Application(s)</button>
 					    	<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="removeAssessments" disabled onclick="" type="button">Clear Assessment(s)</button>
 					    	<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="removeReviews"     disabled onclick="" type="button">Clear Review(s)</button>
-					    	<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnCloneApps"      disabled onclick="showCloneDialog(this);" type="button">Clone Applications(s)</button>
+					    	<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnCloneApps"      disabled onclick="showCloneDialog(this);" type="button">Clone Applications</button>
 					    </div>
 					    <div id="tableDiv">
 						    <table id="example" class="display" cellspacing="0" width="100%">

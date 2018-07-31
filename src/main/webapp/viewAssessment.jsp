@@ -346,13 +346,29 @@ if ("true".equalsIgnoreCase(request.getParameter("review"))){
 		    if (form[i].name) data[form[i].name]=form[i].value;
 		  }
 		  
-		  console.log("POSTING: "+JSON.stringify(data));
-	    postWait(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/review", data, new function(response){
+		  
+		  var callback=new function(response){
 		    // wait for the post response before redirecting or else the post will be cancelled
-		    console.log("after post: response= "+response);
+		    console.log("Callback::after post: response= "+response);
 		    // TODO: this would be much nicer if the server provided a 302 so we could use a submit rather than an artificial wait
-		    window.location.href = "assessments-v2.jsp?customerId="+customerId;
-	    });
+		    //window.location.href = "assessments-v2.jsp?customerId="+customerId;
+		  };
+		  
+		  console.log("POSTING: "+JSON.stringify(data));
+	    //postWait(addAuthToken(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/review"), data, callback);
+	    
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", addAuthToken(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/review"), true);
+			xhr.setRequestHeader("Content-type", "application/json");
+			xhr.send(JSON.stringify(data));
+			xhr.onloadend = function () {
+			  //console.log("PostWait::status = "+xhr.status);
+			  //console.log("PostWait::status = "+xhr.responseText);
+			  if (xhr.status==200){
+			    console.log("PostWait::http 200 returned ok, redirecting...");
+			  	window.location.href = "assessments-v2.jsp?customerId="+customerId;
+			  }
+			};
 		}
 	</script>
 	

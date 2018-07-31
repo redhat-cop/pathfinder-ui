@@ -47,7 +47,13 @@ function postWait(url, data, callback){
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.send(JSON.stringify(data));
 	xhr.onloadend = function () {
-	  callback(xhr.responseText);
+	  console.log("PostWait::status = "+xhr.status);
+	  console.log("PostWait::status = "+xhr.responseText);
+	  
+	  if (xhr.status==200){
+	    console.log("PostWait::calling callback");
+	  	callback(xhr.responseText);
+	  }
 	};
 }
 
