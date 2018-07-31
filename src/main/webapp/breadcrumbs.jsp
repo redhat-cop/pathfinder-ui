@@ -71,7 +71,6 @@ li:last-child {
 		    //$('#breadcrumb-details>a').attr('href', '#');
 		    $('#breadcrumb-applications>a').attr('href', 'manageCustomerApplications.jsp?customerId='+customer.CustomerId);
 		    $('#breadcrumb-assessments>a').attr('href', 'assessments-v2.jsp?customerId='+customer.CustomerId);
-		    $('#breadcrumb-profiles>a').attr('href', '#');
 		    $('#breadcrumb-members>a').attr('href', 'members.jsp?customerId='+customer.CustomerId);
 		    
 		    if (undefined!=$('#breadcrumb-'+active+'>a').get()){
@@ -89,7 +88,6 @@ li:last-child {
 				-->
 				<li id="breadcrumb-applications"><a href="#">Applications</a></li>
 				<li id="breadcrumb-assessments"><a href="#">Assessments</a></li>
-				<li id="breadcrumb-profiles" class="disabled"><a href="#">Profiles</a></li>
 				<li id="breadcrumb-members"><a href="#">Members</a></li>
 			</ul>
   	</div>
