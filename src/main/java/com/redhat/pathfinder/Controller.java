@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +28,8 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.bson.Document;
 import org.bson.codecs.BsonTypeClassMap;
 import org.bson.codecs.DocumentCodec;
@@ -34,6 +38,7 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
+import com.google.common.base.Splitter;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -90,9 +95,10 @@ public class Controller{
   }
   
   
+  
+  
   @SuppressWarnings("rawtypes")
   public static void main(String[] asd) throws Exception{
-    
     
     Tuple2 admin=new Tuple2<String,String>("admin", "admin");
     Tuple2 mallen=new Tuple2<String,String>("mallen", "123");
@@ -169,7 +175,7 @@ public class Controller{
     request.getSession().invalidate();
     return Response.status(302).location(new URI("../login.jsp")).build();
   }
-  
+
   @POST
   @Path("/login")
   public Response login(@Context HttpServletRequest request, @Context HttpServletResponse response) throws URISyntaxException, IOException{
@@ -177,14 +183,11 @@ public class Controller{
     System.out.println("Controller::login() called");
 //    HttpSession session=request.getSession();
     
-    String payload=IOUtils.toString(request.getInputStream());
+    String uri=IOUtils.toString(request.getInputStream());
     
-    Map<String,String> keyValues=new HashMap<String, String>();
-    String[] parts=payload.split("&");
-    for (String part:parts){
-      String[] kv=part.split("=");
-      keyValues.put(kv[0], kv[1]);
-    }
+    System.out.println("Controller::login() payload = "+uri); //username=&password=
+    
+    final Map<String, String> keyValues=Splitter.on('&').trimResults().withKeyValueSeparator("=").split(uri);
     
     System.out.println("Controller::login():: username="+keyValues.get("username") +", password="+keyValues.get("password"));
 
@@ -193,8 +196,8 @@ public class Controller{
         .post(getProperty("PATHFINDER_SERVER")+"/auth");
     
     if (loginResp.statusCode()!=200){
-      
-      return Response.serverError().build();
+      String error="Username and/or password is unknown or incorrect"; // would grab the text from server side but spring wraps some debug info in there so until we can strip that we cant give details of failure
+      return Response.status(302).location(new URI("../login.jsp?error="+URLEncoder.encode(error, "UTF-8"))).build();
     }
     
     System.out.println("Controller:login():: loginResp.asString() = "+loginResp.asString());

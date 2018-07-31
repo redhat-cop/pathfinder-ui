@@ -157,6 +157,12 @@ ENABLE FOR EMBEDDED JETTY
 	    <artifactId>spring-data-mongodb</artifactId>
 	    <version>1.10.4.RELEASE</version>
 	</dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+						<version>23.5-jre</version>
+        </dependency>
 	
 		</dependencies>
 <!-- 

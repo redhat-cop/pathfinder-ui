@@ -34,11 +34,15 @@
           </div>
           <div class="form-group">
             <label for="Stereotype" class="control-label">Application Profile:</label>
+						<!--
 						<select name="Stereotype" id="Stereotype" class="xform-control" onchange="validate()">
+						-->
+						
+						<select name="Stereotype" id="Stereotype"  onchange="validate()">
 							<option value="" selected disabled hidden>Choose...</option>
-							<option value="TARGETAPP" selected>Target Application</option>
-							<option value="DEPENDENCY">Dependency</option>
-							<option value="PROFILE">Profile</option>
+							<option value="TARGETAPP" selected>Assessable Application</option>
+							<option value="DEPENDENCY">Dependency Only (ie. database or LDAP Server)</option>
+							<!--option value="PROFILE">Profile</option-->
 						</select>
           </div>
           <div class="form-group">
@@ -56,6 +60,15 @@
       function isEmpty(val){
       	return val==null || val=="";
       }
+      
+      console.log("Do something...");
+      $('Stereotype').val("TARGETAPP");
+      $('Stereotype').attr("value", "TARGETAPP");
+      
+      var country = document.getElementById("Stereotype");
+			country.options[country.options.selectedIndex].selected = true;
+
+      
       </script>
       
       <div class="modal-footer">

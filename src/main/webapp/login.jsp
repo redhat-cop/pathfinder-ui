@@ -21,11 +21,26 @@
 			</div>
 		</section>
 		
+		<script>
+		$(document).ready(function(){
+			$("#loginForm").submit(function () {
+        $("#submit").attr("disabled", true);
+			  e.preventDefault();
+        return true;
+	    });
+		});
+		</script>
+		
   	<div id="wrapper">
 			<center>
+				<%if (null!=request.getParameter("error")){%>
+					<div class="modal-content">
+						<%=request.getParameter("error")%>
+					</div>
+				<%}%>
 				<div class="modal-content">
 					<div class="modal-body">
-						<form action="api/pathfinder/login" method="post">
+						<form id="loginForm" action="api/pathfinder/login" method="post">
 		          <div class="form-group">
 		            <label for="username" class="control-label">Username:</label>
 		            <input id="username" name="username" type="text" class="form-control">
@@ -34,7 +49,7 @@
 		            <label for="password" class="control-label">Password:</label>
 		            <input id="password" name="password" type="password" class="form-control">
 		          </div>
-							<br/><input type="submit" value="Submit">
+							<br/><input id="submit" type="submit" value="Submit">
 						</form>
 					</div>
 				</div>
