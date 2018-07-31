@@ -3,8 +3,8 @@
   <body class="is-preload">
   	<link href="assets/css/bootstrap-3.3.7.min.css" rel="stylesheet" />
   	<script src="assets/js/bootstrap-3.3.7.min.js"></script>
-  	<%@include file="nav.jsp"%>
   	
+  	<%@include file="nav.jsp"%>
   	
   	
 		<section id="banner2">
