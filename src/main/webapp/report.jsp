@@ -26,6 +26,7 @@
 
 	<body class="is-preload">
 
+
   	<%@include file="nav.jsp"%>
   	
 		<section id="banner2">
@@ -41,37 +42,75 @@
 				<li><span id="breadcrumb2">Report</span></li>
 			</ul>
 		</div>
+
+		<script>
+		var customerId=Utils.getParameterByName("customerId");
 		
+		$(document).ready(function() {
+			
+			// ### Get Customer Details
+			httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
+				// ### Populate the header with the Customer Name
+				document.getElementById("customerName").innerHTML=customer.CustomerName;
+				document.getElementById("breadcrumb1").innerHTML="<a href='assessments-v2.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
+			});
+			
+		});
+		</script>
+						
 		<section class="wrapper">
 			<div class="inner">
 				
 				<!-- ### Page specific stuff here ### -->
 				
-				<script>
-				var customerId=Utils.getParameterByName("customerId");
 				
-				$(document).ready(function() {
-					
-					// ### Get Customer Details
-					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
-						// ### Populate the header with the Customer Name
-						document.getElementById("customerName").innerHTML=customer.CustomerName;
-						document.getElementById("breadcrumb1").innerHTML="<a href='assessments-v2.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
-
-					});
-					
-				});
+				<h2>Summary</h2>
+				<div class="row">
+					<div class="col-sm-3">
+						<canvas id="gauge-1" style="width:200px;height:100px;"></canvas>
+					</div>
+					<div class="col-sm-3">
+						<canvas id="gauge-2" style="width:200px;height:100px;"></canvas>
+					</div>
+					<div class="col-sm-3">
+						<canvas id="gauge-3" style="width:200px;height:100px;"></canvas>
+					</div>
+				</div>
+				<%@include file="report-summary.jsp"%>
+				<script>
+					//httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(customer){
+						new Chart(document.getElementById("gauge-1"),buildGuage(20, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
+						new Chart(document.getElementById("gauge-2"),buildGuage(30, "rgb(240,171,0)","rgb(220, 220, 220)","Medium Complexity"));
+						new Chart(document.getElementById("gauge-3"),buildGuage(50, "rgb(204, 0, 0)","rgb(220, 220, 220)","Complex/High-risk"));
+					//});
 				</script>
 				
+				<br/><br/><br/>
 				
+				
+				<h2>Bubble Chart Title</h2>
 				<div class="row">
 					<div class="col-sm-4">
-					<!--
-						apps list in draggable checkboxed list
-					-->
-						
-						<h2>Applications</h2>
-						
+						<style>
+							input[type=search] {
+								height: 23px;
+								//width: 100px;
+								padding: 0px;
+								line-height: 1;
+							}
+							.dataTables_filter{
+								width:150px;
+							}
+							.dataTables_length label select{
+								height: 23px;
+								width:  50px;
+								padding: 0px;
+							}
+							.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+								height: 23px;
+								padding: 0px !important;
+							}
+						</style>
 						<script>
 							$(document).ready(function() {
 							    $('#example').DataTable( {
@@ -81,12 +120,17 @@
 							            "dataSrc": "",
 							            "dataType": "json"
 							        },
+							        "oLanguage": { 
+							        	sSearch: "",             // remove the "Search" label text
+							        	sLengthMenu: "_MENU_" }, // remove the "show X entries" text
 							        "scrollCollapse": true,
 							        "paging":         true,
-							        "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
-							        "pageLength" : 10, // default page entries
-							        "searching" : false,
-							        //"order" : [[1,"desc"],[2,"desc"],[0,"asc"]],  //reviewed, assessed then app name
+							        "lengthMenu":     [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
+							        "pageLength" :    10, // default page entries
+							        "searching" :     true,
+							        "bInfo" :         false, // removes "Showing N entries" in the table footer
+							        //"order" :         [[1,"desc"],[2,"desc"],[0,"asc"]],
+							        "order" :         [[4,"desc"]],
 							        "columns": [
 							            { "data": "Id" },
 							            { "data": "Name" },
@@ -95,8 +139,8 @@
 							            { "data": "WorkEffort" },
 							        ]
 							        ,"columnDefs": [
-							        		{ "targets": 0, "orderable": true, "render": function (data,type,row){
-							              return "<input type='checkbox' value='"+row['Id']+"' style='background-color:red;width:10px'/>";
+							        		{ "targets": 0, "orderable": false, "render": function (data,type,row){
+							              return "<input onclick='onChange2(this);' type='checkbox' value='"+row['Id']+"' style='background-color:red;width:10px'/>";
 													}},
 													{ "targets": 3, "orderable": true, "render": function (data,type,row){
 							              return row['Decision']==null?"":row['Decision'];
@@ -117,43 +161,26 @@
 				            <tr>
 			                <th align="left"></th>
 			                <th align="left">Application</th>
-			                <th align="left">Business Priority</th>
+			                <th align="left">Bus. Critical</th>
 			                <th align="left">Decision</th>
 			                <th align="left">Effort</th>
 				            </tr>
 					        </thead>
 						    </table>
 						  </div>
-				  	</div>
-
-<div id="dialog" title="Dependency Map">
-<div id="mynetwork"></div>							
-</div>
- 
-<button id="opener">Open Dependency Map</button>						
-<script>
-$(document).ready(function(){
-    $("table tbody").sortable({
-        items: 'tr',
-        stop : function(event, ui){
-          //alert($(this).sortable('toArray'));
-        }
-    });
-  //$("table tbody").disableSelection();
-});//ready
-</script>
-						<!--
-						-->
-					  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-					  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-				<div class="row">						
-
-						</div>
-						
-
-					</div>
+				  	</div> <!-- dtable wrapper -->
+				  	
+						<script>
+							var appFilter=[];
+							function onChange2(t){
+								t.checked?appFilter.push(t.value):appFilter.splice(appFilter.indexOf(t.value),1);
+								reDrawBubble(rawSummary);
+							}
+						</script>
+				  	
+					</div> <!-- /col-sm-? -->
+					
 					<div class="col-sm-8">
-						<h2>Priority Analysis</h2>
 						x=business priority, y=# of dependencies, size=effort, color=Action (REHOST=red, )
 						<!--
 						bubble chart
@@ -181,18 +208,21 @@ $(document).ready(function(){
 						  sizing['LARGE']=20;
 						  sizing['EXTRA LARGE']=10;
 						  
-							var data;
-							httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(customer){
+						  function reDrawBubble(summary){
 								var label=[];
 								var innerData=[];
 								var backgroundColor=[];
 								data={};
 								//data={label:[],data:[],backgroundColor:[]};
 								
-								//console.log("customer="+JSON.stringify(customer));
+								//console.log("summary="+JSON.stringify(summary));
 								var i;
-								for(i=0;i<customer.length;i++){
-									var app=customer[i];
+								for(i=0;i<summary.length;i++){
+									var app=summary[i];
+									
+									console.log("APP="+JSON.stringify(app));
+									
+									if (!appFilter.includes(app['Id'])) continue;
 									
 									var name=app['Name'];
 									var businessPriority=app['BusinessPriority'];
@@ -229,174 +259,57 @@ $(document).ready(function(){
 									]},
 									options:{
 										aspectRatio: 1,
-			legend: false,
-			tooltips: false,
+										legend: false,
+										scales: {
+											yAxes: [{
+												display: true,
+												ticks: {
+													suggestedMin: 0,
+													suggestedMax: 10,
+													beginAtZero: true
+												}
+											}],
+											xAxes: [{
+												display: true,
+												ticks: {
+													suggestedMin: 0,
+													suggestedMax: 10,
+													beginAtZero: true
+												}
+											}],
+										}
 									}
 								});
+						  }
+						  
+							var data;
+							var rawSummary;
+							httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(summary){
+								rawSummary=summary;
+								reDrawBubble(rawSummary);
 							});
 							
 						</script>
 						
-						<div class="chartjs-wrapper">
+						<div class="chartjs-wrapper" style="width:750px;">
 							<canvas id="chartjs-6" class="chartjs" width="undefined" height="undefined"></canvas>
-							<script>
-//								new Chart(document.getElementById("chartjs-6"),{
-//									"type":"bubble",
-//									"data": {"datasets":[
-//data
-//]}
-//
-////									{
-////										"datasets":[{
-////											"label":[
-////												 "App1"
-////												,"App2"
-////												,"App3"
-////												],
-////											"data":[
-////												 {"x":1,"y":8,"r":10}
-////												,{"x":8,"y":0,"r":30}
-////												,{"x":4,"y":2,"r":20}
-////											],
-////											"backgroundColor":[
-////												Utils.chartColors.RED,
-////												Utils.chartColors.AMBER,
-////												Utils.chartColors.GREEN,
-////											]
-////										}]
-////									}
-//									,options: {
-//										scales: {
-//											xAxes: [{
-//				                ticks: {
-//								          "ticks.min": "0",
-//								          "ticks.max": "10"
-//								        }
-//								    	}]
-//										}
-//									}
-//								});
-							</script>
 						</div>
-						
-
-
-<!-- 						<div id="toggleNodes">		
-<input type="button"  onclick="getRemoveColouredNodes('#FF0000');" value="Remove Red"></input>
-<input type="button"  onclick="getRemoveColouredNodes('#FCC200');" value="Remove Amber"></input>
-<input type="button"  onclick="getRemoveColouredNodes('#7BE141');" value="Remove Green"></input>
-<input type="reset"  onclick="populateNodeArray();window.location.reload() "></input>
-</div>
- -->
    					
-					</div>
+					</div> <!-- col-sm-? -->
+				</div> <!-- /row -->
+<br/><br/><br/>
 
-				</div>
+						<!--
+						-->
+					  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+					  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 				
-				<div class="row">
-
-					<div class="col-sm-12">
-						
-<div style="width: 75%">
-		<canvas id="canvas"></canvas>
-	</div>
-	<script src="http://www.chartjs.org/samples/latest/utils.js"></script>
-	<script>
-		
-		var barChartData = {
-			labels: ['',''],
-			datasets: [{
-				label: 'App 1',
-				backgroundColor: Utils.chartColors.RED,
-				data: [
-					10,20
-				]
-			}, {
-				label: 'App 2',
-				backgroundColor: Utils.chartColors.GREEN,
-				data: [
-					30,0
-				]
-			}, {
-				label: 'App 3',
-				backgroundColor: Utils.chartColors.AMBER,
-				data: [
-					20,0
-				]
-			}]
-
-		};
-		window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
-			window.myBar = new Chart(ctx, {
-				type: 'horizontalBar',
-				data: barChartData,
-				options: {
-					title: {
-						display: true,
-						text: 'Stacked Bar Dependency Graph'
-					},
-					tooltips: {
-						mode: 'index',
-						intersect: false
-					},
-					responsive: true,
-					scales: {
-						xAxes: [{
-							stacked: true,
-						}],
-						yAxes: [{
-							stacked: true
-						}]
-					}
-				}
-			});
-		};
-
-	</script>
-						
-						
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-12">
-
-				</div>
-				</div>
-								
-				<div class="highlights">
-				</div>
 			</div>
 		</section>
 
-
-		
 	</body>
-	// Dependency chart stuff
-<script type="text/javascript" src="assets/js/vis.js"></script>
-<script type="text/javascript" src="assets/js/dependencyMap.js"></script>		
- <script>
-  $( function() {
-    $( "#dialog" ).dialog({
-        width: 1000,
-        height: 500,
-        autoOpen: false,
-      show: {
-        effect: "blind",
-        duration: 1000
-      },
-      hide: {
-        effect: "blind",
-        duration: 1000
-      }
-    });
- 
-    $( "#opener" ).on( "click", function() {
-      $( "#dialog" ).dialog( "open" );
-    });
-  } );
-  </script>
+	
 </html>
 
 

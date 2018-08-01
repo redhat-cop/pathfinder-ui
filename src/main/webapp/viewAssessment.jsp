@@ -258,10 +258,14 @@ if ("true".equalsIgnoreCase(request.getParameter("review"))){
 		<div class="col-sm-3">
 			<h4>Proposed Action</h4>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-sm-2">
 			<h4>Effort Estimate</h4>
 		</div>
-		<div class="col-sm-6">
+		<div class="col-sm-3">
+			<h4>Work Priority</h4>
+			(1=low, 10=high)
+		</div>
+		<div class="col-sm-3">
 			<h4>Supporting Notes</h4>
 		</div>
 	</div>
@@ -276,7 +280,7 @@ if ("true".equalsIgnoreCase(request.getParameter("review"))){
 				<option value="RETAIN">Retain</option>
 			</select>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-sm-2">
 			<select name="WorkEffort" id="WorkEffort">
 				<option value="SMALL">Small</option>
 				<option value="MEDIUM">Medium</option>
@@ -284,37 +288,7 @@ if ("true".equalsIgnoreCase(request.getParameter("review"))){
 				<option value="XLarge">Extra Large</option>
 			</select> 
 		</div>
-		<div class="col-sm-6">
-			<textarea name="ReviewNotes" style="width:400px"></textarea>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-sm-3">
-			<h4>Business Priority</h4>
-		</div>
-		<div class="col-sm-3">
-			<h4>Work Priority</h4>
-		</div>
-		<div class="col-sm-3">
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-3"> (1=low, 10=high)
-			<select type="text" name="BusinessPriority">
-				<option>1</option>
-				<option>2</option>
-				<option>3</option>
-				<option>4</option>
-				<option>5</option>
-				<option>6</option>
-				<option>7</option>
-				<option>8</option>
-				<option>9</option>
-				<option>10</option>
-			</select>
-		</div>
-		<div class="col-sm-3"> (1=low, 10=high)
+		<div class="col-sm-2">
 			<select type="text" name="WorkPriority">
 				<option>1</option>
 				<option>2</option>
@@ -328,7 +302,17 @@ if ("true".equalsIgnoreCase(request.getParameter("review"))){
 				<option>10</option>
 			</select>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-sm-5">
+			<textarea name="ReviewNotes" style="width:325px;height:100px;"></textarea>
+		</div>
+	</div>
+	
+	<div class="row" style="height:10px;">
+		<!-- spacer between review options and submit button -->
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-12" style="text-align:right;">
 			<input type="button" onclick="postReview('form');" value="Submit Review">
 			<!--
 			<input type="submit" onclick="postReview('form');" value="Submit Review">
