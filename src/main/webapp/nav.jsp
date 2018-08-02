@@ -8,7 +8,7 @@
 				<%if (request.getSession().getAttribute("x-access-token")==null){%>
 					<a class="logo" href="login.jsp">Login</a>
 				<%}else{%>
-					<%=request.getSession().getAttribute("x-displayName")%> (<a href="api/pathfinder/logout">Logout</a>)
+					<p>Logged in as <%=request.getSession().getAttribute("x-displayName")%> <a href="api/pathfinder/logout"> (Logout)</a></p>
 				<%}%>
 				
 				<nav>

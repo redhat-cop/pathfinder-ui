@@ -39,40 +39,58 @@
 			<section class="wrapper">
 				<div class="inner">
 					<header class="special">
-						<h2>Choose one of the options below</h2>
 
 					</header>
 					<div class="highlights">
-						<section>
-							<div class="content">
-								<header>
-									<a href="survey.jsp" target=_blank class="icon fa-files-o"><span class="label">Icon</span></a>
-									<h3>Run the assessment questionnaire.</h3>
-								</header>
-								<p>Questions to start you on your way.</p>
-							</div>
-						</section>						
-
-
-						<section>
-							<div class="content">
-								<header>
-									<a href="manageCustomers.jsp" class="icon fa-line-chart"><span class="label">Icon</span></a>
-									<h3>Assessments</h3>
-								</header>
-								<p>View and edit assessment results.</p>
-							</div>
-						</section>
-						<section>
-							<div class="content">
-								<header>
-									<a href="manageCustomers.jsp" class="icon fa-vcard-o"><span class="label">Icon</span></a>
-									<h3>Administration</h3>
-								</header>
-								<p>Add/edit customers and applications.</p>
-							</div>
-						</section>
+					
+									<%if (request.getSession().getAttribute("x-access-token")==null){%>
+		<section id="banner2">
+		</section>
+		
+		<script>
+		$(document).ready(function(){
+			$("#loginForm").submit(function () {
+        $("#submit").attr("disabled", true);
+			  e.preventDefault();
+        return true;
+	    });
+		});
+		</script>
+		
+  			<%if (null!=request.getParameter("error")){%>
+					<div class="modal-content">
+						<%=request.getParameter("error")%>
 					</div>
+				<%}%>
+				<div class="modal-content" style="margin: auto;">
+				<h3>Please login</h3>
+					<div class="modal-body">
+						<form id="loginForm" action="api/pathfinder/login" method="post">
+		          <div class="form-group">
+		            <label for="username" class="control-label">Username:</label>
+		            <input id="username" name="username" type="text" class="form-control">
+		          </div>
+		          <div class="form-group">
+		            <label for="password" class="control-label">Password:</label>
+		            <input id="password" name="password" type="password" class="form-control">
+		          </div>
+							<br/><input id="submit" type="submit" value="Submit">
+						</form>
+					</div>
+				</div>
+  <!-- 					<a class="logo" href="login.jsp">Login</a> -->
+				<%}else{%>
+
+						
+							<div class="content" style="margin: auto;">
+								<header  style="margin: auto;">
+									<a href="manageCustomers.jsp" class="icon fa-line-chart"><span class="label">Icon</span>
+									<h3>Admin & Assessments</h3></a>
+								</header>
+							</div>
+						
+				<%}%>
+			</div>
 				</div>
 			</section>
 
