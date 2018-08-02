@@ -81,33 +81,14 @@
   <!-- 					<a class="logo" href="login.jsp">Login</a> -->
 				<%}else{%>
 
-						<section>
-							<div class="content">
-								<header>
-									<a href="survey.jsp" target=_blank class="icon fa-files-o"><span class="label">Icon</span></a>
-									<h3>Run the assessment questionnaire.</h3>
+						
+							<div class="content" style="margin: auto;">
+								<header  style="margin: auto;">
+									<a href="manageCustomers.jsp" class="icon fa-line-chart"><span class="label">Icon</span>
+									<h3>Admin & Assessments</h3></a>
 								</header>
-								<p>Questions to start you on your way.</p>
 							</div>
-						</section>
-						<section>
-							<div class="content">
-								<header>
-									<a href="manageCustomers.jsp" class="icon fa-line-chart"><span class="label">Icon</span></a>
-									<h3>Assessments</h3>
-								</header>
-								<p>View and edit assessment results.</p>
-							</div>
-						</section>
-						<section>
-							<div class="content">
-								<header>
-									<a href="manageCustomers.jsp" class="icon fa-vcard-o"><span class="label">Icon</span></a>
-									<h3>Administration</h3>
-								</header>
-								<p>Add/edit customers and applications.</p>
-							</div>
-						</section>
+						
 				<%}%>
 			</div>
 				</div>
