@@ -43,7 +43,7 @@
 					</header>
 					<div class="highlights">
 					
-									<%if (request.getSession().getAttribute("x-access-token")==null){%>
+									<%if (request.getSession().getAttribute("x-access-token")!=null){%>
 		<section id="banner2">
 		</section>
 		
