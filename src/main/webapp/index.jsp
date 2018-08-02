@@ -39,10 +39,14 @@
 			<section class="wrapper">
 				<div class="inner">
 					<header class="special">
-						<h2>Choose one of the options below</h2>
 
 					</header>
 					<div class="highlights">
+					
+									<%if (request.getSession().getAttribute("x-access-token")==null){%>
+					<a class="logo" href="login.jsp">Login</a>
+				<%}else{%>
+
 						<section>
 							<div class="content">
 								<header>
@@ -51,9 +55,7 @@
 								</header>
 								<p>Questions to start you on your way.</p>
 							</div>
-						</section>						
-
-
+						</section>
 						<section>
 							<div class="content">
 								<header>
@@ -72,7 +74,8 @@
 								<p>Add/edit customers and applications.</p>
 							</div>
 						</section>
-					</div>
+				<%}%>
+			</div>
 				</div>
 			</section>
 
