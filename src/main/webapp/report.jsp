@@ -64,7 +64,7 @@
 				<!-- ### Page specific stuff here ### -->
 				
 				
-				<h2>Summary</h2>
+				<h2>Current Landscape</h2>
 				<div class="row">
 					<div class="col-sm-3">
 						<canvas id="gauge-1" style="width:200px;height:100px;"></canvas>
@@ -80,10 +80,20 @@
 				<script>
 					//httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(customer){
 						new Chart(document.getElementById("gauge-1"),buildGuage(20, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
-						new Chart(document.getElementById("gauge-2"),buildGuage(30, "rgb(240,171,0)","rgb(220, 220, 220)","Medium Complexity"));
-						new Chart(document.getElementById("gauge-3"),buildGuage(50, "rgb(204, 0, 0)","rgb(220, 220, 220)","Complex/High-risk"));
+						new Chart(document.getElementById("gauge-2"),buildGuage(30, "rgb(240,171,0)","rgb(220, 220, 220)","High Risk"));
+						new Chart(document.getElementById("gauge-3"),buildGuage(50, "rgb(204, 0, 0)","rgb(220, 220, 220)","Blocked"));
 					//});
 				</script>
+				
+				<br/><br/><br/>
+				
+				
+				<h2>Identified Risks</h2>
+				<div class="row">
+					<div class="col-sm-9">
+						TODO: list of RED (and UNKNOWN?) questions that were answered on any assessment  
+					</div>
+				</div>
 				
 				<br/><br/><br/>
 				
@@ -92,6 +102,7 @@
 				<div class="row">
 					<div class="col-sm-4">
 						<style>
+						  /* override the datatables formatting to compress the screen real-estate used */
 							input[type=search] {
 								height: 23px;
 								//width: 100px;
@@ -109,6 +120,9 @@
 							.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
 								height: 23px;
 								padding: 0px !important;
+							}
+							table.dataTable thead th, table.dataTable thead td{
+								padding: 0px 0px !important;
 							}
 						</style>
 						<script>
@@ -140,7 +154,7 @@
 							        ]
 							        ,"columnDefs": [
 							        		{ "targets": 0, "orderable": false, "render": function (data,type,row){
-							              return "<input onclick='onChange2(this);' type='checkbox' value='"+row['Id']+"' style='background-color:red;width:10px'/>";
+							              return "<input onclick='onChange2(this);' checked type='checkbox' value='"+row['Id']+"' style='background-color:red;width:10px'/>";
 													}},
 													{ "targets": 3, "orderable": true, "render": function (data,type,row){
 							              return row['Decision']==null?"":row['Decision'];
@@ -174,7 +188,7 @@
 							var appFilter=[];
 							function onChange2(t){
 								t.checked?appFilter.push(t.value):appFilter.splice(appFilter.indexOf(t.value),1);
-								reDrawBubble(rawSummary);
+								reDrawBubble(rawSummary, false);
 							}
 						</script>
 				  	
@@ -202,17 +216,29 @@
 						  decisionColors['RETIRE']    ="#f0ab00"; //amber
 						  decisionColors['NULL']      ="#808080"; //grey
 						  var sizing=[];
-						  sizing['0']=0;
-						  sizing['SMALL']=60;
+						  sizing['0']=10;
+						  sizing['SMALL']=20;
 						  sizing['MEDIUM']=40;
-						  sizing['LARGE']=20;
-						  sizing['EXTRA LARGE']=10;
+						  sizing['LARGE']=60;
+						  sizing['EXTRA LARGE']=80;
+						  var randomNumbers=[];
+
 						  
-						  function reDrawBubble(summary){
+						  var bubbleChart;
+						  
+						  function getData(summary){
+						    
+						    //TODO: remove this when we get dependencies
+						    if (randomNumbers.length==0){
+								  for(i=0;i<summary.length;i++){
+								  	randomNumbers[i]=Math.floor(Math.random() * 10) + 0;
+								  }
+						    }
+						    
 								var label=[];
 								var innerData=[];
 								var backgroundColor=[];
-								data={};
+								var data={};
 								//data={label:[],data:[],backgroundColor:[]};
 								
 								//console.log("summary="+JSON.stringify(summary));
@@ -220,7 +246,7 @@
 								for(i=0;i<summary.length;i++){
 									var app=summary[i];
 									
-									console.log("APP="+JSON.stringify(app));
+									//console.log("APP="+JSON.stringify(app));
 									
 									if (!appFilter.includes(app['Id'])) continue;
 									
@@ -229,7 +255,7 @@
 									var decision=app['Decision'];
 									var workEffort=app['WorkEffort'];
 									//var inboundDependencies=5; // TODO: not implemented in the back end yet
-									var inboundDependencies=Math.floor(Math.random() * 10) + 0;
+									var inboundDependencies=randomNumbers[i]
 									
 									//TODO: this shouldnt be possible unless the assessment is incomplete
 									if (businessPriority==null) businessPriority=0;
@@ -251,13 +277,31 @@
 								data['data']=innerData;
 								
 								//console.log("data="+JSON.stringify(data));
+								return data;
+						  }
+						  
+						  function reDrawBubble(summary, initial){
+						  	console.log("redraw -> "+initial);
 								
-								new Chart(document.getElementById("chartjs-6"),{
+								if (!initial){
+									bubbleChart.destroy();
+								}else{
+									// add all apps to begin with
+									for(i=0;i<summary.length;i++){
+										appFilter.push(summary[i]['Id']);
+									}
+								}
+								
+							  var ctx=document.getElementById("bubbleChart").getContext('2d');
+								bubbleChart=new Chart(ctx,{
 									"type":"bubble",
 									"data": {"datasets":[
-										data
+										getData(summary)
 									]},
 									options:{
+										animation: {
+											duration: initial?1000:1
+										},
 										aspectRatio: 1,
 										legend: false,
 										scales: {
@@ -280,31 +324,48 @@
 										}
 									}
 								});
+									
+								
 						  }
 						  
 							var data;
 							var rawSummary;
 							httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(summary){
 								rawSummary=summary;
-								reDrawBubble(rawSummary);
+								reDrawBubble(rawSummary, true);
 							});
 							
 						</script>
 						
 						<div class="chartjs-wrapper" style="width:750px;">
-							<canvas id="chartjs-6" class="chartjs" width="undefined" height="undefined"></canvas>
+							<canvas id="bubbleChart" class="chartjs" width="undefined" height="undefined"></canvas>
 						</div>
    					
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
 <br/><br/><br/>
 
-						<!--
-						-->
-					  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-					  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
 				
+				<h2>Suggested Adoption Plan</h2>
+				<div class="row">
+					<div class="col-sm-12">
+						
+						<div style="width: 1000px; height: 100px;">
+							<canvas id="adoption" style="width: 500px; height: 100px;"></canvas>
+						</div>
+						
+						<%@include file="report-adoption3.jsp"%>
+						
+					</div>
+						
+					</div> <!-- col-sm-? -->
+				</div> <!-- /row -->
+<br/><br/><br/>
+
+<div class="row">
+&nbsp;
+</div>
+
 			</div>
 		</section>
 
@@ -314,3 +375,9 @@
 
 
 
+
+						<!--
+					  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+					  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+				
+						-->
