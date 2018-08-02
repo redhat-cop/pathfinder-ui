@@ -39,10 +39,48 @@
 			<section class="wrapper">
 				<div class="inner">
 					<header class="special">
-						<h2>Choose one of the options below</h2>
 
 					</header>
 					<div class="highlights">
+					
+									<%if (request.getSession().getAttribute("x-access-token")==null){%>
+		<section id="banner2">
+		</section>
+		
+		<script>
+		$(document).ready(function(){
+			$("#loginForm").submit(function () {
+        $("#submit").attr("disabled", true);
+			  e.preventDefault();
+        return true;
+	    });
+		});
+		</script>
+		
+  			<%if (null!=request.getParameter("error")){%>
+					<div class="modal-content">
+						<%=request.getParameter("error")%>
+					</div>
+				<%}%>
+				<div class="modal-content" style="margin: auto;">
+				<h3>Please login</h3>
+					<div class="modal-body">
+						<form id="loginForm" action="api/pathfinder/login" method="post">
+		          <div class="form-group">
+		            <label for="username" class="control-label">Username:</label>
+		            <input id="username" name="username" type="text" class="form-control">
+		          </div>
+		          <div class="form-group">
+		            <label for="password" class="control-label">Password:</label>
+		            <input id="password" name="password" type="password" class="form-control">
+		          </div>
+							<br/><input id="submit" type="submit" value="Submit">
+						</form>
+					</div>
+				</div>
+  <!-- 					<a class="logo" href="login.jsp">Login</a> -->
+				<%}else{%>
+
 						<section>
 							<div class="content">
 								<header>
@@ -51,9 +89,7 @@
 								</header>
 								<p>Questions to start you on your way.</p>
 							</div>
-						</section>						
-
-
+						</section>
 						<section>
 							<div class="content">
 								<header>
@@ -72,7 +108,8 @@
 								<p>Add/edit customers and applications.</p>
 							</div>
 						</section>
-					</div>
+				<%}%>
+			</div>
 				</div>
 			</section>
 
