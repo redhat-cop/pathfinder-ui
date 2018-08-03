@@ -169,7 +169,7 @@ function onClickHandlers(myChart) {
 						<%}%>
 					</div>
 						<div class="col-sm-8">
-							<h2><span id="applicationName"></span></h2>
+							<h2><span id="applicationName">Loading...</span></h2>
 						</div>
 				</div>
 				
@@ -270,12 +270,12 @@ function onClickHandlers(myChart) {
 								
 								<!-- ### TITLE SECTION GOES HERE -->
 								
-								<span id="applicationDescription"></span><br/>
+								<span id="applicationDescription">Loading...</span><br/>
 								
 								<!-- 
 								put this one in later when we have time: https://codepen.io/trevanhetzel/pen/rOVrGK
 								-->
-								Business Criticality: <span id="businessCriticality"></span>
+								Business Criticality: <span id="businessCriticality">Loading...</span>
 								</p>
 							
 							</div>
