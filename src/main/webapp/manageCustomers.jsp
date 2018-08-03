@@ -88,7 +88,9 @@
 			              return "<input type='checkbox' name='id' value='"+row['CustomerId']+"'></input>";
 								 }},
 			           { "targets": 1, "orderable": true, "render": function (data,type,row){
-			              return "<a href='#' onclick='loadEntity(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>"+row["CustomerName"]+"</a>";
+							      var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>"+row['CustomerName']+"</a>";
+							      return link+"&nbsp;<span class='editLink'>(<a href='#' onclick='loadEntity(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>edit</a>)</span>";
+			              //return "<a href='#' onclick='loadEntity(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>"+row["CustomerName"]+"</a>";
 								 }},
 								 { "targets": 3, "orderable": false, "render": function (data,type,row){
 								    return "";//<a href='report.jsp?customerId="+row["CustomerId"]+"'>Report</a>";
@@ -151,7 +153,7 @@
 		            <tr>
 		                <th align="left"></th>
 		                <th align="left">Customer Name</th>
-		                <th align="left">Customer Details</th>
+		                <th align="left">Customer Description</th>
 		                <th align="left"></th>
 		                <th align="left"></th>
 		                <th align="left"></th>

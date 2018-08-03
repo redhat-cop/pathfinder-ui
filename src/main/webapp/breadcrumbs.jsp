@@ -78,6 +78,18 @@ li:last-child {
 		    	//$('#breadcrumb-'+active+'>a').attr("href","#"); // prevent navigation to current page
 		    }
   		}
+  		
+  		// Duplicate of the above setBreadcrumbs method for pages where we get the customer details without a specific extra call. Trying to migrate to this method over setBreadcrumbs...
+  		function initTabs(active, customerId, customerName){
+		    document.getElementById("customer").innerHTML=customerName;
+		    $('#breadcrumb-applications>a').attr('href', 'manageCustomerApplications.jsp?customerId='+customerId);
+		    $('#breadcrumb-assessments>a').attr('href', 'assessments-v2.jsp?customerId='+customerId);
+		    $('#breadcrumb-members>a').attr('href', 'members.jsp?customerId='+customerId);
+		    if (undefined!=$('#breadcrumb-'+active+'>a').get()){
+		    	$('#breadcrumb-'+active+'>a').addClass("active");
+		    	//$('#breadcrumb-'+active+'>a').attr("href","#"); // prevent navigation to current page
+		    }
+  		}
   	</script>
   	
   	<div>
@@ -86,8 +98,8 @@ li:last-child {
 				<!--
 				<li id="breadcrumb-details"><a href="#">Details</a></li>
 				-->
-				<li id="breadcrumb-applications"><a href="#">Applications</a></li>
 				<li id="breadcrumb-assessments"><a href="#">Assessments</a></li>
+				<li id="breadcrumb-applications"><a href="#">Applications</a></li>
 				<li id="breadcrumb-members"><a href="#">Members</a></li>
 			</ul>
   	</div>

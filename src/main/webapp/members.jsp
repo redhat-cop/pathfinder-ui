@@ -66,7 +66,9 @@
 									return "<input type='checkbox' name='id' value='"+row['Id']+"'></input>";
 								}},
 				      	{ "targets": 1, "orderable": true, "render": function (data,type,row){
-									return "<a href='#' onclick='loadEntity(\""+row["Id"]+"\"); return false;' data-toggle='modal' data-target='#exampleModal'>"+row['Username']+"</a>";
+								  return row['Username']+"&nbsp;<span class='editLink'>(<a href='#' onclick='loadEntity(\""+row["Username"]+"\");' data-toggle='modal' data-target='#exampleModal'>edit</a>)</span>";
+								  
+								  //return "<a href='#' onclick='loadEntity(\""+row["Id"]+"\"); return false;' data-toggle='modal' data-target='#exampleModal'>"+row['Username']+"</a>";
 								}},
 			        ]
 			    } );

@@ -39,28 +39,38 @@
 				//var beenReviewed=false;
 				
 				$(document).ready(function() {
-					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"?assessmentFields=BUSPRIORITY", function(application){
+					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"?custom=customer.id,customer.name,BUSPRIORITY", function(application){
 						//document.getElementById("breadcrumb2").innerHTML=application.Name;
+						
 						document.getElementById("applicationName").innerHTML=application.Name;
 						document.getElementById("applicationDescription").innerHTML=application.Description;
-						document.getElementById("businessCriticality").innerHTML=application.AssessmentFields['BUSPRIORITY'];
-						
-						
-						//beenReviewed=application.Review!=null;
-					  //console.log("app.count="+progress.Appcount+", assessed="+progress.Assessed+", reviewed="+progress.Reviewed);
-					});
-					
-					// ### Get Customer Details
-					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
+						document.getElementById("businessCriticality").innerHTML=application.CustomFields['BUSPRIORITY'];
+
 						// ### Populate the header with the Customer Name
 						//document.getElementById("customerName").innerHTML=customer.CustomerName;
 						//document.getElementById("breadcrumb1").innerHTML="<a href='assessments-v2.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
 						
 				    if (undefined!=setBreadcrumbs){
 				      setBreadcrumbs("assessments", customer);
+				      initTabs("assessments", application.CustomFields['customer.id'], application.CustomFields['customer.name']);
 				    }
 						
+						
+						//beenReviewed=application.Review!=null;
+					  //console.log("app.count="+progress.Appcount+", assessed="+progress.Assessed+", reviewed="+progress.Reviewed);
 					});
+					
+					//// ### Get Customer Details
+					//httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
+					//	// ### Populate the header with the Customer Name
+					//	//document.getElementById("customerName").innerHTML=customer.CustomerName;
+					//	//document.getElementById("breadcrumb1").innerHTML="<a href='assessments-v2.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
+					//	
+				  //  if (undefined!=setBreadcrumbs){
+				  //    setBreadcrumbs("assessments", customer);
+				  //  }
+					//	
+					//});
 					
 				});
 				

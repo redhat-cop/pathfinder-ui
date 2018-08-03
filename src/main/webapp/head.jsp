@@ -16,4 +16,13 @@
 	  	var applicationId=Utils.getParameterByName("applicationId");
 	  	var assessmentId=Utils.getParameterByName("assessmentId");
 	  </script>
+	  
+	  <!-- We REALLY need to sort out the css for this app at some point SOON!-->
+	  <style>
+	  	.editLink{
+			  vertical-align:super;
+			  font-size:0.6em;
+	  	}
+	  
+	  </style>
 	</head>

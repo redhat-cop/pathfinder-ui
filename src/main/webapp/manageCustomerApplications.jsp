@@ -69,7 +69,8 @@
 									return "<input type='checkbox' name='id' value='"+row['Id']+"'></input>";
 								}},
 				      	{ "targets": 1, "orderable": true, "render": function (data,type,row){
-									return "<a href='#' onclick='loadEntity(\""+row["Id"]+"\"); return false;' data-toggle='modal' data-target='#exampleModal'>"+row['Name']+"</a>";
+							    return row['Name']+"&nbsp;<span class='editLink'>(<a href='#' onclick='loadEntity(\""+row["Id"]+"\");' data-toggle='modal' data-target='#exampleModal'>edit</a>)</span>";
+								  //return "<a href='#' onclick='loadEntity(\""+row["Id"]+"\"); return false;' data-toggle='modal' data-target='#exampleModal'>"+row['Name']+"</a>";
 								}},
 			        	{ "targets": 2, "orderable": true, "render": function (data,type,row){
 									return row['Stereotype']=="TARGETAPP"?"Assessable Application":"Dependency Only";
