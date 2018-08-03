@@ -39,9 +39,13 @@
 				//var beenReviewed=false;
 				
 				$(document).ready(function() {
-					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId, function(application){
+					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"?assessmentFields=BUSPRIORITY", function(application){
 						//document.getElementById("breadcrumb2").innerHTML=application.Name;
 						document.getElementById("applicationName").innerHTML=application.Name;
+						document.getElementById("applicationDescription").innerHTML=application.Description;
+						document.getElementById("businessCriticality").innerHTML=application.AssessmentFields['BUSPRIORITY'];
+						
+						
 						//beenReviewed=application.Review!=null;
 					  //console.log("app.count="+progress.Appcount+", assessed="+progress.Assessed+", reviewed="+progress.Reviewed);
 					});
@@ -146,18 +150,28 @@ function onClickHandlers(myChart) {
   })};
 </script>
 				
+				<div class="row">
+					<div class="col-sm-4">
+						<%if ("true".equalsIgnoreCase(request.getParameter("review"))){%>
+							<h2>Architect Review</h2>
+						<%}else{%>
+							<h2>Assessment Summary</h2>
+						<%}%>
+					</div>
+						<div class="col-sm-8">
+							<h2><span id="applicationName"></span></h2>
+						</div>
+				</div>
+				
 				
 				<div class="row">
 					<div class="col-sm-4">
-						<!-- ### CHART GOES HERE -->
 						
-						<h2>Assessment: <span id="applicationName"></span></h2>
+						<!-- ### CHART GOES HERE -->
 						<script>
-						  
 							$(document).ready(function() {
 								
 								httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/assessments/"+assessmentId+"/viewAssessmentSummary", function(viewAssessmentSummary){
-									
 									var data=viewAssessmentSummary
 									
 									var i;
@@ -238,159 +252,171 @@ function onClickHandlers(myChart) {
 						}
 						</style>
 						
-						
 					</div>
 					<div class="col-sm-8">
-						
+							
 						<div class="row">
-
-<%
-if ("true".equalsIgnoreCase(request.getParameter("review"))){
-%>
-
-<p><h2>Architect Review</h2></p>
-<p>Please use this section to provide your assessment of the possible migration/modernisation plan and an effort estimation.</p>
-
-<form action="/api/pathfinder/customers/<%=request.getParameter("customer")%>/applications/<%=request.getParameter("app")%>/" id="form" method="post">
-	<input type="hidden" id="AssessmentId" name="AssessmentId" value="<%=request.getParameter("assessment")%>"/>
-	<!--input type="hidden" id="ReviewTimestamp" name="ReviewTimestamp" value="2018-03-14 03:23:29pm"/-->
-	<div class="row">
-		<div class="col-sm-3">
-			<h4>Proposed Action</h4>
-		</div>
-		<div class="col-sm-2">
-			<h4>Effort Estimate</h4>
-		</div>
-		<div class="col-sm-3">
-			<h4>Work Priority</h4>
-			(1=low, 10=high)
-		</div>
-		<div class="col-sm-3">
-			<h4>Supporting Notes</h4>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-3">
-			<select name="ReviewDecision" id="ReviewDecision">
-				<option value="REHOST">Re-host</option>
-				<option value="REPLATFORM">Re-platform</option>
-				<option value="REFACTOR">Refactor</option>
-				<option value="REPURCHASE">Repurchase</option>
-				<option value="RETIRE">Retire</option>
-				<option value="RETAIN">Retain</option>
-			</select>
-		</div>
-		<div class="col-sm-2">
-			<select name="WorkEffort" id="WorkEffort">
-				<option value="SMALL">Small</option>
-				<option value="MEDIUM">Medium</option>
-				<option value="LARGE">Large</option>
-				<option value="XLarge">Extra Large</option>
-			</select> 
-		</div>
-		<div class="col-sm-2">
-			<select type="text" name="WorkPriority">
-				<option>1</option>
-				<option>2</option>
-				<option>3</option>
-				<option>4</option>
-				<option>5</option>
-				<option>6</option>
-				<option>7</option>
-				<option>8</option>
-				<option>9</option>
-				<option>10</option>
-			</select>
-		</div>
-		<div class="col-sm-5">
-			<textarea name="ReviewNotes" style="width:325px;height:100px;"></textarea>
-		</div>
-	</div>
-	
-	<div class="row" style="height:10px;">
-		<!-- spacer between review options and submit button -->
-	</div>
-	
-	<div class="row">
-		<div class="col-sm-12" style="text-align:right;">
-			<input type="button" onclick="postReview('form');" value="Submit Review">
-			<!--
-			<input type="submit" onclick="postReview('form');" value="Submit Review">
-			-->
-			
-		</div>
-
-	</div>
-	<script>
-		function postReview(formId){
-	    var form=document.getElementById(formId);
-		  
-	    var data = {};
-	    for (var i = 0, ii = form.length; i < ii; ++i) {
-		    if (form[i].name) data[form[i].name]=form[i].value;
-		  }
-		  
-		  
-		  var callback=new function(response){
-		    // wait for the post response before redirecting or else the post will be cancelled
-		    console.log("Callback::after post: response= "+response);
-		    // TODO: this would be much nicer if the server provided a 302 so we could use a submit rather than an artificial wait
-		    //window.location.href = "assessments-v2.jsp?customerId="+customerId;
-		  };
-		  
-		  console.log("POSTING: "+JSON.stringify(data));
-	    //postWait(addAuthToken(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/review"), data, callback);
-	    
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST", addAuthToken(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/review"), true);
-			xhr.setRequestHeader("Content-type", "application/json");
-			xhr.send(JSON.stringify(data));
-			xhr.onloadend = function () {
-			  //console.log("PostWait::status = "+xhr.status);
-			  //console.log("PostWait::status = "+xhr.responseText);
-			  if (xhr.status==200){
-			    console.log("PostWait::http 200 returned ok, redirecting...");
-			  	window.location.href = "assessments-v2.jsp?customerId="+customerId;
-			  }
-			};
-		}
-	</script>
-	
-</form>
-<!--
-<a href="results.php?customer=<?php echo $_REQUEST['customer'] ?>"><button>Return to Results</button></a>
--->
+							<div class="col-sm-8">
+								
+								<!-- ### TITLE SECTION GOES HERE -->
+								
+								<span id="applicationDescription"></span><br/>
+								
+								<!-- 
+								put this one in later when we have time: https://codepen.io/trevanhetzel/pen/rOVrGK
+								-->
+								Business Criticality: <span id="businessCriticality"></span>
+								</p>
 							
-<%
-}
-%>
+							</div>
 							
+							
+							<div class="col-sm-8">
+								<!-- ### REVIEW (OPTIONAL) GOES HERE -->
+								<%
+								if ("true".equalsIgnoreCase(request.getParameter("review"))){
+								%>
+								
+								<p>Please use this section to provide your assessment of the possible migration/modernisation plan and an effort estimation.</p>
+								
+								<form action="/api/pathfinder/customers/<%=request.getParameter("customer")%>/applications/<%=request.getParameter("app")%>/" id="form" method="post">
+									<input type="hidden" id="AssessmentId" name="AssessmentId" value="<%=request.getParameter("assessment")%>"/>
+									<!--input type="hidden" id="ReviewTimestamp" name="ReviewTimestamp" value="2018-03-14 03:23:29pm"/-->
+									<div class="row">
+										<div class="col-sm-3">
+											<h4>Proposed Action</h4>
+										</div>
+										<div class="col-sm-2">
+											<h4>Effort Estimate</h4>
+										</div>
+										<div class="col-sm-3">
+											<h4>Work Priority</h4>
+											(1=low, 10=high)
+										</div>
+										<div class="col-sm-3">
+											<h4>Supporting Notes</h4>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-3">
+											<select name="ReviewDecision" id="ReviewDecision">
+												<option value="REHOST">Re-host</option>
+												<option value="REPLATFORM">Re-platform</option>
+												<option value="REFACTOR">Refactor</option>
+												<option value="REPURCHASE">Repurchase</option>
+												<option value="RETIRE">Retire</option>
+												<option value="RETAIN">Retain</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
+											<select name="WorkEffort" id="WorkEffort">
+												<option value="SMALL">Small</option>
+												<option value="MEDIUM">Medium</option>
+												<option value="LARGE">Large</option>
+												<option value="XLarge">Extra Large</option>
+											</select> 
+										</div>
+										<div class="col-sm-2">
+											<select type="text" name="WorkPriority">
+												<option>1</option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+												<option>6</option>
+												<option>7</option>
+												<option>8</option>
+												<option>9</option>
+												<option>10</option>
+											</select>
+										</div>
+										<div class="col-sm-5">
+											<textarea name="ReviewNotes" style="width:325px;height:100px;"></textarea>
+										</div>
+									</div>
+									
+									<div class="row" style="height:10px;">
+										<!-- spacer between review options and submit button -->
+									</div>
+									
+									<div class="row">
+										<div class="col-sm-12" style="text-align:right;">
+											<input type="button" onclick="postReview('form');" value="Submit Review">
+											<!--
+											<input type="submit" onclick="postReview('form');" value="Submit Review">
+											-->
+											
+										</div>
+								
+									</div>
+									<script>
+										function postReview(formId){
+									    var form=document.getElementById(formId);
+										  
+									    var data = {};
+									    for (var i = 0, ii = form.length; i < ii; ++i) {
+										    if (form[i].name) data[form[i].name]=form[i].value;
+										  }
+										  
+										  
+										  var callback=new function(response){
+										    // wait for the post response before redirecting or else the post will be cancelled
+										    console.log("Callback::after post: response= "+response);
+										    // TODO: this would be much nicer if the server provided a 302 so we could use a submit rather than an artificial wait
+										    //window.location.href = "assessments-v2.jsp?customerId="+customerId;
+										  };
+										  
+										  console.log("POSTING: "+JSON.stringify(data));
+									    //postWait(addAuthToken(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/review"), data, callback);
+									    
+											var xhr = new XMLHttpRequest();
+											xhr.open("POST", addAuthToken(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applications/"+appId+"/review"), true);
+											xhr.setRequestHeader("Content-type", "application/json");
+											xhr.send(JSON.stringify(data));
+											xhr.onloadend = function () {
+											  //console.log("PostWait::status = "+xhr.status);
+											  //console.log("PostWait::status = "+xhr.responseText);
+											  if (xhr.status==200){
+											    console.log("PostWait::http 200 returned ok, redirecting...");
+											  	window.location.href = "assessments-v2.jsp?customerId="+customerId;
+											  }
+											};
+										}
+									</script>
+									
+								</form>
+								<!--
+								<a href="results.php?customer=<?php echo $_REQUEST['customer'] ?>"><button>Return to Results</button></a>
+								-->
+															
+								<%
+								}
+								%>
+							</div>
+							
+							
+							<div class="col-sm-10">
+								<!-- ### DETAILS DATATABLE GO HERE -->
+							    <div id="buttonbar">
+							    </div>
+							    <div id="tableDiv">
+								    <table id="example" class="display" cellspacing="0" width="100%">
+							        <thead>
+						            <tr>
+					                <th align="left">Question</th>
+					                <th align="left">Answer</th>
+					                <th align="left">Rating</th>
+						            </tr>
+							        </thead>
+								    </table>
+								  </div>
+								
+							</div>
 						</div>
 						
-						<div class="row">
-							
-							<!-- ### DATATABLE GOES HERE -->
-					  	<div id="wrapper">
-						    <div id="buttonbar">
-						    </div>
-						    <div id="tableDiv">
-							    <table id="example" class="display" cellspacing="0" width="100%">
-						        <thead>
-					            <tr>
-				                <th align="left">Question</th>
-				                <th align="left">Answer</th>
-				                <th align="left">Rating</th>
-					            </tr>
-						        </thead>
-							    </table>
-							  </div>
-					  	</div>
-					  	
-						</div>
-						
-				  	
 					</div>
 				</div>
+				
 				
 				<div class="highlights">
 				</div>
