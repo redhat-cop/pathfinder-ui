@@ -1,7 +1,9 @@
 <script>
 
 
-    window.onload = function() {
+		//httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/report", function(report){
+			//var summaryList=report.summaryList;
+			
 			var ctx = document.getElementById('adoption').getContext('2d');
 			var chart = new Chart(ctx, {
 		    type: 'horizontalBar',
@@ -74,7 +76,10 @@
 			//        return e._datasetIndex === 1;
 			//    });
 			//}
-	
-		};
+			
+			
+			
+		//});
+
 
 </script>

@@ -40,7 +40,7 @@
           
           <div id="form-id" class="form-group">
             <label for="CustomerName" class="control-label">Customer Name:</label>
-            <input id="CustomerName" name="CustomerName" type="text" class="form-control"/>
+            <input id="CustomerName" name="CustomerName" type="text" class="form-control mandatory"/>
           </div>
           <div class="form-group">
             <label for="CustomerDescription" class="control-label">Customer Description:</label>
@@ -75,6 +75,22 @@
           </div>
         </form>
       </div>
+      <script>
+	      function formValidate(){
+		      $('#edit-ok').attr('disabled', isEmpty($('#CustomerName').val()));
+	      }
+	      function isEmpty(val){
+	      	return val==null || val=="";
+	      }
+      	$(document).ready(function() {
+	      	$("#exampleModal select").change(function(){
+						formValidate();
+					});
+					$("#exampleModal input").keyup(function(){
+						formValidate();
+					});
+				});
+      </script>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button id="edit-ok" type="button" data-dismiss="modal" onclick="save(this, 'form'); return false;">Create</button>

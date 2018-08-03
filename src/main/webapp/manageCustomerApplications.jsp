@@ -60,6 +60,8 @@
 			        "columns": [
 			            { "data": "Id" },
 			            { "data": "Name" },
+			            { "data": "Stereotype" },
+			            { "data": "Owner" },
 			            { "data": "Description" },
 			        ]
 			        ,"columnDefs": [
@@ -68,6 +70,9 @@
 								}},
 				      	{ "targets": 1, "orderable": true, "render": function (data,type,row){
 									return "<a href='#' onclick='loadEntity(\""+row["Id"]+"\"); return false;' data-toggle='modal' data-target='#exampleModal'>"+row['Name']+"</a>";
+								}},
+			        	{ "targets": 2, "orderable": true, "render": function (data,type,row){
+									return row['Stereotype']=="TARGETAPP"?"Assessable Application":"Dependency Only";
 								}},
 			        ]
 			    } );
@@ -111,6 +116,8 @@
 			            <tr>
 			                <th align="left"></th>
 			                <th align="left">Application Name</th>
+			                <th align="left">Type</th>
+			                <th align="left">Owner</th>
 			                <th align="left">Description</th>
 			                <!--th align="left">Edit</th-->
 			                <!--th align="left">Delete</th-->

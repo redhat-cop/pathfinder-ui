@@ -78,11 +78,11 @@
 				</div>
 				<%@include file="report-summary.jsp"%>
 				<script>
-					//httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(customer){
+					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/report", function(report){
 						new Chart(document.getElementById("gauge-1"),buildGuage(20, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
 						new Chart(document.getElementById("gauge-2"),buildGuage(30, "rgb(240,171,0)","rgb(220, 220, 220)","High Risk"));
 						new Chart(document.getElementById("gauge-3"),buildGuage(50, "rgb(204, 0, 0)","rgb(220, 220, 220)","Blocked"));
-					//});
+					});
 				</script>
 				
 				<br/><br/><br/>
@@ -348,7 +348,7 @@
 				
 				<h2>Suggested Adoption Plan</h2>
 				<div class="row">
-					<div class="col-sm-12">
+					<div class="col-sm-8">
 						
 						<div style="width: 1000px; height: 100px;">
 							<canvas id="adoption" style="width: 500px; height: 100px;"></canvas>

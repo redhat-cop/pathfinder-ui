@@ -106,7 +106,10 @@ function loadEntity(id){
       }else{
         form[i].value=json[form[i].name];
       }
+      //form[i].disabled=false;
     }
+    if (formValidate!=undefined)
+      formValidate();
   }
 }
 function save(sender, formId){
@@ -142,6 +145,7 @@ function httpGet(url, field, callback){
 function httpGetObject(url, callback){
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", addAuthToken(url), true);
+	//xhr.setRequestHeader("Accept", "application/json");
 	xhr.send();
 	xhr.onloadend = function () {
 	  callback(JSON.parse(xhr.responseText));
