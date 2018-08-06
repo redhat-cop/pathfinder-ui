@@ -32,6 +32,7 @@
 		</script>
 		
   	<div id="wrapper">
+  					<div class="inner">
 			<center>
 				<%if (null!=request.getParameter("error")){%>
 					<div class="modal-content">
@@ -54,6 +55,7 @@
 					</div>
 				</div>
 			</center>
+			</div>
   	</div>
 
 	</body>
