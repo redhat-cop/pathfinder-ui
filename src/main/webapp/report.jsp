@@ -21,11 +21,11 @@
 	
 	<!-- for pie/line/bubble graphing -->
 	<!--
-	-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+	-->
+	<script src="assets/js/Chart-2.6.0.min.js"></script>
 
 	<body class="is-preload">
-
 
   	<%@include file="nav.jsp"%>
   	
@@ -79,9 +79,10 @@
 				<%@include file="report-summary.jsp"%>
 				<script>
 					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/report", function(report){
-						new Chart(document.getElementById("gauge-1"),buildGuage(20, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
-						new Chart(document.getElementById("gauge-2"),buildGuage(30, "rgb(240,171,0)","rgb(220, 220, 220)","High Risk"));
-						new Chart(document.getElementById("gauge-3"),buildGuage(50, "rgb(204, 0, 0)","rgb(220, 220, 220)","Blocked"));
+						new Chart(document.getElementById("gauge-1"),buildGuage(report.assessmentSummary.Easy*100, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
+						new Chart(document.getElementById("gauge-2"),buildGuage(report.assessmentSummary.Medium*100, "rgb(240,171,0)","rgb(220, 220, 220)","High Risk"));
+						new Chart(document.getElementById("gauge-3"),buildGuage(report.assessmentSummary.Hard*100, "rgb(204, 0, 0)","rgb(220, 220, 220)","Blocked"));
+						drawRisks(report);
 					});
 				</script>
 				
@@ -91,7 +92,55 @@
 				<h2>Identified Risks</h2>
 				<div class="row">
 					<div class="col-sm-9">
-						TODO: list of RED (and UNKNOWN?) questions that were answered on any assessment  
+						
+						<script>
+							function drawRisks(data){
+							  var risks=[];
+							  if (data.risks!=undefined) risks=data.risks;
+							  
+						    $('#risks').DataTable( {
+						        "data": risks,
+						        "oLanguage": { 
+						        	sSearch: "",             // remove the "Search" label text
+						        	sLengthMenu: "_MENU_"    // remove the "show X entries" text
+						        },
+						        "scrollCollapse": true,
+						        "paging":         false,
+						        //"lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
+						        "pageLength" : -1, // default page entries
+						        "bInfo" : false, // removes "Showing N entries" in the table footer
+						        "columns": [
+						            { "data": "question" },
+						            { "data": "answer" },
+						            { "data": "offendingApps" },
+							        ],
+						        //"columnDefs": [
+						        //   { "targets": 0, "orderable": true, "render": function (data,type,row){
+						        //      return row['question'];
+										//	 }},
+						        //   { "targets": 1, "orderable": true, "render": function (data,type,row){
+										//	    return row['offendingApps'];
+										//	 }},
+						        //]
+						    } );
+						  }
+						</script>
+						A list of questions with answers that that could cause migratory risk to a container platform.
+						
+				  	<div id="wrapper">
+					    <div id="tableDiv">
+						    <table id="risks" class="display" cellspacing="0" width="100%">
+						        <thead>
+						            <tr>
+						                <th align="left">Question</th>
+						                <th align="left">Answer</th>
+						                <th align="left">Application(s)</th>
+						            </tr>
+						        </thead>
+						    </table>
+						  </div>
+				  	</div>
+
 					</div>
 				</div>
 				
@@ -127,13 +176,14 @@
 						</style>
 						<script>
 							$(document).ready(function() {
-							    $('#example').DataTable( {
-							        "ajax": {
-							            "url": Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applicationAssessmentSummary",
-							            "data":{"_t":jwtToken},
-							            "dataSrc": "",
-							            "dataType": "json"
-							        },
+							    $('#appFilter').DataTable( {
+							        //"ajax": {
+							        //    "url": Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applicationAssessmentSummary",
+							        //    "data":{"_t":jwtToken},
+							        //    "dataSrc": "",
+							        //    "dataType": "json"
+							        //},
+							        "data": applicationAssessmentSummary,
 							        "oLanguage": { 
 							        	sSearch: "",             // remove the "Search" label text
 							        	sLengthMenu: "_MENU_" }, // remove the "show X entries" text
@@ -149,6 +199,7 @@
 							            { "data": "Id" },
 							            { "data": "Name" },
 							            { "data": "BusinessPriority" },
+							            { "data": "WorkPriority" },
 							            { "data": "Decision" },
 							            { "data": "WorkEffort" },
 							        ]
@@ -156,10 +207,10 @@
 							        		{ "targets": 0, "orderable": false, "render": function (data,type,row){
 							              return "<input onclick='onChange2(this);' checked type='checkbox' value='"+row['Id']+"' style='background-color:red;width:10px'/>";
 													}},
-													{ "targets": 3, "orderable": true, "render": function (data,type,row){
+													{ "targets": 4, "orderable": true, "render": function (data,type,row){
 							              return row['Decision']==null?"":row['Decision'];
 													}},
-													{ "targets": 4, "orderable": true, "render": function (data,type,row){
+													{ "targets": 5, "orderable": true, "render": function (data,type,row){
 							              return row['WorkEffort']==null?"":row['WorkEffort'];
 													}}
 							        ]
@@ -170,14 +221,15 @@
 					    <div id="buttonbar">
 					    </div>
 					    <div id="tableDiv">
-						    <table id="example" class="display" cellspacing="0" width="100%">
+						    <table id="appFilter" class="display" cellspacing="0" width="100%">
 					        <thead>
 				            <tr>
 			                <th align="left"></th>
-			                <th align="left">Application</th>
-			                <th align="left">Bus. Critical</th>
-			                <th align="left">Decision</th>
-			                <th align="left">Effort</th>
+			                <th align="left" title="Application Name">Application</th>
+			                <th align="left" title="Business Criticality">Critical</th>
+			                <th align="left" title="Work Priority">Priority</th>
+			                <th align="left" title="Recommended Action">Action</th>
+			                <th align="left" title="Estimated Effort">Effort</th>
 				            </tr>
 					        </thead>
 						    </table>
@@ -188,14 +240,17 @@
 							var appFilter=[];
 							function onChange2(t){
 								t.checked?appFilter.push(t.value):appFilter.splice(appFilter.indexOf(t.value),1);
-								reDrawBubble(rawSummary, false);
+								reDrawBubble(applicationAssessmentSummary, false);
 							}
 						</script>
 				  	
 					</div> <!-- /col-sm-? -->
 					
 					<div class="col-sm-8">
+					<!--
 						x=business priority, y=# of dependencies, size=effort, color=Action (REHOST=red, )
+					-->
+						x=business criticality, y=work priority, size=effort, color=Action (REHOST=red, )
 						<!--
 						bubble chart
 						x=biz priority
@@ -222,7 +277,6 @@
 						  sizing['LARGE']=60;
 						  sizing['EXTRA LARGE']=80;
 						  var randomNumbers=[];
-
 						  
 						  var bubbleChart;
 						  
@@ -252,6 +306,7 @@
 									
 									var name=app['Name'];
 									var businessPriority=app['BusinessPriority'];
+									var workPriority=app['WorkPriority'];
 									var decision=app['Decision'];
 									var workEffort=app['WorkEffort'];
 									//var inboundDependencies=5; // TODO: not implemented in the back end yet
@@ -269,7 +324,7 @@
 									}
 									// {"x":1,"y":8,"r":10}
 									//console.log(workEffort);
-									innerData.push({"x":businessPriority,"y":inboundDependencies,"r":sizing[workEffort]})
+									innerData.push({"x":businessPriority,"y":workPriority,"r":sizing[workEffort]})
 									
 								}
 								data['label']=label;
@@ -329,10 +384,19 @@
 						  }
 						  
 							var data;
-							var rawSummary;
+							var applicationAssessmentSummary;
 							httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(summary){
-								rawSummary=summary;
-								reDrawBubble(rawSummary, true);
+								applicationAssessmentSummary=summary;
+								reDrawBubble(applicationAssessmentSummary, true);
+								
+								//// draw the goldilocks zone
+								//var c = document.getElementById("bubbleChart");
+								//var ctx = c.getContext("2d");
+								//ctx.beginPath();
+								//ctx.arc(95, 80, 70, 0, 2 * Math.PI);
+								//ctx.stroke();
+								
+								
 							});
 							
 						</script>

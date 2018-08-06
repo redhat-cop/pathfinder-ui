@@ -256,6 +256,8 @@ function onClickHandlers(myChart) {
 							});
 						</script>
 						<canvas id="pieChart"></canvas>
+						<!--
+						-->
 						<style>
 						#example_filter label{
 							display:none; //hide the search box on datatables, but search has to be enabled so the chart can filter the data 
@@ -281,7 +283,7 @@ function onClickHandlers(myChart) {
 							</div>
 							
 							
-							<div class="col-sm-8">
+							<div class="col-sm-10">
 								<!-- ### REVIEW (OPTIONAL) GOES HERE -->
 								<%
 								if ("true".equalsIgnoreCase(request.getParameter("review"))){
@@ -293,22 +295,26 @@ function onClickHandlers(myChart) {
 									<input type="hidden" id="AssessmentId" name="AssessmentId" value="<%=request.getParameter("assessment")%>"/>
 									<!--input type="hidden" id="ReviewTimestamp" name="ReviewTimestamp" value="2018-03-14 03:23:29pm"/-->
 									<div class="row">
-										<div class="col-sm-3">
+										<div class="col-sm-2">
 											<h4>Proposed Action</h4>
 										</div>
 										<div class="col-sm-2">
 											<h4>Effort Estimate</h4>
 										</div>
-										<div class="col-sm-3">
+										<div class="col-sm-2">
+											<h4>Business Criticality</h4>
+											(1=low, 10=high)
+										</div>
+										<div class="col-sm-2">
 											<h4>Work Priority</h4>
 											(1=low, 10=high)
 										</div>
-										<div class="col-sm-3">
+										<div class="col-sm-4">
 											<h4>Supporting Notes</h4>
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-sm-3">
+										<div class="col-sm-2">
 											<select name="ReviewDecision" id="ReviewDecision">
 												<option value="REHOST">Re-host</option>
 												<option value="REPLATFORM">Re-platform</option>
@@ -327,6 +333,20 @@ function onClickHandlers(myChart) {
 											</select> 
 										</div>
 										<div class="col-sm-2">
+											<select type="text" name="BusinessPriority">
+												<option>1</option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+												<option>6</option>
+												<option>7</option>
+												<option>8</option>
+												<option>9</option>
+												<option>10</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
 											<select type="text" name="WorkPriority">
 												<option>1</option>
 												<option>2</option>
@@ -340,7 +360,7 @@ function onClickHandlers(myChart) {
 												<option>10</option>
 											</select>
 										</div>
-										<div class="col-sm-5">
+										<div class="col-sm-4">
 											<textarea name="ReviewNotes" style="width:325px;height:100px;"></textarea>
 										</div>
 									</div>

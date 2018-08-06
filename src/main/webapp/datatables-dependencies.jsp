@@ -4,8 +4,9 @@
   
   <!--
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
-  -->
   <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css" rel="stylesheet">
+  -->
+  <link href="assets/css/jquery.dataTables-1.10.16.css" rel="stylesheet">
   
   <!--
   <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet"/>
@@ -26,8 +27,9 @@
   <script src="assets/js/datatables-functions.js?v14"></script>
   <!--
 	<script src="assets/js/datatables-plugins.js?v8"></script>
-  -->
 	<script src="https://rawgit.com/phstc/jquery-dateFormat/master/dist/dateFormat.min.js"></script>
+  -->
+	<script src="assets/js/dateFormat.min.js"></script>
 	
 	<script src="utils.jsp"></script>
 	

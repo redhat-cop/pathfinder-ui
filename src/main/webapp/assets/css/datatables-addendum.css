@@ -1,5 +1,7 @@
 tr td:first-child{
-  width: 15px;
+  
+  
+  //width: 15px; // this is not good! this affects datatables too! commenting out until I get around to fixing it
 }
 #exampleModal{
 	top:150px;

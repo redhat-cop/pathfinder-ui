@@ -66,15 +66,27 @@
 						<div id="reviewedProgress" class="progress-bar"></div>
 						
 						<center>
-							<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Generate Report</button></a>
+							<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Report</button></a>
 						</center>
 						
-						<!-- ### Pie Chart Canvas -->
-						<div id="piechartAss" style="width: 500px; height: 500px; float: left;"></div>
+						<!--
+						<center>
+							<a href="dependencyGraph.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Dependencies</button></a>
+						</center>
+						-->
 						
+						<!-- ### Pie Chart Canvas -->
+						<!--
+						<div id="piechartAss" style="width: 500px; height: 500px; float: left;"></div>
+						-->
 						
 						<!-- potentially add pie charts for Decision & Effort? -->
 						
+						<ul>
+							<li>add dependency chart here somewhere?</li>
+							<li>and dream-up a better name for the report</li>
+							<li>and potentially move them to the tab bar</li>
+						</ul>
 						
 						
 					</div>
@@ -156,7 +168,9 @@
 											}},
 											{ "targets": 7, "orderable": true, "render": function (data,type,row){
 											// formats are here: https://github.com/phstc/jquery-dateFormat
+												//return asd==undefined;
 					              return row['ReviewDate']==null?"":DateFormat.format.date(new Date(parseInt(row['ReviewDate'])), 'dd/MMM/yy HH:mm');
+					              //return row['ReviewDate'];
 											}},
 						          { "targets": 8, "orderable": false, "render": function (data,type,row){
 					            	return row["Assessed"]!=true?"":"<a href='viewAssessment.jsp?app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'><img src='images/details.png'/></a>";
@@ -253,7 +267,7 @@
 			                <th align="left">Application</th>
 			                <th align="left">Assessed</th>
 			                <th align="left">Reviewed</th>
-			                <th align="left">Priority</th>
+			                <th align="left" title="Business Criticality">Criticality</th>
 			                <th align="left">Decision</th>
 			                <th align="left">Effort</th>
 			                <th align="left">Review Date</th>
