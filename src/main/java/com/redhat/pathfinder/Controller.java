@@ -173,7 +173,7 @@ public class Controller{
   @Path("/logout")
   public Response logout(@Context HttpServletRequest request, @Context HttpServletResponse response) throws URISyntaxException, IOException{
     request.getSession().invalidate();
-    return Response.status(302).location(new URI("../index.jsp")).build();
+    return Response.status(302).location(new URI("/index.jsp")).build();
   }
 
   @POST
