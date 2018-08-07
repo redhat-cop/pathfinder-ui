@@ -1,11 +1,45 @@
-<!doctype html>
+<!DOCTYPE HTML>
 <html>
-<head>
-    <title>Dependency Map</title>
+  
+  <%@include file="head.jsp"%>
+  
+  <link href="assets/css/breadcrumbs.css" rel="stylesheet" />
+	
+  <!-- #### DATATABLES DEPENDENCIES ### -->
+  <!-- Firefox doesnt support link imports yet
+  <link rel="import" href="datatables-dependencies.jsp">
+  -->
+  <%@include file="datatables-dependencies.jsp"%>
+  
+	
+	<body class="is-preload">
+  	<%@include file="nav.jsp"%>
+  	
+
+		<section id="banner2">
+			<div class="inner">
+				<h1>Assessment Summary</h1>
+				<p>View the summary of assesssment results and review output.</p>
+			</div>
+		</section>
+		
+		<%@include file="breadcrumbs.jsp"%>
+		<!--
+  	<div id="breadcrumbs">
+			<ul class="breadcrumb">
+				<li><a href="manageCustomers.jsp">Customers</a></li>
+				<li><span id="breadcrumb"></span></li>
+			</ul>
+		</div>
+		-->
+		
+		<section class="wrapper">
+			<div class="inner">
+			
+			
+			
+			
     <script type="text/javascript" src="assets/js/vis.js"></script>
-<link rel="stylesheet" type="text/css" href="http://overpass-30e2.kxcdn.com/overpass.css"/>
-<link href="assets/css/breadcrumbs.css" rel="stylesheet" />
-<script src="assets/js/jquery-3.3.1.min.js"></script>
 
     <style type="text/css">
         #mynetwork {

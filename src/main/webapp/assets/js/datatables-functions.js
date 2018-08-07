@@ -75,6 +75,7 @@ function put(uri, data){
 function editFormReset(){
     document.getElementById("edit-ok").innerHTML="Create";
     document.getElementById("exampleModalLabel").innerHTML=document.getElementById("exampleModalLabel").innerHTML.replace("Update", "New");
+    document.getElementById(getIdFieldName()).disabled=false; // allow key fields to be changed when entities are new
     
     var form=document.getElementById("form");
     for (var i = 0, ii = form.length; i < ii; ++i) {
@@ -90,6 +91,8 @@ function editFormReset(){
 function loadEntity(id){
   document.getElementById("edit-ok").innerHTML="Update";
   document.getElementById("exampleModalLabel").innerHTML=document.getElementById("exampleModalLabel").innerHTML.replace("New", "Update");
+  document.getElementById(getIdFieldName()).disabled=true; // don't allow key fields to be changed
+  
   var xhr = new XMLHttpRequest();
   var ctx = "${pageContext.request.contextPath}";
   

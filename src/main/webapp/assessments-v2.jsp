@@ -62,6 +62,11 @@
 									<a class="btn btn-primary form-control" href="report.jsp?customerId=<%=request.getParameter("customerId")%>">Report</a>
 								</div>
 							</div>
+							<div class="col-xs-2">
+								<div class="form-group">
+									<a href="report-quadrant.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Quadrant Report</button></a>
+								</div>
+							</div>
 						</div>
 						
 					</div>

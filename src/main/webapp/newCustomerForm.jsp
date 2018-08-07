@@ -9,13 +9,6 @@
   	"create":		Utils.SERVER+"/api/pathfinder/customers/",
   	"update":		Utils.SERVER+"/api/pathfinder/customers/$ID"
   };
-  
-//	function getLoadUrl(id){
-//		return Utils.SERVER+"/api/pathfinder/customers/"+id+"/";
-//	}
-//	function getCreateUrl(id){
-//		return Utils.SERVER+"/api/pathfinder/customers/";
-//	}
 	function getIdFieldName(){
 		return "CustomerId";
 	}

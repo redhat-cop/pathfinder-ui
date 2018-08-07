@@ -71,7 +71,7 @@
 		                "display": true,
 		                "text": title,
 		                "position": "bottom",
-		                "fontSize": 18,
+		                "fontSize": 22,
 		                "fontFamily": "Overpass",
 		                "fontStyle": "normal",
 		                "padding": 0,
@@ -94,7 +94,8 @@ Chart.pluginService.register({
                     (chart.config.data.datasets[0].data[0] +
                     chart.config.data.datasets[0].data[2]));
       var oldFill = ctx.fillStyle;
-      var fontSize = ((height - chart.chartArea.top) / 120).toFixed(2);
+      //var fontSize = ((height - chart.chartArea.top) / 100).toFixed(2);
+      var fontSize = 1.1;
 
       ctx.restore();
       ctx.font = fontSize + "em sans-serif";
@@ -104,7 +105,8 @@ Chart.pluginService.register({
 			
       var text = apps,
           textX = Math.round((width - ctx.measureText(text).width) / 2),
-          textY = ((height + chart.chartArea.top) / 2) + 55;
+          //textY = ((height + 100 + chart.chartArea.top) / 2);
+          textY = ((height -50+ chart.chartArea.bottom) / 2);
 
       ctx.fillStyle = chart.config.data.datasets[0].backgroundColor[0];
       
