@@ -24,6 +24,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 	-->
 	<script src="assets/js/Chart-2.6.0.min.js"></script>
+	<script src="https://unpkg.com/lodash@4.17.10/lodash.min.js"></script>
 
 	<body class="is-preload">
 
@@ -284,60 +285,27 @@
 						  var bubbleChart;
 						  
 						  function getData(summary){
-						    
-						    ////TODO: remove this when we get dependencies
-						    //if (randomNumbers.length==0){
-								//  for(i=0;i<summary.length;i++){
-								//  	randomNumbers[i]=Math.floor(Math.random() * 10) + 0;
-								//  }
-						    //}
-						    //
-								//var labels=[];
-								//var innerData=[];
-								//var backgroundColor=[];
-								//var data={};
-								////data={labels:[],data:[],backgroundColor:[]};
-								//
-								////console.log("summary="+JSON.stringify(summary));
-								//var i;
-								//for(i=0;i<summary.length;i++){
-								//	var app=summary[i];
-								//	
-								//	//console.log("APP="+JSON.stringify(app));
-								//	
-								//	if (!appFilter.includes(app['Id'])) continue;
-								//	
-								//	var name=app['Name'];
-								//	var businessPriority=app['BusinessPriority'];
-								//	var workPriority=app['WorkPriority'];
-								//	var decision=app['Decision'];
-								//	var workEffort=app['WorkEffort'];
-								//	//var inboundDependencies=5; // TODO: not implemented in the back end yet
-								//	var inboundDependencies=randomNumbers[i]
-								//	var confidence=app['Confidence'];
-								//	
-								//	//TODO: this shouldnt be possible unless the assessment is incomplete
-								//	if (businessPriority==null) businessPriority=0;
-								//	if (workEffort==null) workEffort=0;
-								//	if (confidence==null) confidence=0;
-								//	
-								//	labels.push(name);
-								//	if (decision!=null){
-								//		backgroundColor.push(decisionColors[decision]);
-								//	}else{
-								//		backgroundColor.push(decisionColors.NULL);
-								//	}
-								//	// {"x":1,"y":8,"r":10}
-								//	//console.log(workEffort);
-								//	innerData.push({"x":confidence,"y":businessPriority,"r":sizing[workEffort]})
-								//	
-								//}
-								//data['labels']=labels;
-								//data['backgroundColor']=backgroundColor;
-								//data['data']=innerData;
-								
-								
-								
+								var datasets = _.chain(summary)
+								.filter(summaryItem => (appFilter.includes(summaryItem.Id)))
+								.map(app => {
+									return {
+										label: app.Name,
+										backgroundColor: app.Decision ? decisionColors[app.Decision] : decisionColors.NULL,
+										data: [
+											{
+												x: app.Confidence || 0,
+												y: app.BusinessPriority || 0,
+												r: sizing[app.WorkEffort || 0]
+											}
+										]
+									}
+								 })
+								 .value()
+								return {datasets}
+						  }
+						  
+						  function getDataOriginal(summary){
+						    	
 								var datasets=[];
 								var i;
 								for(i=0;i<summary.length;i++){
@@ -543,7 +511,7 @@
 							<canvas id="adoption" style="width: 500px; height: 100px;"></canvas>
 						</div>
 						
-						<%@include file="report-adoption3.jsp"%>
+						<%@include file="report-adoption.jsp"%>
 						
 					</div>
 						
