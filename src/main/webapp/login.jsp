@@ -32,7 +32,11 @@
 		</script>
 		
   	<div id="wrapper">
+<<<<<<< HEAD
   		<div class="inner">
+=======
+  					<div class="inner">
+>>>>>>> a94efe6c21c21518406c2b407524c39632dcc8d9
 			<center>
 				<%if (null!=request.getParameter("error")){%>
 					<div class="modal-content">
@@ -55,7 +59,11 @@
 					</div>
 				</div>
 			</center>
+<<<<<<< HEAD
 		</div>
+=======
+			</div>
+>>>>>>> a94efe6c21c21518406c2b407524c39632dcc8d9
   	</div>
 
 	</body>
