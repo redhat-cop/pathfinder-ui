@@ -52,7 +52,8 @@
 </ul>
 
 <h3>CSS</h3>
-<p>Courtesy of https://templated.co/industrious. Released for free under the Creative Commons Attribution 3.0 license (templated.co/license) </p>
+<p>Courtesy of https://templated.co/industrious. </p>
+<p>Released for free under the Creative Commons Attribution 3.0 license (templated.co/license) </p>
 </div>
 
 </div>
@@ -63,6 +64,10 @@
 <li>Aidan Cammies</li>
 <li>Bryan Saunders</li>
 <li>Chris Jenkins</li>
+<li>Ed Seymour</li>
+<li>Guy Bianco</li>
+<li>James Brokenbek</li>
+<li>Katrina Novakovic</li>
 <li>Kerrie Laird</li>
 <li>Malcolm Herbert</li>
 <li>Mat Allen</li>
@@ -71,8 +76,6 @@
 <li>Roger Nunn</li>
 <li>Scott McCarty</li>
 <li>Trevor Quinn</li>
-<li>Guy Bianco</li>
-<li>Katrina Novakovic</li>
 </ul>
 </div>
 
