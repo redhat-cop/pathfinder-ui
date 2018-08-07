@@ -209,7 +209,7 @@
 							        ]
 							        ,"columnDefs": [
 							        		{ "targets": 0, "orderable": false, "render": function (data,type,row){
-							              return "<input onclick='onChange2(this);' checked type='checkbox' value='"+row['Id']+"' style='background-color:red;width:10px'/>";
+							              return "<input onclick='onChange2(this);' checked type='checkbox' value='"+row['Id']+"' style='margin-right: 0rem;'/>";
 													}},
 							        ]
 							    } );
