@@ -34,7 +34,11 @@
 			<!-- Nav -->
 			<nav id="menu">
 				<ul class="links">
+				<%if (request.getSession().getAttribute("x-access-token")==null){%>				
 					<li><a href="index.jsp">Home</a></li>
+				<%}else{%>
+					<li><a href="manageCustomers.jsp">Home</a></li>
+				<%}%>
 					<!--
 					<li><a href="survey.jsp" target=_blank>Assessment</a></li>
 					-->
