@@ -28,12 +28,6 @@
 	<body class="is-preload">
 		<%@include file="nav.jsp"%>
 		
-		<section id="banner2">
-			<div class="inner">
-				<h1>Dependency Map</h1>
-				<p>Visualisation of Application Dependencies</div>
-		</section>
-			
 		<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><a href="manageCustomers.jsp">Customers</a></li>

@@ -31,34 +31,7 @@ body:before {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 10001;
-}
-#banner2 {
-    -ms-flex-align: center;
-    -ms-flex-pack: center;
-    background-color: #111111;
-    color: rgba(255, 255, 255, 0.5);
-    -moz-align-items: center;
-    -webkit-align-items: center;
-    -ms-align-items: center;
-    align-items: center;
-    display: -moz-flex;
-    display: -webkit-flex;
-    display: -ms-flex;
-    display: flex;
-    -moz-justify-content: center;
-    -webkit-justify-content: center;
-    -ms-justify-content: center;
-    justify-content: center;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-top: 0;
-    display: -ms-flexbox;
-    overflow: hidden;
-    position: relative;
-    text-align: center;
-    width: 100%;
+    z-index: 1000;
 }
 #header > .logo {
     color: #ffffff;

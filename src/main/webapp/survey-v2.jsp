@@ -6,14 +6,6 @@
   	
   	<%@include file="nav.jsp"%>
   	
-  	
-		<section id="banner2">
-			<div class="inner">
-				<h1>Application Assessment</h1>
-				<p>Perform the application assessment.</p>
-			</div>
-		</section>
-		
 		<%@include file="breadcrumbs.jsp"%>
 		
 		<section class="wrapper">

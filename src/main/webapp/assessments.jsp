@@ -26,13 +26,6 @@
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
   	
-		<section id="banner2">
-			<div class="inner">
-				<h1><span id="customerName"></span> Assessment Summary</h1>
-				<p>View the results of an assessment and review output.</p>
-			</div>
-		</section>
-		
   	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><a href="manageCustomers.jsp">Customers</a></li>

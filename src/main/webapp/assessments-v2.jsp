@@ -15,14 +15,6 @@
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
   	
-
-		<section id="banner2">
-			<div class="inner">
-				<h1>Assessment Summary</h1>
-				<p>View the summary of assesssment results and review output.</p>
-			</div>
-		</section>
-		
 		<%@include file="breadcrumbs.jsp"%>
 		<!--
   	<div id="breadcrumbs">

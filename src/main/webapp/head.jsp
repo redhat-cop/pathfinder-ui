@@ -7,6 +7,7 @@
 		<meta name="keywords" content="" />
 
     <link rel="stylesheet" href="https://rawgit.com/RedHatBrand/Overpass/master/webfonts/overpass-webfont/overpass.css"/>
+		<link href="assets/css/bootstrap-3.3.7.min.css" rel="stylesheet" />
 
 	  <script src="assets/js/jquery-3.3.1.min.js"></script>
 	  <script src="utils.jsp"></script>

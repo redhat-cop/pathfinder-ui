@@ -9,12 +9,6 @@
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
   	
-		<section id="banner2">
-			<div class="inner">
-				<h1>Pathfinder Admin</h1>
-				<p>Pathfinder workflow process.</div>
-		</section>
-		
   	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><a href="manageCustomers.jsp">Customers</a></li>

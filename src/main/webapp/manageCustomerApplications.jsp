@@ -15,12 +15,6 @@
   
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
-  	
-		<section id="banner2">
-			<div class="inner">
-				<h1>Pathfinder Admin</h1>
-				<p>Create customers and applications.</div>
-		</section>
 		
 		<%@include file="breadcrumbs.jsp"%>
   	

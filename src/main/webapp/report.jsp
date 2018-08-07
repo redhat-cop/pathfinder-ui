@@ -20,12 +20,6 @@
 
   	<%@include file="nav.jsp"%>
   	
-		<section id="banner2">
-			<div class="inner">
-				<h1>Report for <span id="customerName"></span></h1>
-			</div>
-		</section>
-		
   	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><a href="manageCustomers.jsp">Customers</a></li>

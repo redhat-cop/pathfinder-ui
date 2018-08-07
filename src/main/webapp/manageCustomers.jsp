@@ -8,20 +8,10 @@
 	
   <link href="assets/css/breadcrumbs.css" rel="stylesheet" />
   
-  <!-- #### DATATABLES DEPENDENCIES ### -->
-  <!-- Firefox doesnt support link imports yet
-  <link rel="import" href="datatables-dependencies.jsp">
-  -->
   <%@include file="datatables-dependencies.jsp"%>
 	
 	<body class="is-preload">
 		<%@include file="nav.jsp"%>
-		
-		<section id="banner2">
-			<div class="inner">
-				<h1>Pathfinder Admin</h1>
-				<p>Create customers and applications.</div>
-		</section>
 		
 		<!--
 		<div id="breadcrumbs">
@@ -107,10 +97,10 @@
 								    return "<a href='members.jsp?customerId="+row["CustomerId"]+"'>Members ("+row['CustomerMemberCount']+")</a>";
 								 }}
 				         //,{ "targets": 6, "orderable": false, "render": function (data,type,row){
-								 //   return "<div class='btn-image btn btn-edit' title='Edit' onclick='load(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
+								 //   return "<div class='btn btn-warning' title='Edit' onclick='load(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
 								 // }}
 				         //,{ "targets": 7, "orderable": false, "render": function (data,type,row){
-								 //   return "<div class='btn-image btn btn-delete' title='Delete' onclick='return deleteItem(\""+row["CustomerId"]+"\");'></div>";
+								 //   return "<div class='btn btn-danger' title='Delete' onclick='return deleteItem(\""+row["CustomerId"]+"\");'></div>";
 								 // }}
 			        ]
 			    } );
@@ -143,31 +133,38 @@
 			}
 		</script>
   	<div id="wrapper">
+
 	    <div id="buttonbar">
-				<div class="row">
-					<div class="col-xs-6">
+				<div class="row page-title">
+					<div class="col-xs-4">
+						<h2>Customers</h2>
+					</div>
+					<div class="col-xs-1 pull-right">
 						<button class="btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+					</div>
+					<div class="pull-right col-xs-2">
 						<button class="btn btn-danger" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove Customers(s)</button>
 					</div>
 				</div>
-	    </div>
+			</div>
+
 	    <div id="tableDiv">
 		    <table id="example" class="display" cellspacing="0" width="100%">
-		        <thead>
-		            <tr>
-		                <th align="left"></th>
-		                <th align="left">Customer Name</th>
-		                <th align="left">Customer Description</th>
-		                <th align="left"></th>
-		                <th align="left"></th>
-		                <th align="left"></th>
-		                <th align="left"></th>
-		                <!--
-		                <th align="left">Edit</th>
-		                <th align="left">Delete</th>
-		                -->
-		            </tr>
-		        </thead>
+					<thead>
+						<tr>
+								<th align="left"></th>
+								<th align="left">Name</th>
+								<th align="left">Description</th>
+								<th align="left"></th>
+								<th align="left"></th>
+								<th align="left"></th>
+								<th align="left"></th>
+								<!--
+								<th align="left">Edit</th>
+								<th align="left">Delete</th>
+								-->
+						</tr>
+					</thead>
 		    </table>
 		  </div>
   	</div>

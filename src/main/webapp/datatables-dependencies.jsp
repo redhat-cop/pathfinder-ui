@@ -1,5 +1,4 @@
   <%-- <link href="assets/css/jquery.dataTables-1.10.16.css" rel="stylesheet"> --%>
-  <link href="assets/css/bootstrap-3.3.7.min.css" rel="stylesheet" />
 	<link href="assets/css/datatables-addendum.css?v2" rel="stylesheet" />
   <%-- <link href="https://cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.css" rel="stylesheet"/> --%>
 

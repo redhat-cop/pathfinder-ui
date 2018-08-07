@@ -10,12 +10,6 @@
 	
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
-  	
-		<section id="banner2">
-			<div class="inner">
-				<h1><span id="customerName"></span> Results</h1>
-				<p>View the results of an assessment and review output.</div>
-		</section>
 		
   	<div id="breadcrumbs">
 			<ul class="breadcrumb">

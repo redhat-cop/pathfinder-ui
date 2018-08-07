@@ -18,13 +18,6 @@
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
   	
-		<section id="banner2">
-			<div class="inner">
-				<h1>Assessment Details</h1>
-				<p>View the results of an assessment and review output.</p>
-			</div>
-		</section>
-		
   	<%@include file="breadcrumbs.jsp"%>
 		
 		<section class="wrapper">
