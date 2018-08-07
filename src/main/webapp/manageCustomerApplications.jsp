@@ -108,8 +108,12 @@
 		</script>
     	<div id="wrapper">
 		    <div id="buttonbar">
-	        <button style="position:relative;height:30px;width:75px;left:0px;top:0px;"  class="btn" name="New"    onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
-					<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnRemove"     disabled onclick="btnDelete_onclick(this);" type="button">Remove Application(s)</button>
+					<div class="row">
+						<div class="col-xs-6">
+							<button class="btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+							<button class="btn btn-danger" name="btnRemove" disabled onclick="btnDelete_onclick(this);" type="button">Delete Application(s)</button>
+						</div>
+					</div>
 		    </div>
 		    <div id="tableDiv">
 			    <table id="example" class="display" cellspacing="0" width="100%">

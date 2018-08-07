@@ -98,7 +98,7 @@
 								 { "targets": 4, "orderable": false, "render": function (data,type,row){
 							     var percentComplete=row['CustomerPercentageComplete'];
 							     var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>Assessments&nbsp;("+percentComplete+"%)</a>";
-							     return "<div class='progress'><div class='progress-bar-success' role='progressbar' aria-valuenow='"+percentComplete+"' aria-valuemin='0' aria-valuemax='100' style='width:"+percentComplete+"%'><center>"+link+"</center></div></div>";
+							     return "<div class='progress'><div class='progress-bar-success' role='progressbar' aria-valuenow='"+percentComplete+"' aria-valuemin='0' aria-valuemax='100' style='width:"+percentComplete+"%'>"+link+"</div></div>";
 								 }},
 			           { "targets": 5, "orderable": false, "render": function (data,type,row){
 								    return "<a href='manageCustomerApplications.jsp?customerId="+row["CustomerId"]+"'>Applications ("+row['CustomerAppCount']+")</a>";
@@ -144,8 +144,12 @@
 		</script>
   	<div id="wrapper">
 	    <div id="buttonbar">
-	        <button style="position:relative;height:30px;width:75px;left:0px;top:0px;"  class="btn" name="New"       onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
-					<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove Customers(s)</button>
+				<div class="row">
+					<div class="col-xs-6">
+						<button class="btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+						<button class="btn btn-danger" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove Customers(s)</button>
+					</div>
+				</div>
 	    </div>
 	    <div id="tableDiv">
 		    <table id="example" class="display" cellspacing="0" width="100%">

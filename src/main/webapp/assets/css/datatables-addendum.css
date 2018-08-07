@@ -1,28 +1,18 @@
-tr td:first-child{
-  
-  
-  //width: 15px; // this is not good! this affects datatables too! commenting out until I get around to fixing it
-}
 #exampleModal{
 	top:150px;
 }
-#wrapper{
-	width:90%;
-	margin: auto;
-}
-#buttonbar{
+/* #buttonbar{
 	position:relative;
 	top:45px;
-	z-index: 2146013764;
 	width: 50%; /* so it doesnt go over the search filter box*/
-}
-table.dataTable tbody td {
+} */
+/* table.dataTable tbody td {
   padding: 3px 3px;
   padding-left:   4px;
   vertical-align: middle;
-}
+} */
 .progress{
-	margin-bottom: 0px;
+	margin-bottom: 0;
 }
 .btn-edit{
 	width: 25px;

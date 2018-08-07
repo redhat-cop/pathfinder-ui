@@ -27,29 +27,28 @@
   <div class="modal-dialog" role="document"> <!-- make wider by adding " modal-lg" to class -->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="exampleModalLabel">New Customer</h4>
       </div>
       <div class="modal-body">
         <form id="form">
         	<!-- ### Hidden ID field -->
         	<div id="form-id" class="form-group" style="display:none">
-            <label for="CustomerId" class="control-label">Customer Name:</label>
+            <label for="CustomerId" class="control-label">Customer Name</label>
             <input id="CustomerId" name="CustomerId" type="text" class="form-control"/>
           </div>
           
           <div id="form-id" class="form-group">
-            <label for="CustomerName" class="control-label">Customer Name:</label>
+            <label for="CustomerName" class="control-label">Customer Name *</label>
             <input id="CustomerName" name="CustomerName" type="text" class="form-control mandatory"/>
           </div>
           <div class="form-group">
-            <label for="CustomerDescription" class="control-label">Customer Description:</label>
+            <label for="CustomerDescription" class="control-label">Customer Description</label>
             <input id="CustomerDescription" name="CustomerDescription" type="text" class="form-control">
           </div>
           <div class="form-group">
-            <label for="CustomerVertical" class="control-label">Customer Vertical:</label>
-            <select name="CustomerVertical" id="CustomerVertical" class="form-control">
-							<option value="Agriculture">Agriculture</option>
+            <label for="CustomerVertical" class="control-label">Customer Vertical</label>
+            <select name="CustomerVertical" id="CustomerVertical">
+							<option value="Agriculture" selected="selected">Agriculture</option>
 							<option value="Business Services">Business Services</option>
 							<option value="Construction & Real Estate">Construction & Real Estate</option>
 							<option value="Education">Education</option>
@@ -70,14 +69,14 @@
 						</select>
           </div>
           <div class="form-group">
-            <label for="CustomerAssessor" class="control-label">Customer Assessor:</label>
+            <label for="CustomerAssessor" class="control-label">Customer Assessor *</label>
             <input id="CustomerAssessor" name="CustomerAssessor" type="text" class="form-control">
           </div>
         </form>
       </div>
       <script>
 	      function formValidate(){
-		      $('#edit-ok').attr('disabled', isEmpty($('#CustomerName').val()));
+		      $('#edit-ok').attr('disabled', isEmpty($('#CustomerName').val() || isEmpty('#CustomerAssessor').val()));
 	      }
 	      function isEmpty(val){
 	      	return val==null || val=="";
@@ -92,8 +91,8 @@
 				});
       </script>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button id="edit-ok" type="button" data-dismiss="modal" onclick="save(this, 'form'); return false;">Create</button>
+        <a data-dismiss="modal">Cancel</a>
+        <button id="edit-ok" type="button" class="btn btn-primary" data-dismiss="modal" onclick="save(this, 'form'); return false;">Create</button>
       </div>
     </div>
   </div>

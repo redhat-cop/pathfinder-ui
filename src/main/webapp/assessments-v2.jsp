@@ -53,47 +53,28 @@
 					
 				</script>
 				
-				<div class="row">
-					<div class="col-sm-4">
-						
-						<!-- ### Progress -->
 						
 						<script src="assets/js/progressbar-kimmobrunfeldt-1.0.0.js"></script>
 						<script src="assets/js/progressbar-functions.js"></script>
 						<link href="assets/css/progressbar.css" rel="stylesheet" />
-						<h2>Progress</h2>
-						<div id="assessedProgress" class="progress-bar"></div>
-						<div id="reviewedProgress" class="progress-bar"></div>
-						
-						<center>
-							<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Report</button></a>
-						</center>
-						
-						<!--
-						<center>
-							<a href="dependencyGraph.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Dependencies</button></a>
-						</center>
-						-->
-						
-						<!-- ### Pie Chart Canvas -->
-						<!--
-						<div id="piechartAss" style="width: 500px; height: 500px; float: left;"></div>
-						-->
-						
-						<!-- potentially add pie charts for Decision & Effort? -->
-						
-						<ul>
-							<li>add dependency chart here somewhere?</li>
-							<li>and dream-up a better name for the report</li>
-							<li>and potentially move them to the tab bar</li>
-						</ul>
-						
+
+						<div class="row">
+							<div class="col-xs-5">
+								<div id="assessedProgress" class="progress-bar"></div>
+							</div>
+							<div class="col-xs-5">
+								<div id="reviewedProgress" class="progress-bar"></div>
+							</div>
+							<div class="col-xs-2">
+								<div class="form-group">
+									<a class="btn btn-primary form-control" href="report.jsp?customerId=<%=request.getParameter("customerId")%>">Report</a>
+								</div>
+							</div>
+						</div>
 						
 					</div>
-					<div class="col-sm-8">
-						<h2>Assessments</h2>
-						<!-- #### DATATABLE ### -->
-						
+
+					<div>
 						<script>
 							function onDatatableRefresh(json){
 								console.log("onDatatableRefresh: apps/assessments.length="+json.length);
@@ -135,46 +116,76 @@
 					            { "data": "WorkEffort" },
 					            { "data": "ReviewDate" },
 					            { "data": "LatestAssessmentId" }
-					        ]
-					        ,"columnDefs": [
-					        		{ "targets": 0, "orderable": false, "render": function (data,type,row){
-					              return "<input type='checkbox' name='appId' value='"+row['Id']+"'></input><input type='hidden' name='"+row['Id']+"_name' value='"+row['Name']+"'></input>";
-											}},
-					        		{ "targets": 1, "orderable": true, "render": function (data,type,row){
-					              return row['LatestAssessmentId']==null?row["Name"]:"<a href='viewAssessment.jsp?app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'>"+row["Name"]+"</a>";
-											}},
-					        		{ "targets": 2, "orderable": true, "render": function (data,type,row){
-					              
-					              //return "<span class='"+(row["Assessed"]==true?"messageGreen'>Yes"+(row['IncompleteAnswersCount']>0?:"<span title=\""+row['CompleteAnswersCount']+" completed answers &amp; "+row['IncompleteAnswersCount']+" answered as 'UNKNOWN'\"> ("+row['CompleteAnswersCount']+"/<span class=\"messageRed\">"+row['IncompleteAnswersCount']+"</span>)</span>"):"messageRed'><a href='survey-v2.jsp?customerId="+customerId+"&applicationId="+row['Id']+"'>No</a>")+"</span>";
-					              
-					              var title=row['CompleteAnswersCount']+" completed answers &amp; "+row['IncompleteAnswersCount']+" answered as 'UNKNOWN'";
-					              var completeIncomplete=row['IncompleteAnswersCount']>0?"<span title=\""+title+"\">("+row['CompleteAnswersCount']+"/<span class=\"messageRed\">"+row['IncompleteAnswersCount']+"</span>)</span>":"";
-					              return "<span class='"+(row["Assessed"]==true?"messageGreen'>Yes "+completeIncomplete:"messageRed'><a href='survey-v2.jsp?customerId="+customerId+"&applicationId="+row['Id']+"'>No</a>")+"</span>";
-											}},
-											{ "targets": 3, "orderable": true, "render": function (data,type,row){
-												if (row["ReviewDate"]==null && row["Assessed"]==true){
-												  return "<a href='viewAssessment.jsp?review=true&app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'><img height='24px' src='images/review.png'></a>";
-												}else if (row["ReviewDate"]==null){
-													return "";
-												}else{
-													return "Yes";
+									],
+									"columnDefs": [
+					        		{
+												"targets": 0,
+												"orderable": false,
+												"render": function (data,type,row){
+													return "<input type='checkbox' name='appId' value='"+row['Id']+"'></input><input type='hidden' name='"+row['Id']+"_name' value='"+row['Name']+"'></input>";
 												}
-											}},
-											{ "targets": 5, "orderable": true, "render": function (data,type,row){
-					              return row['Decision']==null?"":row['Decision']; 
-											}},
-											{ "targets": 6, "orderable": true, "render": function (data,type,row){
-					              return row['WorkEffort']==null?"":row['WorkEffort'];
-											}},
-											{ "targets": 7, "orderable": true, "render": function (data,type,row){
-											// formats are here: https://github.com/phstc/jquery-dateFormat
-												//return asd==undefined;
-					              return row['ReviewDate']==null?"":DateFormat.format.date(new Date(parseInt(row['ReviewDate'])), 'dd/MMM/yy HH:mm');
-					              //return row['ReviewDate'];
-											}},
-						          { "targets": 8, "orderable": false, "render": function (data,type,row){
-					            	return row["Assessed"]!=true?"":"<a href='viewAssessment.jsp?app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'><img src='images/details.png'/></a>";
-											}}
+											},
+					        		{
+												"targets": 1,
+												"orderable": true,
+												"render": function (data,type,row){
+													return row['LatestAssessmentId']==null?row["Name"]:"<a href='viewAssessment.jsp?app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'>"+row["Name"]+"</a>";
+												}
+											},
+					        		{
+												"targets": 2,
+												"orderable": true,
+												"render": function (data,type,row){
+													var title=row['CompleteAnswersCount']+" completed answers &amp; "+row['IncompleteAnswersCount']+" answered as 'UNKNOWN'";
+													var completeIncomplete=row['IncompleteAnswersCount']>0?"<span title=\""+title+"\">("+row['CompleteAnswersCount']+"/<span class=\"messageRed\">"+row['IncompleteAnswersCount']+"</span>)</span>":"";
+													return "<span class='"+(row["Assessed"]==true?"messageGreen'>Yes "+completeIncomplete:"messageRed'><a href='survey-v2.jsp?customerId="+customerId+"&applicationId="+row['Id']+"'>No</a>")+"</span>";
+												}
+											},
+											{
+												"targets": 3,
+												"orderable": true,
+												width: '20%',
+												"render": function (data,type,row){
+													if (row["ReviewDate"]==null && row["Assessed"]==true){
+														return "<a href='viewAssessment.jsp?review=true&app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'><img height='24px' src='images/review.png'></a>";
+													} else if (row["ReviewDate"]==null){
+														return "";
+													} else {
+														return "Yes";
+													}
+												}
+											},
+											{
+												"targets": 5,
+												"orderable": true,
+												"render": function (data,type,row){
+													return row['Decision']==null?"":row['Decision']; 
+												}
+											},
+											{
+												"targets": 6,
+												"orderable": true,
+												"render": function (data,type,row){
+													return row['WorkEffort']==null?"":row['WorkEffort'];
+												}
+											},
+											{
+												"targets": 7,
+												"orderable": true,
+												"render": function (data,type,row){
+													// formats are here: https://github.com/phstc/jquery-dateFormat
+													//return asd==undefined;
+													return row['ReviewDate']==null?"":DateFormat.format.date(new Date(parseInt(row['ReviewDate'])), 'dd/MMM/yy HH:mm');
+													//return row['ReviewDate'];
+												}
+											},
+						          {
+												"targets": 8,
+												"orderable": false,
+												"render": function (data,type,row){
+													return row["Assessed"]!=true?"":"<a href='viewAssessment.jsp?app="+row['Id']+"&assessment="+row['LatestAssessmentId']+"&customer="+customerId+"'><img src='images/details.png'/></a>";
+												}
+											}
 					        ]
 						    });
 						    // ### END Datatable load
@@ -249,15 +260,23 @@
 							
 							
 						</script>
-				  	<div id="wrapper">
-					    <div id="buttonbar" style="position:relative;top:0px;width:100%;">
-					    	<button style="position:relative;height:30px;width:125px;left:0px;top:0px;" class="btn" name="New"                        onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">Add Application</button>
-					    	<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnRemoveApps"     disabled onclick="btnDelete_onclick(this);" type="button">Remove Application(s)</button>
-					    	<!--
-					    	<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="removeAssessments" disabled onclick="" type="button">Clear Assessment(s)</button>
-					    	<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="removeReviews"     disabled onclick="" type="button">Clear Review(s)</button>
-					    	-->
-					    	<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnCloneApps"      disabled onclick="showCloneDialog(this);" type="button">Clone Application</button>
+				  	<div>
+					    <div id="buttonbar" class="row">
+								<div class="col-xs-2">
+									<button class="btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">Add Application</button>
+								</div>
+								<div class="col-xs-2">
+									<button class="btn btn-danger" name="btnRemoveApps" disabled onclick="btnDelete_onclick(this);" type="button">Remove Application(s)</button>
+								</div>
+								<!-- <div class="col-xs-2">
+									<button class="btn btn-warning" name="removeAssessments" disabled onclick="" type="button">Clear Assessment(s)</button>
+								</div> -->
+								<!-- <div class="col-xs-2">
+									<button class="btn btn-warning" name="removeReviews" disabled onclick="" type="button">Clear Review(s)</button>
+								</div> -->
+								<div class="col-xs-2">
+									<button class="btn btn-default" name="btnCloneApps" disabled onclick="showCloneDialog(this);" type="button">Clone Application</button>
+								</div>
 					    </div>
 					    <div id="tableDiv">
 						    <table id="example" class="display" cellspacing="0" width="100%">
@@ -279,7 +298,6 @@
 				  	</div>
 				  	
 					</div>
-				</div>
 				
 				
 				

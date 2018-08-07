@@ -100,14 +100,6 @@
 						
 						
 						<script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
-						<style>
-							.progress-bar {
-							  margin: 20px;
-							  width: 90%;
-							  height: 30px;
-							  background-color: #ccc;
-							}
-						</style>
 						
 						<h2>Progress</h2>
 						<div id="assessedProgress" class="progress-bar"></div>

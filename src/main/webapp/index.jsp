@@ -94,14 +94,6 @@
 				</div>
 			</section>
 
-		<!-- CTA -->
-			<section id="cta" class="wrapper">
-				<div class="inner">
-					<h2>EMEA Red Hat Value from Technology Team</h2>
-				</div>
-			</section>
-
-
 
 	</body>
 </html>
