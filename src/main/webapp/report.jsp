@@ -298,6 +298,7 @@
 												r: sizing[app.WorkEffort || 0]
 											}
 										]
+<<<<<<< HEAD
 									}
 								 })
 								 .value()
@@ -341,14 +342,12 @@
 										dataset['backgroundColor']=decisionColors[decision];
 									}else{
 										dataset['backgroundColor']=decisionColors.NULL;
+=======
+>>>>>>> 1ea01ef386c004a75e6de9ec9f270bf6f59e6477
 									}
-									
-									datasets.push(dataset);
-								}
-								
-								var result={datasets};
-								console.log(JSON.stringify(datasets));
-								return result;
+								 })
+								 .value()
+								return {datasets}
 						  }
 						  
 						  function reDrawBubble(summary, initial){
