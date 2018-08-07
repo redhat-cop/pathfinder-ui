@@ -41,6 +41,9 @@
     padding: 6px 16px;
     width: 300px;
     height: 52px;
+    top: -3px;
+    position: relative;
+    left: 0px;
 }
 ol, ul {
     list-style: none;
