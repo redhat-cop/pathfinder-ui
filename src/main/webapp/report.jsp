@@ -247,7 +247,7 @@
 								redrawBubble(applicationAssessmentSummary, false);
 							}
 						</script>
-				  	
+
 					</div> <!-- /col-sm-? -->
 					
 					<div class="col-sm-8">
@@ -500,7 +500,7 @@
 						<div class="chartjs-wrapper" style="width:850px;height:600px;">
 							<canvas id="bubbleChart" class="chartjs" width="800px" height="500px;"></canvas>
 						</div>
-   					
+
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
 <br/><br/><br/>
