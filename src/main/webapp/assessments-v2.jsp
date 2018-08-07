@@ -66,12 +66,13 @@
 						<div id="reviewedProgress" class="progress-bar"></div>
 						
 						<center>
-							<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Report</button></a>
+							<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Regular Report</button></a>
+							<a href="report-quadrant.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Quadrant Report</button></a>
 						</center>
 						
 						<!--
 						<center>
-							<a href="dependencyGraph.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Dependencies</button></a>
+							<a href="dependencyMap.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Dependencies</button></a>
 						</center>
 						-->
 						

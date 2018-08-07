@@ -252,8 +252,8 @@
 					<!--
 						x=business priority, y=# of dependencies, size=effort, color=Action (REHOST=red, )
 						x=business criticality, y=work priority, size=effort, color=Action (REHOST=red, )
-					-->
 						x=confidence, y=business criticality, size=effort, color=Action (REHOST=red, )
+					-->
 					
 						<!--
 						bubble chart
@@ -334,7 +334,7 @@
 									
 									//data points
 									dataset['data']=[];
-									dataset['data'].push({"x":confidence,"y":businessPriority,"r":sizing[workEffort]});
+									dataset['data'].push({"x":confidence-50,"y":businessPriority-5,"r":sizing[workEffort]});
 									
 									// color
 									if (decision!=null){
@@ -388,8 +388,9 @@
 												},
 												display: true,
 												ticks: {
-													suggestedMin: 1,
-													suggestedMax: 10,
+													display: false,
+													suggestedMin: -5,
+													suggestedMax: 5,
 													beginAtZero: true
 												},
 												scaleLabel:{
@@ -400,8 +401,9 @@
 											xAxes: [{
 												display: true,
 												ticks: {
-													suggestedMin: 1,
-													suggestedMax: 100,
+													display: false,
+													suggestedMin: -50,
+													suggestedMax: 50,
 													beginAtZero: true
 												},
 												scaleLabel:{
@@ -412,8 +414,72 @@
 										}
 									}
 								});
-								bubbleChart.generateLegend();
+								//bubbleChart.generateLegend();
 								
+								
+								Chart.pluginService.register({
+								  beforeDraw: function(chart) {
+								    var width = chart.chart.width,
+								        height = chart.chart.height,
+								        ctx = chart.chart.ctx,
+								        type = chart.config.type;
+								    
+								    if (type == 'bubble'){
+								      ctx.restore();
+								      var fontSize = 1.1;
+								      ctx.font = fontSize + "em sans-serif";
+								      ctx.textBaseline = "middle"
+								      ctx.fillStyle="#555";
+											
+											var topLeftText    ="Impactful but not advisable to move",  topLeftX=((width/4)*1)-(ctx.measureText(topLeftText).width/2), topLeftTextY=15;
+											var topRightText   ="Impactful & Migratable",              topRightX=((width/4)*3)-(ctx.measureText(topRightText).width/2), topRightTextY=15;
+											var bottomLeftText ="Enroute to Abandonware",    bottomLeftX=((width/4)*1)-(ctx.measureText(bottomLeftText).width/2), bottomLeftTextY=chart.chartArea.bottom-15;
+											var bottomRightText="Trivial but migratable",                bottomRightX=((width/4)*3)-(ctx.measureText(bottomRightText).width/2), bottomRightTextY=chart.chartArea.bottom-15;
+											
+											// quadrant text
+									    ctx.fillText(topLeftText, topLeftX, topLeftTextY);
+									    ctx.fillText(topRightText, topRightX, topRightTextY);
+									    ctx.fillText(bottomLeftText, bottomLeftX, bottomLeftTextY);
+									    ctx.fillText(bottomRightText, bottomRightX, bottomRightTextY);
+									    
+									    
+									    // quadrant color
+									    // fill top right
+									    //ctx.fillStyle = "rgba(46, 212, 0, 0.5)";
+											//ctx.globalAlpha = 0.4;
+											//var x=(width/2)+15, y=0, w=(width/2)-15, h=(height/2)-13;
+									    //ctx.fillRect(x,y,w,h);
+									    //ctx.globalAlpha = 1.0;
+									    
+									    // far right quarter fill
+									    //ctx.fillStyle = "rgba(46, 212, 0, 0.5)";
+											//ctx.globalAlpha = 0.3;
+											var x=((width/4)*3), y=0, w=(width/4), h=(height)-27;
+									    //ctx.fillRect(x,y,w,h);
+									    //ctx.globalAlpha = 1.0;
+									    //width=width-150;
+									    
+									    // adjust the width of the green gradient area (higher = wider)
+									    var adjustment=140;
+									    x=x-adjustment;
+									    w=w+adjustment;
+									    
+											var grd=ctx.createLinearGradient(x,0,width-150,0);
+											grd.addColorStop(0,"rgba(255,255,255,0)");
+											grd.addColorStop(1,"rgba(46, 212, 0, 0.3)");
+											
+											ctx.fillStyle=grd;
+											ctx.fillRect(x,y,w,h);
+									    
+
+											ctx.save();
+										}								    
+									}
+								});
+								
+								//var c = document.getElementById("bubbleChart");
+								//var ctx = c.getContext("2d");
+								//xxxxxxxxxxx
 						  }
 						  
 							var data;
@@ -434,63 +500,66 @@
 							
 						</script>
 						
-						<div id="bubbleLegend" style="float:right;position:relative;top:30px;left:-30px;">
-							<div class="row">
-								<div class="col-sm-1">
+						<style>
+						#bubbleLegend{
+					    justify-content:space-around;
+					    list-style-type:none;
+						}
+						#bubbleLegend ul li{
+//							float: right;
+//							position: relative;
+//							top: 30px;
+//							left: -30px;
+							display: inline-block;
+							width: 120px;
+						}
+						</style>
+						
+						<div id="bubbleLegend">
+							<ul>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#92d400;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#333">REHOST</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#f0ab00;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REFACTOR</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#cc0000;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REPLATFORM</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#3B0083;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REPURCHASE</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#A3DBE8;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#333">RETAIN</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#004153;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">RETIRE</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#808080;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">NOT REVIEWED</text>
 									</svg>
-								</div>
-							</div>
+								</li>
+							</ul>
 						</div>
 						
 						
