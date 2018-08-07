@@ -66,11 +66,13 @@
 <li>Kerrie Laird</li>
 <li>Malcolm Herbert</li>
 <li>Mat Allen</li>
-<li>Noel O'Conner</li>
+<li>Noel O'Connor</li>
 <li>Rob Harris</li>
 <li>Roger Nunn</li>
 <li>Scott McCarty</li>
 <li>Trevor Quinn</li>
+<li>Guy Bianco</li>
+<li>Katrina Novakovic</li>
 </ul>
 </div>
 
