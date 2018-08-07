@@ -81,8 +81,8 @@
 				<script>
 					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/report", function(report){
 						new Chart(document.getElementById("gauge-1"),buildGuage(report.assessmentSummary.Easy,report.assessmentSummary.Total, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
-						new Chart(document.getElementById("gauge-2"),buildGuage(report.assessmentSummary.Medium,report.assessmentSummary.Total, "rgb(240,171,0)","rgb(220, 220, 220)","High Risk"));
-						new Chart(document.getElementById("gauge-3"),buildGuage(report.assessmentSummary.Hard,report.assessmentSummary.Total, "rgb(204, 0, 0)","rgb(220, 220, 220)","Blocked"));
+						new Chart(document.getElementById("gauge-2"),buildGuage(report.assessmentSummary.Medium,report.assessmentSummary.Total, "rgb(240,171,0)","rgb(220, 220, 220)","Modernizable"));
+						new Chart(document.getElementById("gauge-3"),buildGuage(report.assessmentSummary.Hard,report.assessmentSummary.Total, "rgb(204, 0, 0)","rgb(220, 220, 220)","Unsuitable for Containers"));
 						drawRisks(report);
 					});
 				</script>
@@ -298,7 +298,6 @@
 												r: sizing[app.WorkEffort || 0]
 											}
 										]
-<<<<<<< HEAD
 									}
 								 })
 								 .value()
@@ -342,12 +341,14 @@
 										dataset['backgroundColor']=decisionColors[decision];
 									}else{
 										dataset['backgroundColor']=decisionColors.NULL;
-=======
->>>>>>> 1ea01ef386c004a75e6de9ec9f270bf6f59e6477
 									}
-								 })
-								 .value()
-								return {datasets}
+									
+									datasets.push(dataset);
+								}
+								
+								var result={datasets};
+								console.log(JSON.stringify(datasets));
+								return result;
 						  }
 						  
 						  function reDrawBubble(summary, initial){
