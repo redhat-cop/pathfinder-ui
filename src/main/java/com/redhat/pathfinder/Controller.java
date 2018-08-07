@@ -8,6 +8,8 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -99,6 +102,36 @@ public class Controller{
   
   @SuppressWarnings("rawtypes")
   public static void main(String[] asd) throws Exception{
+    
+    List<ArrayList<String>> apps=Lists.newArrayList(
+      Lists.newArrayList("G","G","G","G","G","G"),
+      Lists.newArrayList("G","G","G","A","A","A"),
+      Lists.newArrayList("A","A","A","A","A","A"),
+      Lists.newArrayList("G","A","A","A","A","R"),
+      Lists.newArrayList("G","A","A","R","R","R")
+    );
+    
+    double increment=1-(1/apps.get(0).size());
+    
+    for(List<String> app:apps){
+      double score=0;
+      Collections.sort(app, new Comparator<String>(){
+        public int compare(String o1, String o2){
+          return "R".equals(o1)?-1:0;
+        }
+      });
+      double spreadRatio=1;
+      for(String r:app){
+        if ("R".equals(r)) spreadRatio=spreadRatio*0.4;
+        if ("A".equals(r)) spreadRatio=spreadRatio*0.8;
+        score+=increment*(1*spreadRatio);
+      }
+      System.out.println(score);
+    }
+    
+    
+    
+    if (true) return;
     
     Tuple2 admin=new Tuple2<String,String>("admin", "admin");
     Tuple2 mallen=new Tuple2<String,String>("mallen", "123");
@@ -173,7 +206,7 @@ public class Controller{
   @Path("/logout")
   public Response logout(@Context HttpServletRequest request, @Context HttpServletResponse response) throws URISyntaxException, IOException{
     request.getSession().invalidate();
-    return Response.status(302).location(new URI("../login.jsp")).build();
+    return Response.status(302).location(new URI("../index.jsp")).build();
   }
 
   @POST

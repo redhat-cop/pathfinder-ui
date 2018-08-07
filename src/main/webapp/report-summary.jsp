@@ -1,10 +1,12 @@
 				<script>
-					function buildGuage(percentage,completeColorRGB,incompleteColorRGB,title){
+					function buildGuage(count,total,completeColorRGB,incompleteColorRGB,title){
+					  var percentage=(count/total)*100;
 					  var remaining=100-percentage;
+					  var tooltip=(count==1?count+" Application":count+" Applications");
 						return {
 							"type":"doughnut",
 			        "data": {
-//                "labels": [percentage,"",remaining],
+                "labels": [tooltip,"",remaining],
 		            "datasets": [
 		                {
 		                    "data": [
@@ -18,11 +20,6 @@
 		                        incompleteColorRGB,
 		                    ],
 		                    "borderWidth": 0,
-//		                    "hoverBackgroundColor": [
-//		                        completeColorRGB,
-//		                        "rgba(0, 0, 0, 0.6)",
-//		                        incompleteColorRGB,
-//		                    ],
 		                    "hoverBorderWidth": 0
 		                },
 		                {
@@ -58,14 +55,68 @@
 		                "display": false
 		            },
 		            "tooltips": {
-		                "enabled": true
+		                "enabled": false,
+		                callbacks: {
+												label: function(tooltipItem, data) {
+														if (tooltipItem.index==0){
+					                      var value = data.datasets[0].data[tooltipItem.index];
+					                      var label = data.labels[tooltipItem.index];
+					                      var percentage = Math.round(count / total * 100);
+					                      return label + ' ' + percentage + '%';
+														}
+                  			}
+		                }
 		            },
 		            "title": {
 		                "display": true,
 		                "text": title,
-		                "position": "bottom"
+		                "position": "bottom",
+		                "fontSize": 18,
+		                "fontFamily": "Overpass",
+		                "fontStyle": "normal",
+		                "padding": 0,
 		            }
-		        	}
+		        	},
+		        	
+		        	
 						};
 					}
+					
+Chart.pluginService.register({
+  beforeDraw: function(chart) {
+    var width = chart.chart.width,
+        height = chart.chart.height,
+        ctx = chart.chart.ctx,
+        type = chart.config.type;
+
+    if (type == 'doughnut'){
+      var percent = Math.round((chart.config.data.datasets[0].data[0] * 100) /
+                    (chart.config.data.datasets[0].data[0] +
+                    chart.config.data.datasets[0].data[2]));
+      var oldFill = ctx.fillStyle;
+      var fontSize = ((height - chart.chartArea.top) / 120).toFixed(2);
+
+      ctx.restore();
+      ctx.font = fontSize + "em sans-serif";
+      ctx.textBaseline = "middle"
+			
+			var apps=chart.config.data.labels[0];
+			
+      var text = apps,
+          textX = Math.round((width - ctx.measureText(text).width) / 2),
+          textY = ((height + chart.chartArea.top) / 2) + 55;
+
+      ctx.fillStyle = chart.config.data.datasets[0].backgroundColor[0];
+      
+      // label with "1 Apps"
+      ctx.fillText(apps, textX, textY);
+      
+      // label with "60%"
+      //ctx.fillText("("+percent+"%)", textX, textY);
+      
+      ctx.fillStyle = oldFill;
+      ctx.save();
+    }
+  }
+});
 </script>

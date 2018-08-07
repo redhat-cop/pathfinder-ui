@@ -67,21 +67,21 @@
 				<h2>Current Landscape</h2>
 				<div class="row">
 					<div class="col-sm-3">
-						<canvas id="gauge-1" style="width:200px;height:100px;"></canvas>
+						<canvas id="gauge-1" style="width:200px;height:110px;"></canvas>
 					</div>
 					<div class="col-sm-3">
-						<canvas id="gauge-2" style="width:200px;height:100px;"></canvas>
+						<canvas id="gauge-2" style="width:200px;height:110px;"></canvas>
 					</div>
 					<div class="col-sm-3">
-						<canvas id="gauge-3" style="width:200px;height:100px;"></canvas>
+						<canvas id="gauge-3" style="width:200px;height:110px;"></canvas>
 					</div>
 				</div>
 				<%@include file="report-summary.jsp"%>
 				<script>
 					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/report", function(report){
-						new Chart(document.getElementById("gauge-1"),buildGuage(report.assessmentSummary.Easy*100, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
-						new Chart(document.getElementById("gauge-2"),buildGuage(report.assessmentSummary.Medium*100, "rgb(240,171,0)","rgb(220, 220, 220)","High Risk"));
-						new Chart(document.getElementById("gauge-3"),buildGuage(report.assessmentSummary.Hard*100, "rgb(204, 0, 0)","rgb(220, 220, 220)","Blocked"));
+						new Chart(document.getElementById("gauge-1"),buildGuage(report.assessmentSummary.Easy,report.assessmentSummary.Total, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
+						new Chart(document.getElementById("gauge-2"),buildGuage(report.assessmentSummary.Medium,report.assessmentSummary.Total, "rgb(240,171,0)","rgb(220, 220, 220)","High Risk"));
+						new Chart(document.getElementById("gauge-3"),buildGuage(report.assessmentSummary.Hard,report.assessmentSummary.Total, "rgb(204, 0, 0)","rgb(220, 220, 220)","Blocked"));
 						drawRisks(report);
 					});
 				</script>
@@ -200,6 +200,7 @@
 							            { "data": "Name" },
 							            { "data": "BusinessPriority" },
 							            { "data": "WorkPriority" },
+							            { "data": "Confidence" },
 							            { "data": "Decision" },
 							            { "data": "WorkEffort" },
 							        ]
@@ -207,12 +208,6 @@
 							        		{ "targets": 0, "orderable": false, "render": function (data,type,row){
 							              return "<input onclick='onChange2(this);' checked type='checkbox' value='"+row['Id']+"' style='background-color:red;width:10px'/>";
 													}},
-													{ "targets": 4, "orderable": true, "render": function (data,type,row){
-							              return row['Decision']==null?"":row['Decision'];
-													}},
-													{ "targets": 5, "orderable": true, "render": function (data,type,row){
-							              return row['WorkEffort']==null?"":row['WorkEffort'];
-													}}
 							        ]
 							    } );
 							} );
@@ -221,6 +216,11 @@
 					    <div id="buttonbar">
 					    </div>
 					    <div id="tableDiv">
+					    	<style>
+					    		#appFilter tr td{
+					    			font-size:10pt;
+					    		}
+					    	</style>
 						    <table id="appFilter" class="display" cellspacing="0" width="100%">
 					        <thead>
 				            <tr>
@@ -228,6 +228,7 @@
 			                <th align="left" title="Application Name">Application</th>
 			                <th align="left" title="Business Criticality">Critical</th>
 			                <th align="left" title="Work Priority">Priority</th>
+			                <th align="left" title="Confidence">Confidence</th>
 			                <th align="left" title="Recommended Action">Action</th>
 			                <th align="left" title="Estimated Effort">Effort</th>
 				            </tr>
@@ -249,8 +250,10 @@
 					<div class="col-sm-8">
 					<!--
 						x=business priority, y=# of dependencies, size=effort, color=Action (REHOST=red, )
-					-->
 						x=business criticality, y=work priority, size=effort, color=Action (REHOST=red, )
+					-->
+						x=confidence, y=business criticality, size=effort, color=Action (REHOST=red, )
+					
 						<!--
 						bubble chart
 						x=biz priority
@@ -263,12 +266,12 @@
 						<script>
 						  var decisionColors=[];
 						  // colors got from https://brand.redhat.com/elements/color/
-						  decisionColors['REHOST']    ="#cc0000"; //red
-						  decisionColors['REFACTOR']  ="#004153"; //dark blue
-						  decisionColors['REPLATFORM']="#A3DBE8"; //light blue 
+						  decisionColors['REHOST']    ="#92d400"; //green
+						  decisionColors['REFACTOR']  ="#f0ab00"; //amber
+						  decisionColors['REPLATFORM']="#cc0000"; //red
 						  decisionColors['REPURCHASE']="#3B0083"; //purple
-						  decisionColors['RETAIN']    ="#92d400"; //green
-						  decisionColors['RETIRE']    ="#f0ab00"; //amber
+						  decisionColors['RETAIN']    ="#A3DBE8"; //light blue
+						  decisionColors['RETIRE']    ="#004153"; //dark blue
 						  decisionColors['NULL']      ="#808080"; //grey
 						  var sizing=[];
 						  sizing['0']=10;
@@ -282,27 +285,67 @@
 						  
 						  function getData(summary){
 						    
-						    //TODO: remove this when we get dependencies
-						    if (randomNumbers.length==0){
-								  for(i=0;i<summary.length;i++){
-								  	randomNumbers[i]=Math.floor(Math.random() * 10) + 0;
-								  }
-						    }
-						    
-								var label=[];
-								var innerData=[];
-								var backgroundColor=[];
-								var data={};
-								//data={label:[],data:[],backgroundColor:[]};
+						    ////TODO: remove this when we get dependencies
+						    //if (randomNumbers.length==0){
+								//  for(i=0;i<summary.length;i++){
+								//  	randomNumbers[i]=Math.floor(Math.random() * 10) + 0;
+								//  }
+						    //}
+						    //
+								//var labels=[];
+								//var innerData=[];
+								//var backgroundColor=[];
+								//var data={};
+								////data={labels:[],data:[],backgroundColor:[]};
+								//
+								////console.log("summary="+JSON.stringify(summary));
+								//var i;
+								//for(i=0;i<summary.length;i++){
+								//	var app=summary[i];
+								//	
+								//	//console.log("APP="+JSON.stringify(app));
+								//	
+								//	if (!appFilter.includes(app['Id'])) continue;
+								//	
+								//	var name=app['Name'];
+								//	var businessPriority=app['BusinessPriority'];
+								//	var workPriority=app['WorkPriority'];
+								//	var decision=app['Decision'];
+								//	var workEffort=app['WorkEffort'];
+								//	//var inboundDependencies=5; // TODO: not implemented in the back end yet
+								//	var inboundDependencies=randomNumbers[i]
+								//	var confidence=app['Confidence'];
+								//	
+								//	//TODO: this shouldnt be possible unless the assessment is incomplete
+								//	if (businessPriority==null) businessPriority=0;
+								//	if (workEffort==null) workEffort=0;
+								//	if (confidence==null) confidence=0;
+								//	
+								//	labels.push(name);
+								//	if (decision!=null){
+								//		backgroundColor.push(decisionColors[decision]);
+								//	}else{
+								//		backgroundColor.push(decisionColors.NULL);
+								//	}
+								//	// {"x":1,"y":8,"r":10}
+								//	//console.log(workEffort);
+								//	innerData.push({"x":confidence,"y":businessPriority,"r":sizing[workEffort]})
+								//	
+								//}
+								//data['labels']=labels;
+								//data['backgroundColor']=backgroundColor;
+								//data['data']=innerData;
 								
-								//console.log("summary="+JSON.stringify(summary));
+								
+								
+								var datasets=[];
 								var i;
 								for(i=0;i<summary.length;i++){
 									var app=summary[i];
 									
-									//console.log("APP="+JSON.stringify(app));
-									
 									if (!appFilter.includes(app['Id'])) continue;
+									
+									var dataset={};
 									
 									var name=app['Name'];
 									var businessPriority=app['BusinessPriority'];
@@ -311,28 +354,33 @@
 									var workEffort=app['WorkEffort'];
 									//var inboundDependencies=5; // TODO: not implemented in the back end yet
 									var inboundDependencies=randomNumbers[i]
+									var confidence=app['Confidence'];
 									
 									//TODO: this shouldnt be possible unless the assessment is incomplete
 									if (businessPriority==null) businessPriority=0;
 									if (workEffort==null) workEffort=0;
+									if (confidence==null) confidence=0;
 									
-									label.push({name});
+									// label
+									dataset['label']=[name];
+									
+									//data points
+									dataset['data']=[];
+									dataset['data'].push({"x":confidence,"y":businessPriority,"r":sizing[workEffort]});
+									
+									// color
 									if (decision!=null){
-										backgroundColor.push(decisionColors[decision]);
+										dataset['backgroundColor']=decisionColors[decision];
 									}else{
-										backgroundColor.push(decisionColors.NULL);
+										dataset['backgroundColor']=decisionColors.NULL;
 									}
-									// {"x":1,"y":8,"r":10}
-									//console.log(workEffort);
-									innerData.push({"x":businessPriority,"y":workPriority,"r":sizing[workEffort]})
 									
+									datasets.push(dataset);
 								}
-								data['label']=label;
-								data['backgroundColor']=backgroundColor;
-								data['data']=innerData;
 								
-								//console.log("data="+JSON.stringify(data));
-								return data;
+								var result={datasets};
+								console.log(JSON.stringify(datasets));
+								return result;
 						  }
 						  
 						  function reDrawBubble(summary, initial){
@@ -350,36 +398,53 @@
 							  var ctx=document.getElementById("bubbleChart").getContext('2d');
 								bubbleChart=new Chart(ctx,{
 									"type":"bubble",
-									"data": {"datasets":[
+									"data": 
 										getData(summary)
-									]},
+									,
 									options:{
+									  legend: {
+									  	display: false,
+									  	position: "top"
+									  },
+									  //legendCallback: function(chart) {
+									  //	return "ASDKJHASKHDKADSA";
+									  //},
 										animation: {
-											duration: initial?1000:1
+											duration: initial?1000:1 //so when you click a radio they appear quickly, but animate on startup
 										},
 										aspectRatio: 1,
-										legend: false,
 										scales: {
 											yAxes: [{
+												gridLines: {
+													lineWidth: 1
+												},
 												display: true,
 												ticks: {
-													suggestedMin: 0,
+													suggestedMin: 1,
 													suggestedMax: 10,
 													beginAtZero: true
+												},
+												scaleLabel:{
+													display: true,
+													labelString: "Business Criticality",
 												}
 											}],
 											xAxes: [{
 												display: true,
 												ticks: {
-													suggestedMin: 0,
-													suggestedMax: 10,
+													suggestedMin: 1,
+													suggestedMax: 100,
 													beginAtZero: true
+												},
+												scaleLabel:{
+													display: true,
+													labelString: "Confidence",
 												}
 											}],
 										}
 									}
 								});
-									
+								bubbleChart.generateLegend();
 								
 						  }
 						  
@@ -401,8 +466,68 @@
 							
 						</script>
 						
-						<div class="chartjs-wrapper" style="width:750px;">
-							<canvas id="bubbleChart" class="chartjs" width="undefined" height="undefined"></canvas>
+						<div id="bubbleLegend" style="float:right;position:relative;top:30px;left:-30px;">
+							<div class="row">
+								<div class="col-sm-1">
+									<svg height="25" width="200">
+									  <rect width="120" height="25" stroke="black" style="fill:#92d400;stroke-width:0;stroke:rgb(0,0,0)" />
+									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#333">REHOST</text>
+									</svg>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-1">
+									<svg height="25" width="200">
+									  <rect width="120" height="25" stroke="black" style="fill:#f0ab00;stroke-width:0;stroke:rgb(0,0,0)" />
+									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REFACTOR</text>
+									</svg>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-1">
+									<svg height="25" width="200">
+									  <rect width="120" height="25" stroke="black" style="fill:#cc0000;stroke-width:0;stroke:rgb(0,0,0)" />
+									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REPLATFORM</text>
+									</svg>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-1">
+									<svg height="25" width="200">
+									  <rect width="120" height="25" stroke="black" style="fill:#3B0083;stroke-width:0;stroke:rgb(0,0,0)" />
+									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REPURCHASE</text>
+									</svg>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-1">
+									<svg height="25" width="200">
+									  <rect width="120" height="25" stroke="black" style="fill:#A3DBE8;stroke-width:0;stroke:rgb(0,0,0)" />
+									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#333">RETAIN</text>
+									</svg>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-1">
+									<svg height="25" width="200">
+									  <rect width="120" height="25" stroke="black" style="fill:#004153;stroke-width:0;stroke:rgb(0,0,0)" />
+									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">RETIRE</text>
+									</svg>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-1">
+									<svg height="25" width="200">
+									  <rect width="120" height="25" stroke="black" style="fill:#808080;stroke-width:0;stroke:rgb(0,0,0)" />
+									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">NOT REVIEWED</text>
+									</svg>
+								</div>
+							</div>
+						</div>
+						
+						
+						<div class="chartjs-wrapper" style="width:850px;height:600px;">
+							<canvas id="bubbleChart" class="chartjs" width="800px" height="500px;"></canvas>
 						</div>
    					
 					</div> <!-- col-sm-? -->
