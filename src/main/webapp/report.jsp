@@ -176,7 +176,8 @@
 							}
 						</style>
 						<script>
-							$(document).ready(function() {
+							//$(document).ready(function() {
+							function redrawApplications(applicationAssessmentSummary){
 							    $('#appFilter').DataTable( {
 							        //"ajax": {
 							        //    "url": Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applicationAssessmentSummary",
@@ -211,7 +212,8 @@
 													}},
 							        ]
 							    } );
-							} );
+							}; 
+							//);
 						</script>
 				  	<div id="wrapper">
 					    <div id="buttonbar">
@@ -242,7 +244,7 @@
 							var appFilter=[];
 							function onChange2(t){
 								t.checked?appFilter.push(t.value):appFilter.splice(appFilter.indexOf(t.value),1);
-								reDrawBubble(applicationAssessmentSummary, false);
+								redrawBubble(applicationAssessmentSummary, false);
 							}
 						</script>
 				  	
@@ -351,7 +353,7 @@
 								return result;
 						  }
 						  
-						  function reDrawBubble(summary, initial){
+						  function redrawBubble(summary, initial){
 						  	console.log("redraw -> "+initial);
 								
 								if (!initial){
@@ -420,7 +422,8 @@
 							var applicationAssessmentSummary;
 							httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(summary){
 								applicationAssessmentSummary=summary;
-								reDrawBubble(applicationAssessmentSummary, true);
+								redrawApplications(applicationAssessmentSummary);
+								redrawBubble(applicationAssessmentSummary, true);
 								
 								//// draw the goldilocks zone
 								//var c = document.getElementById("bubbleChart");
