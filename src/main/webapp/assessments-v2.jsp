@@ -68,6 +68,7 @@
 						<center>
 							<a href="report.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Regular Report</button></a>
 							<a href="report-quadrant.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Quadrant Report</button></a>
+							<a href="report-quadrant2.jsp?customerId=<%=request.getParameter("customerId")%>"><button>Quadrant Report +labels</button></a>
 						</center>
 						
 						<!--

@@ -269,6 +269,7 @@ r">
 						//transparency=certainty
 						-->
 						
+						<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 						<script>
 						  var decisionColors=[];
 						  // colors got from https://brand.redhat.com/elements/color/
@@ -375,6 +376,30 @@ r">
 										getDataOriginal(summary)
 									,
 									options:{
+										plugins: {
+            					datalabels: {
+            						anchor: function (context) {
+				                    var value = context.dataset.data[context.dataIndex];
+				                    return value.x < 1000 ? 'end' : 'center';
+				                },
+				                align: function (context) {
+				                    var value = context.dataset.data[context.dataIndex];
+				                    return value.x < 1000 ? 'end' : 'center';
+				                },
+				                color: function (context) {
+				                    var value = context.dataset.data[context.dataIndex];
+				                    return value.x < 1000 ? context.dataset.backgroundColor : 'white';
+				                },
+				                font: {
+				                    weight: 'bold'
+				                },
+				                formatter: function (value, context) {
+				                    return context.dataset.label;
+				                },
+				                offset: 2,
+				                padding: 0
+            					},
+            				},
 									  legend: {
 									  	display: false,
 									  	position: "top"
