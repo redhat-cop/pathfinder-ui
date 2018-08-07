@@ -9,15 +9,8 @@
   	"create":		Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/",
   	"update":		Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/$ID"
   };
-  
-//	function getLoadUrl(id){
-//		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/"+id+"/";
-//	}
-//	function getCreateUrl(id){
-//		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/";
-//	}
 	function getIdFieldName(){
-		return "Id";
+		return "Username";
 	}
 </script>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
@@ -29,21 +22,23 @@
       </div>
       <div class="modal-body">
         <form id="form">
+        	<!--
         	<div id="form-id" class="form-group" style="display:none">
             <label for="Id" class="control-label">Id:</label>
             <input id="Id" name="Id" type="text" class="form-control"/>
           </div>
+          -->
           <div class="form-group">
             <label for="Username" class="control-label">Username:</label>
-            <input id="Username" name="Username" type="text" class="form-control" onkeyup="validate()">
+            <input id="Username" name="Username" type="text" class="form-control">
           </div>
           <div class="form-group">
             <label for="Password" class="control-label">Password:</label>
-            <input id="Password" name="Password" type="password" class="form-control" onkeyup="validate()">
+            <input id="Password" name="Password" type="password" class="form-control">
           </div>
           <div class="form-group">
             <label for="Password2" class="control-label">Password Confirmation:</label>
-            <input id="Password2" name="Password2" type="password" class="form-control" onkeyup="validate()">
+            <input id="Password2" name="Password2" type="password" class="form-control">
           </div>
           <div class="form-group">
             <label for="Email" class="control-label">Email:</label>
@@ -51,17 +46,25 @@
           </div>
           <div class="form-group">
             <label for="DisplayName" class="control-label">Display Name:</label>
-            <input id="DisplayName" name="DisplayName" type="text" class="form-control" onkeyup="validate()">
+            <input id="DisplayName" name="DisplayName" type="text" class="form-control">
           </div>
         </form>
       </div>
       <script>
-      function validate(){
-	      $('#edit-ok').attr('disabled', isEmpty($('#Username').val()) || isEmpty($('#Password').val()) || isEmpty($('#Email').val()) || $('#Password').val()!=$('#Password2').val())
-      }
-      function isEmpty(val){
-      	return val==null || val=="";
-      }
+	      function formValidate(){
+		      $('#edit-ok').attr('disabled', isEmpty($('#Username').val()) ||  $('#Password').val()!=$('#Password2').val())
+	      }
+	      function isEmpty(val){
+	      	return val==null || val=="";
+	      }
+      	$(document).ready(function() {
+	      	$("#exampleModal select").change(function(){
+						formValidate();
+					});
+					$("#exampleModal input").keyup(function(){
+						formValidate();
+					});
+				});
       </script>
       
       <div class="modal-footer">

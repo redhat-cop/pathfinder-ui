@@ -3,20 +3,12 @@
 <!--#################-->
 <!-- EDIT MODAL FORM -->
 <!--#################-->
-<script src="utils.jsp"></script>
 <script>
   var entityManagementUrls={
   	"get":			Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/$ID",
   	"create":		Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/",
   	"update":		Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/$ID"
   };
-  
-//	function getLoadUrl(id){
-//		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/"+id;
-//	}
-//	function getCreateUrl(id){
-//		return Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/";
-//	}
 	function getIdFieldName(){
 		return "Id";
 	}
