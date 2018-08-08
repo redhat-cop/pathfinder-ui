@@ -282,7 +282,11 @@ r">
 									
 									// color
 									if (decision!=null){
-										dataset['backgroundColor']=decisionColors[decision];
+										if (greyscale){
+											dataset['backgroundColor']=decisionColors.NULL;
+										}else{
+											dataset['backgroundColor']=decisionColors[decision];
+										}
 									}else{
 										dataset['backgroundColor']=decisionColors.NULL;
 									}
@@ -515,6 +519,22 @@ r">
 							<option>Solid</option>
 							<option>Gradient</option>
 						</select-->
+						<script>
+							var greyscale=true;
+							
+							function greyscaleToggle(t){
+								if (t.value=="Show Action"){
+									t.value="Hide Action";
+									greyscale=false;
+								}else{
+									t.value="Show Action";
+									greyscale=true;
+								}
+								redrawBubble(applicationAssessmentSummary, false);
+							}
+						</script>
+						<input type="button" id="greyscale" value="Show Action" onclick="greyscaleToggle(this);"/>
+						
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
 				
