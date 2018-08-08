@@ -79,76 +79,10 @@
 					</div>
 				</div>
 				<%@include file="report-summary.jsp"%>
-				<script>
-					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/report", function(report){
-						new Chart(document.getElementById("gauge-1"),buildGuage(report.assessmentSummary.Easy,report.assessmentSummary.Total, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
-						new Chart(document.getElementById("gauge-2"),buildGuage(report.assessmentSummary.Medium,report.assessmentSummary.Total, "rgb(240,171,0)","rgb(220, 220, 220)","Modernizable"));
-						new Chart(document.getElementById("gauge-3"),buildGuage(report.assessmentSummary.Hard,report.assessmentSummary.Total, "rgb(204, 0, 0)","rgb(220, 220, 220)","Unsuitable for Containers"));
-						drawRisks(report);
-					});
-				</script>
-				
-				<br/><br/><br/>
-				
-				
-				<h2>Identified Risks</h2>
-				<div class="row">
-					<div class="col-sm-9">
-						
-						<script>
-							function drawRisks(data){
-							  var risks=[];
-							  if (data.risks!=undefined) risks=data.risks;
-							  
-						    $('#risks').DataTable( {
-						        "data": risks,
-						        "oLanguage": { 
-						        	sSearch: "",             // remove the "Search" label text
-						        	sLengthMenu: "_MENU_"    // remove the "show X entries" text
-						        },
-						        "scrollCollapse": true,
-						        "paging":         false,
-						        //"lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
-						        "pageLength" : -1, // default page entries
-						        "bInfo" : false, // removes "Showing N entries" in the table footer
-						        "columns": [
-						            { "data": "question" },
-						            { "data": "answer" },
-						            { "data": "offendingApps" },
-							        ],
-						        //"columnDefs": [
-						        //   { "targets": 0, "orderable": true, "render": function (data,type,row){
-						        //      return row['question'];
-										//	 }},
-						        //   { "targets": 1, "orderable": true, "render": function (data,type,row){
-										//	    return row['offendingApps'];
-										//	 }},
-						        //]
-						    } );
-						  }
-						</script>
-						A list of questions with answers that that could cause migratory risk to a container platform.
-						
-				  	<div id="wrapper">
-					    <div id="tableDiv">
-						    <table id="risks" class="display" cellspacing="0" width="100%">
-						        <thead>
-						            <tr>
-						                <th align="left">Question</th>
-						                <th align="left">Answer</th>
-						                <th align="left">Application(s)</th>
-						            </tr>
-						        </thead>
-						    </table>
-						  </div>
-				  	</div>
 
-					</div>
-				</div>
+				
 				
 				<br/><br/><br/>
-				
-				
 				<h2>Bubble Chart Title</h2>
 				<div class="row">
 					<div class="col-sm-4">
@@ -197,7 +131,7 @@
 							        "searching" :     true,
 							        "bInfo" :         false, // removes "Showing N entries" in the table footer
 							        //"order" :         [[1,"desc"],[2,"desc"],[0,"asc"]],
-							        "order" :         [[4,"desc"]],
+							        "order" :         [[4,"desc"],[6,"asc"]],
 							        "columns": [
 							            { "data": "Id" },
 							            { "data": "Name" },
@@ -208,12 +142,17 @@
 							            { "data": "WorkEffort" },
 							        ]
 							        ,"columnDefs": [
-							        		{ "targets": 0, "orderable": false, "render": function (data,type,row){
+							            { "targets": 0, "orderable": false, "render": function (data,type,row){
 							              return "<input onclick='onChange2(this);' "+(row['Decision']!=null?"checked":"")+" type='checkbox' value='"+row['Id']+"' style='margin-right: 0rem;'/>";
-													}},
+							            }},
 							        ]
 							    } );
-							}; 
+							};
+							
+							function checkAppByDefaultIf(row){
+								return row['Decision']!=null
+											&& (row['Decision']=="REHOST" || row['Decision']=="REFACTOR" || row['Decision']=="REPLATFORM")
+							}
 							//);
 						</script>
 				  	<div id="wrapper">
@@ -254,7 +193,7 @@ r">
 					</div> <!-- /col-sm-? -->
 					
 					<div class="col-sm-8">
-					<!--
+					<!--\
 						x=business priority, y=# of dependencies, size=effort, color=Action (REHOST=red, )
 						x=business criticality, y=work priority, size=effort, color=Action (REHOST=red, )
 						x=confidence, y=business criticality, size=effort, color=Action (REHOST=red, )
@@ -281,10 +220,10 @@ r">
 						  decisionColors['NULL']      ="#808080"; //grey
 						  var sizing=[];
 						  sizing['0']=10;
-						  sizing['SMALL']=20;
-						  sizing['MEDIUM']=40;
-						  sizing['LARGE']=60;
-						  sizing['EXTRA LARGE']=80;
+						  sizing['SMALL']=15;
+						  sizing['MEDIUM']=27;
+						  sizing['LARGE']=36;
+						  sizing['XLarge']=45;
 						  var randomNumbers=[];
 						  
 						  var bubbleChart;
@@ -447,28 +386,43 @@ r">
 									    ctx.fillText(bottomLeftText, bottomLeftX, bottomLeftTextY);
 									    ctx.fillText(bottomRightText, bottomRightX, bottomRightTextY);
 									    
-									    var goldilocks=$('#goldilocks').val();
+									    //var goldilocks=$('#goldilocks').val();
 											var x=(width/2)+15, y=0, w=(width/2)-15, h=(height/2)-13;
 									    
-									    if (goldilocks=="Solid"){
-										    // quadrant color / fill top right
-										    ctx.fillStyle = "rgba(46, 212, 0, 0.5)";
-												ctx.globalAlpha = 0.4;
-										    ctx.fillRect(x,y,w,h);
-										    ctx.globalAlpha = 1.0;
-									    }else if (goldilocks=="Gradient"){
+									    //if (goldilocks=="Solid"){
+										  //  // quadrant color / fill top right
+										  //  ctx.fillStyle = "rgba(46, 212, 0, 0.5)";
+											//	ctx.globalAlpha = 0.4;
+										  //  ctx.fillRect(x,y,w,h);
+										  //  ctx.globalAlpha = 1.0;
+									    //}else if (goldilocks=="Gradient"){
 									    	// adjust the width of the green gradient area (higher = wider)
 										    var adjustment=140;
 										    x=x-adjustment;
 										    w=w+adjustment;
 										    
 												var grd=ctx.createLinearGradient(x,0,width-150,0);
+												var grdOpacity=0.12;
 												grd.addColorStop(0,"rgba(255,255,255,0)");
-												grd.addColorStop(1,"rgba(46, 212, 0, 0.3)");
+												grd.addColorStop(1,"rgba(46, 212, 0, "+grdOpacity+")");
 												
 												ctx.fillStyle=grd;
-												ctx.fillRect(x,y,w,h*2);
+												ctx.fillRect(x,y,w,(h*2)-5);
+									    //}
+									    
+									    for(i=0;i<chart.config.data.datasets.length;i++){
+									    	var bubble=chart.config.data.datasets[i];
+									    	var r=bubble.data[0].r;
+									    	var x=bubble.data[0].x;
+									    	var y=bubble.data[0].y;
+									    	var label=bubble.label[0];
+									    	
+									    	//console.log(label);
+									    	
+									    	// TODO: MAT! you're drawing your dependency lines on the bubble chart here
+									    	
 									    }
+									    
 									    
 									    //console.log("chart="+JSON.stringify(chart.config));
 									    
@@ -556,35 +510,85 @@ r">
 							<canvas id="bubbleChart" class="chartjs" width="800px" height="500px;"></canvas>
 						</div>
    					
-						<select id="goldilocks" onchange="redrawBubble(applicationAssessmentSummary, false);">
+						<!--select id="goldilocks" onchange="redrawBubble(applicationAssessmentSummary, false);">
 							<option>None</option>
 							<option>Solid</option>
 							<option>Gradient</option>
-						</select>
+						</select-->
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
-<br/><br/><br/>
-
 				
+				
+				<br/><br/><br/>
 				<h2>Suggested Adoption Plan</h2>
 				<div class="row">
 					<div class="col-sm-8">
-						
-						<div style="width: 1000px; height: 100px;">
-							<canvas id="adoption" style="width: 500px; height: 100px;"></canvas>
-						</div>
-						
+						<canvas id="adoption" style="width: 500px; height: 100px;"></canvas>
 						<%@include file="report-adoption.jsp"%>
-						
-					</div>
-						
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
-<br/><br/><br/>
+				
+				
+				
+				<br/><br/><br/>
+				<h2>Identified Risks</h2>
+				<div class="row">
+					<div class="col-sm-10">
+						
+						<script>
+							function drawRisks(data){
+							  var risks=[];
+							  if (data.risks!=undefined) risks=data.risks;
+							  
+						    $('#risks').DataTable( {
+						        "data": risks,
+						        "oLanguage": { 
+						        	sSearch: "",             // remove the "Search" label text
+						        	sLengthMenu: "_MENU_"    // remove the "show X entries" text
+						        },
+						        "scrollCollapse": true,
+						        "paging":         false,
+						        //"lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
+						        "pageLength" : -1, // default page entries
+						        "bInfo" : false, // removes "Showing N entries" in the table footer
+						        "columns": [
+						            { "data": "question" },
+						            { "data": "answer" },
+						            { "data": "offendingApps" },
+							        ],
+						        //"columnDefs": [
+						        //   { "targets": 0, "orderable": true, "render": function (data,type,row){
+						        //      return row['question'];
+										//	 }},
+						        //   { "targets": 1, "orderable": true, "render": function (data,type,row){
+										//	    return row['offendingApps'];
+										//	 }},
+						        //]
+						    } );
+						  }
+						</script>
+						A list of questions with answers that that could cause migratory risk to a container platform.
+						
+				  	<div id="wrapper">
+					    <div id="tableDiv">
+						    <table id="risks" class="display" cellspacing="0" width="100%">
+						        <thead>
+						            <tr>
+						                <th align="left">Question</th>
+						                <th align="left">Answer</th>
+						                <th align="left">Application(s)</th>
+						            </tr>
+						        </thead>
+						    </table>
+						  </div>
+				  	</div>
 
-<div class="row">
-&nbsp;
-</div>
+					</div>
+				</div>
+
+				<div class="row">
+				&nbsp;
+				</div>
 
 			</div>
 		</section>
@@ -596,8 +600,11 @@ r">
 
 
 
-						<!--
-					  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-					  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-				
-						-->
+				<script>
+					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/report", function(report){
+						new Chart(document.getElementById("gauge-1"),buildGuage(report.assessmentSummary.Easy,report.assessmentSummary.Total, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
+						new Chart(document.getElementById("gauge-2"),buildGuage(report.assessmentSummary.Medium,report.assessmentSummary.Total, "rgb(240,171,0)","rgb(220, 220, 220)","Modernizable"));
+						new Chart(document.getElementById("gauge-3"),buildGuage(report.assessmentSummary.Hard,report.assessmentSummary.Total, "rgb(204, 0, 0)","rgb(220, 220, 220)","Unsuitable for Containers"));
+						drawRisks(report);
+					});
+				</script>
