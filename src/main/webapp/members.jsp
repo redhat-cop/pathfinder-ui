@@ -94,23 +94,37 @@
 			}
 
 		</script>
-    	<div id="wrapper">
-		    <div id="buttonbar">
-	        <button style="position:relative;height:30px;width:75px;left:0px;top:0px;"  class="btn" name="New"                onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
-					<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove Members(s)</button>
-		    </div>
-		    <div id="tableDiv">
-			    <table id="example" class="display" cellspacing="0" width="100%">
-			        <thead>
-			            <tr>
-			                <th align="left"></th>
-			                <th align="left">Username</th>
-			                <th align="left">DisplayName</th>
-			                <th align="left">Email</th>
-			            </tr>
-			        </thead>
-			    </table>
-			  </div>
+
+		<div id="wrapper" class="container-fluid">
+			<div id="buttonbar">
+				<div class="row page-title">
+					<div class="col-xs-4">
+						<h2>Members</h2>
+					</div>
+					<div class="col-xs-1 pull-right">
+						<div class="form-group">
+							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+						</div>
+					</div>
+					<div class="col-xs-1 pull-right">
+						<div class="form-group">
+							<button class="form-control btn btn-danger" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="tableDiv">
+				<table id="example" class="display" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th align="left"></th>
+							<th align="left">Username</th>
+							<th align="left">DisplayName</th>
+							<th align="left">Email</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
     </div>
     
 

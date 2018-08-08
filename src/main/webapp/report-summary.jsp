@@ -44,6 +44,11 @@
 		            	]
 		        	},
 							"options": {
+								plugins: {
+	            					datalabels: {
+	            						display: false
+	            					}
+	            	},
     // String - Template string for single tooltips
     tooltipTemplate: "<\%if (label){\%><\%=label \%>: <\%}\%><\%= value + ' \%' \%>",
     // String - Template string for multiple tooltips

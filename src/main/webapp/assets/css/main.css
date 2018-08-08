@@ -69,6 +69,10 @@ th {
   margin-top: 0.15em;
 }
 
+.dataTables_filter {
+  text-align: right;
+}
+
 /* HACK */
 
 .sorting_desc::after {

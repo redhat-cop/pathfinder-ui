@@ -21,6 +21,11 @@
 		        }]
 		    },
 				options:{
+							plugins: {
+            					datalabels: {
+            						display: false
+            					}
+            	},
 					    hover :{
 					        animationDuration:10
 					    },

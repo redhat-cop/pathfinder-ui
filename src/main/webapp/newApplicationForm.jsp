@@ -83,7 +83,7 @@
       </script>
       
       <div class="modal-footer">
-        <a type="button" data-dismiss="modal">Close</a>
+        <a type="button" data-dismiss="modal">Cancel</a>
         <button class="btn btn-primary" id="edit-ok" type="button" data-dismiss="modal" onclick="save(this, 'form'); return false;">Create</button>
       </div>
     </div>

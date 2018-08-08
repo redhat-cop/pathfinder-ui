@@ -98,32 +98,41 @@
 					httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/", idsToDelete);
 				}
 			}
-
 		</script>
-    	<div id="wrapper">
-		    <div id="buttonbar">
-					<div class="row">
-						<div class="col-xs-6">
-							<button class="btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
-							<button class="btn btn-danger" name="btnRemove" disabled onclick="btnDelete_onclick(this);" type="button">Delete Application(s)</button>
+
+		<div id="wrapper" class="container-fluid">
+			<div id="buttonbar">
+				<div class="row page-title">
+					<div class="col-xs-4">
+						<h2>Applications</h2>
+					</div>
+					<div class="col-xs-1 pull-right">
+						<div class="form-group">
+							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
 						</div>
 					</div>
-		    </div>
-		    <div id="tableDiv">
-			    <table id="example" class="display" cellspacing="0" width="100%">
-			        <thead>
-			            <tr>
-			                <th align="left"></th>
-			                <th align="left">Application Name</th>
-			                <th align="left">Type</th>
-			                <th align="left">Owner</th>
-			                <th align="left">Description</th>
-			                <!--th align="left">Edit</th-->
-			                <!--th align="left">Delete</th-->
-			            </tr>
-			        </thead>
-			    </table>
-			  </div>
+					<div class="col-xs-1 pull-right">
+						<div class="form-group">
+							<button class="form-control btn btn-danger" name="btnRemove" disabled onclick="btnDelete_onclick(this);" type="button">Remove</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="tableDiv">
+				<table id="example" class="display" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th align="left"></th>
+							<th align="left">Application Name</th>
+							<th align="left">Type</th>
+							<th align="left">Owner</th>
+							<th align="left">Description</th>
+							<!--th align="left">Edit</th-->
+							<!--th align="left">Delete</th-->
+						</tr>
+					</thead>
+				</table>
+			</div>
     </div>
     
 

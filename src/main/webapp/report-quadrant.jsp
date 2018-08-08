@@ -22,8 +22,9 @@
 	<!-- for pie/line/bubble graphing -->
 	<!--
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-	-->
 	<script src="assets/js/Chart-2.6.0.min.js"></script>
+	-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
 	<script src="https://unpkg.com/lodash@4.17.10/lodash.min.js"></script>
 
 	<body class="is-preload">
@@ -176,7 +177,8 @@
 							}
 						</style>
 						<script>
-							$(document).ready(function() {
+							//$(document).ready(function() {
+							function redrawApplications(applicationAssessmentSummary){
 							    $('#appFilter').DataTable( {
 							        //"ajax": {
 							        //    "url": Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applicationAssessmentSummary",
@@ -207,14 +209,17 @@
 							        ]
 							        ,"columnDefs": [
 							        		{ "targets": 0, "orderable": false, "render": function (data,type,row){
-							              return "<input onclick='onChange2(this);' checked type='checkbox' value='"+row['Id']+"' style='background-color:red;width:10px'/>";
+							              return "<input onclick='onChange2(this);' "+(row['Decision']!=null?"checked":"")+" type='checkbox' value='"+row['Id']+"' style='margin-right: 0rem;'/>";
 													}},
 							        ]
 							    } );
-							} );
+							}; 
+							//);
 						</script>
 				  	<div id="wrapper">
-					    <div id="buttonbar">
+					    <div 							}; 
+							//);
+r">
 					    </div>
 					    <div id="tableDiv">
 					    	<style>
@@ -242,7 +247,7 @@
 							var appFilter=[];
 							function onChange2(t){
 								t.checked?appFilter.push(t.value):appFilter.splice(appFilter.indexOf(t.value),1);
-								reDrawBubble(applicationAssessmentSummary, false);
+								redrawBubble(applicationAssessmentSummary, false);
 							}
 						</script>
 				  	
@@ -351,16 +356,15 @@
 								return result;
 						  }
 						  
-						  function reDrawBubble(summary, initial){
+						  function redrawBubble(summary, initial){
 						  	console.log("redraw -> "+initial);
 								
 								if (!initial){
 									bubbleChart.destroy();
 								}else{
-									// add all apps to begin with
-									for(i=0;i<summary.length;i++){
-										appFilter.push(summary[i]['Id']);
-									}
+									$('#appFilter tbody tr td input[type=checkbox]:checked').each(function () {
+										appFilter.push(this.value);
+									});
 								}
 								
 							  var ctx=document.getElementById("bubbleChart").getContext('2d');
@@ -425,7 +429,8 @@
 								        type = chart.config.type;
 								    
 								    if (type == 'bubble'){
-								      ctx.restore();
+								      //ctx.restore();
+									    ctx.clearRect(0, 0, chart.chart.width, chart.chart.height);
 								      var fontSize = 1.1;
 								      ctx.font = fontSize + "em sans-serif";
 								      ctx.textBaseline = "middle"
@@ -442,60 +447,44 @@
 									    ctx.fillText(bottomLeftText, bottomLeftX, bottomLeftTextY);
 									    ctx.fillText(bottomRightText, bottomRightX, bottomRightTextY);
 									    
+									    var goldilocks=$('#goldilocks').val();
+											var x=(width/2)+15, y=0, w=(width/2)-15, h=(height/2)-13;
 									    
-									    // quadrant color
-									    // fill top right
-									    //ctx.fillStyle = "rgba(46, 212, 0, 0.5)";
-											//ctx.globalAlpha = 0.4;
-											//var x=(width/2)+15, y=0, w=(width/2)-15, h=(height/2)-13;
-									    //ctx.fillRect(x,y,w,h);
-									    //ctx.globalAlpha = 1.0;
+									    if (goldilocks=="Solid"){
+										    // quadrant color / fill top right
+										    ctx.fillStyle = "rgba(46, 212, 0, 0.5)";
+												ctx.globalAlpha = 0.4;
+										    ctx.fillRect(x,y,w,h);
+										    ctx.globalAlpha = 1.0;
+									    }else if (goldilocks=="Gradient"){
+									    	// adjust the width of the green gradient area (higher = wider)
+										    var adjustment=140;
+										    x=x-adjustment;
+										    w=w+adjustment;
+										    
+												var grd=ctx.createLinearGradient(x,0,width-150,0);
+												grd.addColorStop(0,"rgba(255,255,255,0)");
+												grd.addColorStop(1,"rgba(46, 212, 0, 0.3)");
+												
+												ctx.fillStyle=grd;
+												ctx.fillRect(x,y,w,h*2);
+									    }
 									    
-									    // far right quarter fill
-									    //ctx.fillStyle = "rgba(46, 212, 0, 0.5)";
-											//ctx.globalAlpha = 0.3;
-											var x=((width/4)*3), y=0, w=(width/4), h=(height)-27;
-									    //ctx.fillRect(x,y,w,h);
-									    //ctx.globalAlpha = 1.0;
-									    //width=width-150;
+									    //console.log("chart="+JSON.stringify(chart.config));
 									    
-									    // adjust the width of the green gradient area (higher = wider)
-									    var adjustment=140;
-									    x=x-adjustment;
-									    w=w+adjustment;
-									    
-											var grd=ctx.createLinearGradient(x,0,width-150,0);
-											grd.addColorStop(0,"rgba(255,255,255,0)");
-											grd.addColorStop(1,"rgba(46, 212, 0, 0.3)");
-											
-											ctx.fillStyle=grd;
-											ctx.fillRect(x,y,w,h);
-									    
-
 											ctx.save();
 										}								    
 									}
 								});
 								
-								//var c = document.getElementById("bubbleChart");
-								//var ctx = c.getContext("2d");
-								//xxxxxxxxxxx
 						  }
 						  
 							var data;
 							var applicationAssessmentSummary;
 							httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(summary){
 								applicationAssessmentSummary=summary;
-								reDrawBubble(applicationAssessmentSummary, true);
-								
-								//// draw the goldilocks zone
-								//var c = document.getElementById("bubbleChart");
-								//var ctx = c.getContext("2d");
-								//ctx.beginPath();
-								//ctx.arc(95, 80, 70, 0, 2 * Math.PI);
-								//ctx.stroke();
-								
-								
+								redrawApplications(applicationAssessmentSummary);
+								redrawBubble(applicationAssessmentSummary, true);
 							});
 							
 						</script>
@@ -567,6 +556,11 @@
 							<canvas id="bubbleChart" class="chartjs" width="800px" height="500px;"></canvas>
 						</div>
    					
+						<select id="goldilocks" onchange="redrawBubble(applicationAssessmentSummary, false);">
+							<option>None</option>
+							<option>Solid</option>
+							<option>Gradient</option>
+						</select>
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
 <br/><br/><br/>

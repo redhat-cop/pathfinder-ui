@@ -164,7 +164,7 @@
 					</div>
 					<div class="col-xs-1 pull-right">
 						<div class="form-group">
-							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">Add</button>
+							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
 						</div>
 					</div>
 					<div class="pull-right col-xs-1">
