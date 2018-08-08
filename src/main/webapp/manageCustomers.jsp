@@ -72,30 +72,53 @@
 			            { "data": "CustomerPercentageComplete" },
 			            { "data": "CustomerId" },
 			            { "data": "CustomerId" },
-				        ]
-			        ,"columnDefs": [
-			           { "targets": 0, "orderable": true, "render": function (data,type,row){
+							],
+			        columnDefs: [
+			          {
+									targets: 0,
+									orderable: false,
+									render: function (data,type,row){
 			              return "<input type='checkbox' name='id' value='"+row['CustomerId']+"'></input>";
-								 }},
-			           { "targets": 1, "orderable": true, "render": function (data,type,row){
-							      var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>"+row['CustomerName']+"</a>";
-							      return link+"&nbsp;<span class='editLink'>(<a href='#' onclick='loadEntity(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>edit</a>)</span>";
-			              //return "<a href='#' onclick='loadEntity(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>"+row["CustomerName"]+"</a>";
-								 }},
-								 { "targets": 3, "orderable": false, "render": function (data,type,row){
-								    return "";//<a href='report.jsp?customerId="+row["CustomerId"]+"'>Report</a>";
-								 }},
-								 { "targets": 4, "orderable": false, "render": function (data,type,row){
+									}
+								},
+			          {
+									targets: 1,
+									orderable: true,
+									render: function (data,type,row){
+										var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>"+row['CustomerName']+"</a>";
+										return link+"&nbsp;<span class='editLink'>(<a href='#' onclick='loadEntity(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>edit</a>)</span>";
+									}
+								},
+								{
+									targets: 3,
+									orderable: false,
+									render: function (data,type,row){
+								    return "";
+									}
+								},
+								{
+									targets: 4,
+									orderable: false,
+									render: function (data,type,row){
 							     var percentComplete=row['CustomerPercentageComplete'];
 							     var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>Assessments&nbsp;("+percentComplete+"%)</a>";
 							     return "<div class='progress'><div class='progress-bar-success' role='progressbar' aria-valuenow='"+percentComplete+"' aria-valuemin='0' aria-valuemax='100' style='width:"+percentComplete+"%'>"+link+"</div></div>";
-								 }},
-			           { "targets": 5, "orderable": false, "render": function (data,type,row){
+									}
+								},
+			          {
+									targets: 5,
+									orderable: false,
+									render: function (data,type,row){
 								    return "<a href='manageCustomerApplications.jsp?customerId="+row["CustomerId"]+"'>Applications ("+row['CustomerAppCount']+")</a>";
-								 }},
-			           { "targets": 6, "orderable": false, "render": function (data,type,row){
+									}
+								},
+			          {
+									targets: 6,
+									orderable: false,
+									render: function (data,type,row){
 								    return "<a href='members.jsp?customerId="+row["CustomerId"]+"'>Members ("+row['CustomerMemberCount']+")</a>";
-								 }}
+									}
+								}
 				         //,{ "targets": 6, "orderable": false, "render": function (data,type,row){
 								 //   return "<div class='btn btn-warning' title='Edit' onclick='load(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
 								 // }}
@@ -132,7 +155,7 @@
 				}
 			}
 		</script>
-  	<div id="wrapper">
+  	<div id="wrapper" class="container-fluid">
 
 	    <div id="buttonbar">
 				<div class="row page-title">
@@ -140,10 +163,14 @@
 						<h2>Customers</h2>
 					</div>
 					<div class="col-xs-1 pull-right">
-						<button class="btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+						<div class="form-group">
+							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">Add</button>
+						</div>
 					</div>
-					<div class="pull-right col-xs-2">
-						<button class="btn btn-danger" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove Customers(s)</button>
+					<div class="pull-right col-xs-1">
+						<div class="form-group">
+							<button class="form-control btn btn-danger" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove</button>
+						</div>
 					</div>
 				</div>
 			</div>
