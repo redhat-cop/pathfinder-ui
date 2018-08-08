@@ -243,8 +243,12 @@
 								"orderable": true,
 								"render": function (data,type,row){
 									// formats are here: https://github.com/phstc/jquery-dateFormat
-									var parsedDate = new Date(parseInt(row.ReviewDate, 10), 'dd/MMM/yy HH:mm')
-									return row.ReviewDate ? DateFormat.format.date(parsedDate) : ''
+									if (row.ReviewDate) {
+										var parsedDate = new Date(parseInt(row.ReviewDate, 10))
+										return DateFormat.format.date(parsedDate, 'dd/MMM/yy HH:mm')
+									} else {
+										return ''
+									}
 								}
 							}
 					]
