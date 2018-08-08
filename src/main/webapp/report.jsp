@@ -87,63 +87,6 @@
 					});
 				</script>
 				
-				<br/><br/><br/>
-				
-				
-				<h2>Identified Risks</h2>
-				<div class="row">
-					<div class="col-sm-9">
-						
-						<script>
-							function drawRisks(data){
-							  var risks=[];
-							  if (data.risks!=undefined) risks=data.risks;
-							  
-						    $('#risks').DataTable( {
-						        "data": risks,
-						        "oLanguage": { 
-						        	sSearch: "",             // remove the "Search" label text
-						        	sLengthMenu: "_MENU_"    // remove the "show X entries" text
-						        },
-						        "scrollCollapse": true,
-						        "paging":         false,
-						        //"lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
-						        "pageLength" : -1, // default page entries
-						        "bInfo" : false, // removes "Showing N entries" in the table footer
-						        "columns": [
-						            { "data": "question" },
-						            { "data": "answer" },
-						            { "data": "offendingApps" },
-							        ],
-						        //"columnDefs": [
-						        //   { "targets": 0, "orderable": true, "render": function (data,type,row){
-						        //      return row['question'];
-										//	 }},
-						        //   { "targets": 1, "orderable": true, "render": function (data,type,row){
-										//	    return row['offendingApps'];
-										//	 }},
-						        //]
-						    } );
-						  }
-						</script>
-						A list of questions with answers that that could cause migratory risk to a container platform.
-						
-				  	<div id="wrapper">
-					    <div id="tableDiv">
-						    <table id="risks" class="display" cellspacing="0" width="100%">
-						        <thead>
-						            <tr>
-						                <th align="left">Question</th>
-						                <th align="left">Answer</th>
-						                <th align="left">Application(s)</th>
-						            </tr>
-						        </thead>
-						    </table>
-						  </div>
-				  	</div>
-
-					</div>
-				</div>
 				
 				<br/><br/><br/>
 				
@@ -424,15 +367,6 @@
 								applicationAssessmentSummary=summary;
 								redrawApplications(applicationAssessmentSummary);
 								redrawBubble(applicationAssessmentSummary, true);
-								
-								//// draw the goldilocks zone
-								//var c = document.getElementById("bubbleChart");
-								//var ctx = c.getContext("2d");
-								//ctx.beginPath();
-								//ctx.arc(95, 80, 70, 0, 2 * Math.PI);
-								//ctx.stroke();
-								
-								
 							});
 							
 						</script>
@@ -496,16 +430,16 @@
 							</div>
 						</div>
 						
-						
 						<div class="chartjs-wrapper" style="width:850px;height:600px;">
 							<canvas id="bubbleChart" class="chartjs" width="800px" height="500px;"></canvas>
 						</div>
 
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
-<br/><br/><br/>
-
 				
+				
+				
+				<br/><br/><br/>
 				<h2>Suggested Adoption Plan</h2>
 				<div class="row">
 					<div class="col-sm-8">
@@ -520,7 +454,67 @@
 						
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
-<br/><br/><br/>
+				
+				
+				
+				<br/><br/><br/>
+				<h2>Identified Risks</h2>
+				<div class="row">
+					<div class="col-sm-9">
+						
+						<script>
+							function drawRisks(data){
+							  var risks=[];
+							  if (data.risks!=undefined) risks=data.risks;
+							  
+						    $('#risks').DataTable( {
+						        "data": risks,
+						        "oLanguage": { 
+						        	sSearch: "",             // remove the "Search" label text
+						        	sLengthMenu: "_MENU_"    // remove the "show X entries" text
+						        },
+						        "scrollCollapse": true,
+						        "paging":         false,
+						        //"lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
+						        "pageLength" : -1, // default page entries
+						        "bInfo" : false, // removes "Showing N entries" in the table footer
+						        "columns": [
+						            { "data": "question" },
+						            { "data": "answer" },
+						            { "data": "offendingApps" },
+							        ],
+						        //"columnDefs": [
+						        //   { "targets": 0, "orderable": true, "render": function (data,type,row){
+						        //      return row['question'];
+										//	 }},
+						        //   { "targets": 1, "orderable": true, "render": function (data,type,row){
+										//	    return row['offendingApps'];
+										//	 }},
+						        //]
+						    } );
+						  }
+						</script>
+						A list of questions with answers that that could cause migratory risk to a container platform.
+						
+				  	<div id="wrapper">
+					    <div id="tableDiv">
+						    <table id="risks" class="display" cellspacing="0" width="100%">
+						        <thead>
+						            <tr>
+						                <th align="left">Question</th>
+						                <th align="left">Answer</th>
+						                <th align="left">Application(s)</th>
+						            </tr>
+						        </thead>
+						    </table>
+						  </div>
+				  	</div>
+
+					</div>
+				</div>
+				
+				
+				
 
 <div class="row">
 &nbsp;
