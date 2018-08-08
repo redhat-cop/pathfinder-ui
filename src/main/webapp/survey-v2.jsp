@@ -3,6 +3,7 @@
   <body class="is-preload">
   	<link href="assets/css/bootstrap-3.3.7.min.css" rel="stylesheet" />
   	<script src="assets/js/bootstrap-3.3.7.min.js"></script>
+
   	
   	<%@include file="nav.jsp"%>
   	
@@ -38,20 +39,23 @@
 		
 		    <script src="https://surveyjs.azureedge.net/1.0.23/survey.jquery.js"></script>
 		    <link href="https://surveyjs.azureedge.net/1.0.23/survey.css" type="text/css" rel="stylesheet"/>
-		
-		    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet"/>
+		    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
+
 		    <!--
 		    <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
 		    -->
 		    <script src="https://unpkg.com/surveyjs-widgets"></script>
+
 		    <!--<link rel="stylesheet" href="./context/index.css">-->
+
 		    <script src="https://unpkg.com/icheck@1.0.2"></script>
 		    <link rel="stylesheet" href="https://unpkg.com/icheck@1.0.2/skins/square/blue.css">
-		    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-		    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
 		    <!--
 		    <link rel="stylesheet" type="text/css" href="http://overpass-30e2.kxcdn.com/overpass.css"/>
 		    -->
+
 				<style type="text/css">
 					body {font-family: Overpass;}
 				</style>
@@ -111,7 +115,8 @@
 					
 					$(document).ready(function() {
 					});
-					
+
+
 					var surveyJsUrl=Utils.SERVER+"/api/pathfinder/survey";
 					var surveyJSElement=document.createElement('script');
 					surveyJSElement.src=surveyJsUrl;
