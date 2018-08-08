@@ -209,7 +209,7 @@
 							        ]
 							        ,"columnDefs": [
 							        		{ "targets": 0, "orderable": false, "render": function (data,type,row){
-							              return "<input onclick='onChange2(this);' checked type='checkbox' value='"+row['Id']+"' style='margin-right: 0rem;'/>";
+							              return "<input onclick='onChange2(this);' "+(row['Decision']!=null?"checked":"")+" type='checkbox' value='"+row['Id']+"' style='margin-right: 0rem;'/>";
 													}},
 							        ]
 							    } );
@@ -362,10 +362,9 @@ r">
 								if (!initial){
 									bubbleChart.destroy();
 								}else{
-									// add all apps to begin with
-									for(i=0;i<summary.length;i++){
-										appFilter.push(summary[i]['Id']);
-									}
+									$('#appFilter tbody tr td input[type=checkbox]:checked').each(function () {
+										appFilter.push(this.value);
+									});
 								}
 								
 							  var ctx=document.getElementById("bubbleChart").getContext('2d');
