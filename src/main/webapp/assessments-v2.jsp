@@ -117,8 +117,8 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
-						<button class="btn btn-primary" id="modal-ok" type="button" data-dismiss="modal" onclick="form_save('clone_form', Utils.SERVER+'/api/pathfinder/customers/'+customerId+'/applications/'+document.getElementById('clone_appId').value+'/copy'); return false;">Create</button>
+						<a type="button" data-dismiss="modal">Cancel</a>
+						<button class="btn btn-primary" id="modal-ok" type="button" data-dismiss="modal" onclick="form_save('clone_form', Utils.SERVER+'/api/pathfinder/customers/'+customerId+'/applications/'+document.getElementById('clone_appId').value+'/copy'); return false;">Clone</button>
 					</div>
 				</div>
 			</div>
@@ -197,7 +197,7 @@
 									if (row.LatestAssessmentId) {
 										return "<a href='viewAssessment.jsp?app=" + row.Id + "&assessment=" + row.LatestAssessmentId + "&customer=" + customerId + "'>" + row.Name + "</a>"
 									} else {
-										return ''
+										return row.Name
 									}
 								}
 							},
