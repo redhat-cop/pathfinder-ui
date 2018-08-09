@@ -5,7 +5,6 @@
   
   <link href="assets/css/main.css" rel="stylesheet" />
   <link href="assets/css/breadcrumbs.css" rel="stylesheet" />
-	<link href="assets/css/datatables-addendum.css" rel="stylesheet" />
 
   <%@include file="datatables-dependencies.jsp"%>
 

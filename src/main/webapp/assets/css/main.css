@@ -69,8 +69,18 @@ th {
   margin-top: 0.15em;
 }
 
+/* overrides */
 .dataTables_filter {
   text-align: right;
+}
+table.dataTable thead .sorting_asc {
+  background-image: none;
+}
+table.dataTable thead .sorting_desc {
+  background-image: none;
+}
+table.dataTable thead .sorting {
+  background-image: none;
 }
 
 /* HACK */

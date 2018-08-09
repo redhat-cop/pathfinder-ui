@@ -15,7 +15,6 @@
   	<%@include file="nav.jsp"%>
   	
 		<%@include file="breadcrumbs.jsp"%>
-		<link href="assets/css/progressbar.css" rel="stylesheet" />
 		
 		<div class="container-fluid">
 			<div class="row">
