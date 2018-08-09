@@ -466,19 +466,10 @@
 						            { "data": "answer" },
 						            { "data": "offendingApps" },
 							        ],
-						        //"columnDefs": [
-						        //   { "targets": 0, "orderable": true, "render": function (data,type,row){
-						        //      return row['question'];
-										//	 }},
-						        //   { "targets": 1, "orderable": true, "render": function (data,type,row){
-										//	    return row['offendingApps'];
-										//	 }},
-						        //]
 						    } );
 						  }
 						</script>
 						A list of questions with answers that that could cause migratory risk to a container platform.
-						
 				  	<div id="wrapper">
 					    <div id="tableDiv">
 						    <table id="risks" class="display" cellspacing="0" width="100%">
@@ -492,7 +483,6 @@
 						    </table>
 						  </div>
 				  	</div>
-
 					</div>
 				</div>
 				

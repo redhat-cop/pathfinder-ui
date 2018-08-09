@@ -75,7 +75,7 @@
 				
 				
 				<br/><br/><br/>
-				<h2>Bubble Chart Title</h2>
+				<h2>Adoption Candidate Distribution</h2>
 				<div class="row">
 					<div class="col-sm-4">
 						<style>
@@ -106,12 +106,6 @@
 							//$(document).ready(function() {
 							function redrawApplications(applicationAssessmentSummary){
 							    $('#appFilter').DataTable( {
-							        //"ajax": {
-							        //    "url": Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applicationAssessmentSummary",
-							        //    "data":{"_t":jwtToken},
-							        //    "dataSrc": "",
-							        //    "dataType": "json"
-							        //},
 							        "data": applicationAssessmentSummary,
 							        "oLanguage": { 
 							        	sSearch: "",             // remove the "Search" label text
@@ -166,7 +160,7 @@ r">
 			                <th align="left" title="Business Criticality">Critical</th>
 			                <th align="left" title="Work Priority">Priority</th>
 			                <th align="left" title="Confidence">Confidence</th>
-			                <th align="left" title="Recommended Action">Action</th>
+			                <th align="left" title="Recommended Decision or Action to take">Decision</th>
 			                <th align="left" title="Estimated Effort">Effort</th>
 				            </tr>
 					        </thead>
@@ -179,6 +173,7 @@ r">
 							function onChange2(t){
 								t.checked?appFilter.push(t.value):appFilter.splice(appFilter.indexOf(t.value),1);
 								redrawBubble(applicationAssessmentSummary, false);
+								redrawAdoptionPlan(applicationAssessmentSummary);
 							}
 						</script>
 				  	
@@ -274,7 +269,11 @@ r">
 									
 									// color
 									if (decision!=null){
-										dataset['backgroundColor']=decisionColors[decision];
+										if (greyscale){
+											dataset['backgroundColor']=decisionColors.NULL;
+										}else{
+											dataset['backgroundColor']=decisionColors[decision];
+										}
 									}else{
 										dataset['backgroundColor']=decisionColors.NULL;
 									}
@@ -283,12 +282,12 @@ r">
 								}
 								
 								var result={datasets};
-								console.log(JSON.stringify(datasets));
+								//console.log(JSON.stringify(datasets));
 								return result;
 						  }
 						  
 						  function redrawBubble(summary, initial){
-						  	console.log("redraw -> "+initial);
+						  	//console.log("redraw -> "+initial);
 								
 								if (!initial){
 									bubbleChart.destroy();
@@ -427,10 +426,15 @@ r">
 						  
 							var data;
 							var applicationAssessmentSummary;
+							var appIdToNameMap=[];
 							httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(summary){
 								applicationAssessmentSummary=summary;
+								for(i=0;i<summary.length;i++){
+									appIdToNameMap[summary.Id]=summary.Name;
+								}
 								redrawApplications(applicationAssessmentSummary);
 								redrawBubble(applicationAssessmentSummary, true);
+								redrawAdoptionPlan(applicationAssessmentSummary);
 							});
 							
 						</script>
@@ -498,8 +502,8 @@ r">
 						</div>
 						
 						
-						<div class="chartjs-wrapper" style="width:850px;height:600px;">
-							<canvas id="bubbleChart" class="chartjs" width="800px" height="500px;"></canvas>
+						<div class="chartjs-wrapper" style="width:850px;height:530px;">
+							<canvas id="bubbleChart" class="chartjs" width="850" height="531"></canvas>
 						</div>
    					
 						<!--select id="goldilocks" onchange="redrawBubble(applicationAssessmentSummary, false);">
@@ -507,6 +511,18 @@ r">
 							<option>Solid</option>
 							<option>Gradient</option>
 						</select-->
+						<script>
+							var greyscale=true;
+							
+							function greyscaleToggle(t){
+								t.value=="Show Decisions"?t.value="Hide Decisions":t.value="Show Decisions";
+								greyscale=(t.value=="Show Decisions");
+								redrawBubble(applicationAssessmentSummary, false);
+							}
+						</script>
+						<input style="height:28px;padding:0px;width:120px;font-size:10pt;line-height:1rem;" type="button" id="greyscale" value="Show Decisions" onclick="greyscaleToggle(this);"/>
+						<input style="height:28px;padding:0px;width:150px;font-size:10pt;line-height:1rem;" disabled type="button" id="dependencies" value="Show Dependencies" onclick="dependenciesToggle(this);"/>
+						
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
 				
@@ -523,11 +539,23 @@ r">
 				
 				
 				<br/><br/><br/>
-				<h2>Identified Risks</h2>
+				<h2>
+				<a class="twisty" role="button" aria-expanded="false" aria-controls="collapser" data-toggle="collapse" href="#collapser" >
+					<img src="assets/images/twisty-off.png" style="width:30px;"/>
+					<img src="assets/images/twisty-on.png"  style="width:30px;display:none"/>
+				</a>
+				<!--
+				<i class="glyphicon glyphicon-triangle-right"></i>
+				-->
+				Identified Risks</h2>
 				<div class="row">
 					<div class="col-sm-10">
 						
 						<script>
+							$(".twisty").click(function(){
+							  $('img',this).toggle();
+							});
+							
 							function drawRisks(data){
 							  var risks=[];
 							  if (data.risks!=undefined) risks=data.risks;
@@ -548,33 +576,55 @@ r">
 						            { "data": "answer" },
 						            { "data": "offendingApps" },
 							        ],
-						        //"columnDefs": [
-						        //   { "targets": 0, "orderable": true, "render": function (data,type,row){
-						        //      return row['question'];
-										//	 }},
-						        //   { "targets": 1, "orderable": true, "render": function (data,type,row){
-										//	    return row['offendingApps'];
-										//	 }},
-						        //]
 						    } );
 						  }
 						</script>
 						A list of questions with answers that that could cause migratory risk to a container platform.
-						
-				  	<div id="wrapper">
-					    <div id="tableDiv">
-						    <table id="risks" class="display" cellspacing="0" width="100%">
-						        <thead>
-						            <tr>
-						                <th align="left">Question</th>
-						                <th align="left">Answer</th>
-						                <th align="left">Application(s)</th>
-						            </tr>
-						        </thead>
-						    </table>
-						  </div>
-				  	</div>
-
+						<div class="collapse" id="collapser">
+					  	<div id="wrapper">
+						    <div id="tableDiv">
+							    <table id="risks" class="display" cellspacing="0" width="100%">
+							        <thead>
+							            <tr>
+							                <th align="left">Question</th>
+							                <th align="left">Answer</th>
+							                <th align="left">Application(s)</th>
+							            </tr>
+							        </thead>
+							    </table>
+							  </div>
+					  	</div>
+						</div>
+					
+					
+<!--
+<div class="card">
+    <div class="card-header" id="heading-example">
+        <h5 class="mb-0">
+            <a data-toggle="collapse" href="#collapse-example" aria-expanded="true" aria-controls="collapse-example">
+                <i class="fa glyphicon glyphicon-triangle-right pull-right"></i>
+                this is some text
+            </a>
+        </h5>
+    </div>
+    <div id="collapse-example" class="collapsed hidden" aria-labelledby="heading-example">
+        <div class="card-block">
+            and this is more text
+            safsdfsdf
+            gfdlkjldfg
+        </div>
+    </div>
+</div>
+						<style>
+						.card-header .fa {
+						  transition: .3s transform ease-in-out;
+						}
+						.card-header .collapsed .fa {
+						  transform: rotate(90deg);
+						}
+						</style>
+-->
+					
 					</div>
 				</div>
 
@@ -587,6 +637,7 @@ r">
 
 	</body>
 	
+	<br/><br/><br/><br/><br/><br/><br/><br/>
 </html>
 
 
