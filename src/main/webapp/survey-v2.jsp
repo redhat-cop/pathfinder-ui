@@ -7,14 +7,6 @@
   	
   	<%@include file="nav.jsp"%>
   	
-  	
-		<section id="banner2">
-			<div class="inner">
-				<h1>Application Assessment</h1>
-				<p>Perform the application assessment.</p>
-			</div>
-		</section>
-		
 		<%@include file="breadcrumbs.jsp"%>
 		
 		<section class="wrapper">
@@ -52,14 +44,6 @@
 		    <script src="https://unpkg.com/icheck@1.0.2"></script>
 		    <link rel="stylesheet" href="https://unpkg.com/icheck@1.0.2/skins/square/blue.css">
 
-		    <!--
-		    <link rel="stylesheet" type="text/css" href="http://overpass-30e2.kxcdn.com/overpass.css"/>
-		    -->
-
-				<style type="text/css">
-					body {font-family: Overpass;}
-				</style>
-				
 		    <div id="surveyElement"></div>
 		    <div id="surveyResult"></div>
 				
@@ -96,14 +80,14 @@
 				}
 				/* buttons */
 				.sv_main.sv_default_css input[type="button"], .sv_default_css button {
-				    color: white;
-				    background-color: #eee;
+					color: white;
+					background-color: #1B5564;
+					border: #4E7A86 solid 1px;
 				}
 				/* buttons:hover */
 				.sv_main.sv_default_css input[type="button"]:hover, .sv_default_css button:hover {
-				    background-color: #ccc;
-				    border-color: #111;
-				    font-color: #111
+					background-color: #4E7A86;
+					border: #80A0A9 solid 1px;
 				}
 				/*
 				.sv_main.sv_default_css .sv_progress {
@@ -112,17 +96,14 @@
 				*/
 				</style>
 				<script>
-					
 					$(document).ready(function() {
 					});
-
 
 					var surveyJsUrl=Utils.SERVER+"/api/pathfinder/survey";
 					var surveyJSElement=document.createElement('script');
 					surveyJSElement.src=surveyJsUrl;
 					document.getElementsByTagName('head')[0].appendChild(surveyJSElement);
 				</script>
-				
 				
 			</div>
 		</section>	

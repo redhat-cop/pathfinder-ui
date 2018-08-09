@@ -16,15 +16,6 @@
 
   <%@include file="nav.jsp"%>
 
-
-
-		<!-- Banner -->
-			<section id="banner2">
-				<div class="inner">
-					<h1>About Pathfinder </h1>
-					<p>Credits.</div>
-			</section>
-
 		<!-- Highlights -->
 			<section class="wrapper">
 				<div class="inner">

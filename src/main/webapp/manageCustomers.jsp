@@ -8,20 +8,10 @@
 	
   <link href="assets/css/breadcrumbs.css" rel="stylesheet" />
   
-  <!-- #### DATATABLES DEPENDENCIES ### -->
-  <!-- Firefox doesnt support link imports yet
-  <link rel="import" href="datatables-dependencies.jsp">
-  -->
   <%@include file="datatables-dependencies.jsp"%>
 	
 	<body class="is-preload">
 		<%@include file="nav.jsp"%>
-		
-		<section id="banner2">
-			<div class="inner">
-				<h1>Pathfinder Admin</h1>
-				<p>Create customers and applications.</div>
-		</section>
 		
 		<!--
 		<div id="breadcrumbs">
@@ -82,35 +72,58 @@
 			            { "data": "CustomerPercentageComplete" },
 			            { "data": "CustomerId" },
 			            { "data": "CustomerId" },
-				        ]
-			        ,"columnDefs": [
-			           { "targets": 0, "orderable": true, "render": function (data,type,row){
+							],
+			        columnDefs: [
+			          {
+									targets: 0,
+									orderable: false,
+									render: function (data,type,row){
 			              return "<input type='checkbox' name='id' value='"+row['CustomerId']+"'></input>";
-								 }},
-			           { "targets": 1, "orderable": true, "render": function (data,type,row){
-							      var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>"+row['CustomerName']+"</a>";
-							      return link+"&nbsp;<span class='editLink'>(<a href='#' onclick='loadEntity(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>edit</a>)</span>";
-			              //return "<a href='#' onclick='loadEntity(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>"+row["CustomerName"]+"</a>";
-								 }},
-								 { "targets": 3, "orderable": false, "render": function (data,type,row){
-								    return "";//<a href='report.jsp?customerId="+row["CustomerId"]+"'>Report</a>";
-								 }},
-								 { "targets": 4, "orderable": false, "render": function (data,type,row){
+									}
+								},
+			          {
+									targets: 1,
+									orderable: true,
+									render: function (data,type,row){
+										var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>"+row['CustomerName']+"</a>";
+										return link+"&nbsp;<span class='editLink'>(<a href='#' onclick='loadEntity(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'>edit</a>)</span>";
+									}
+								},
+								{
+									targets: 3,
+									orderable: false,
+									render: function (data,type,row){
+								    return "";
+									}
+								},
+								{
+									targets: 4,
+									orderable: false,
+									render: function (data,type,row){
 							     var percentComplete=row['CustomerPercentageComplete'];
 							     var link="<a href='assessments-v2.jsp?customerId="+row["CustomerId"]+"'>Assessments&nbsp;("+percentComplete+"%)</a>";
-							     return "<div class='progress'><div class='progress-bar-success' role='progressbar' aria-valuenow='"+percentComplete+"' aria-valuemin='0' aria-valuemax='100' style='width:"+percentComplete+"%'><center>"+link+"</center></div></div>";
-								 }},
-			           { "targets": 5, "orderable": false, "render": function (data,type,row){
+							     return "<div class='progress'><div class='progress-bar-success' role='progressbar' aria-valuenow='"+percentComplete+"' aria-valuemin='0' aria-valuemax='100' style='width:"+percentComplete+"%'>"+link+"</div></div>";
+									}
+								},
+			          {
+									targets: 5,
+									orderable: false,
+									render: function (data,type,row){
 								    return "<a href='manageCustomerApplications.jsp?customerId="+row["CustomerId"]+"'>Applications ("+row['CustomerAppCount']+")</a>";
-								 }},
-			           { "targets": 6, "orderable": false, "render": function (data,type,row){
+									}
+								},
+			          {
+									targets: 6,
+									orderable: false,
+									render: function (data,type,row){
 								    return "<a href='members.jsp?customerId="+row["CustomerId"]+"'>Members ("+row['CustomerMemberCount']+")</a>";
-								 }}
+									}
+								}
 				         //,{ "targets": 6, "orderable": false, "render": function (data,type,row){
-								 //   return "<div class='btn-image btn btn-edit' title='Edit' onclick='load(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
+								 //   return "<div class='btn btn-warning' title='Edit' onclick='load(\""+row["CustomerId"]+"\");' data-toggle='modal' data-target='#exampleModal'></div>";
 								 // }}
 				         //,{ "targets": 7, "orderable": false, "render": function (data,type,row){
-								 //   return "<div class='btn-image btn btn-delete' title='Delete' onclick='return deleteItem(\""+row["CustomerId"]+"\");'></div>";
+								 //   return "<div class='btn btn-danger' title='Delete' onclick='return deleteItem(\""+row["CustomerId"]+"\");'></div>";
 								 // }}
 			        ]
 			    } );
@@ -142,28 +155,43 @@
 				}
 			}
 		</script>
-  	<div id="wrapper">
+  	<div id="wrapper" class="container-fluid">
+
 	    <div id="buttonbar">
-	        <button style="position:relative;height:30px;width:75px;left:0px;top:0px;"  class="btn" name="New"       onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
-					<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove Customers(s)</button>
-	    </div>
+				<div class="row page-title">
+					<div class="col-xs-4">
+						<h2>Customers</h2>
+					</div>
+					<div class="col-xs-1 pull-right">
+						<div class="form-group">
+							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+						</div>
+					</div>
+					<div class="pull-right col-xs-1">
+						<div class="form-group">
+							<button class="form-control btn btn-danger" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
 	    <div id="tableDiv">
 		    <table id="example" class="display" cellspacing="0" width="100%">
-		        <thead>
-		            <tr>
-		                <th align="left"></th>
-		                <th align="left">Customer Name</th>
-		                <th align="left">Customer Description</th>
-		                <th align="left"></th>
-		                <th align="left"></th>
-		                <th align="left"></th>
-		                <th align="left"></th>
-		                <!--
-		                <th align="left">Edit</th>
-		                <th align="left">Delete</th>
-		                -->
-		            </tr>
-		        </thead>
+					<thead>
+						<tr>
+								<th align="left"></th>
+								<th align="left">Name</th>
+								<th align="left">Description</th>
+								<th align="left"></th>
+								<th align="left"></th>
+								<th align="left"></th>
+								<th align="left"></th>
+								<!--
+								<th align="left">Edit</th>
+								<th align="left">Delete</th>
+								-->
+						</tr>
+					</thead>
 		    </table>
 		  </div>
   	</div>

@@ -15,12 +15,6 @@
   
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
-  	
-		<section id="banner2">
-			<div class="inner">
-				<h1>Pathfinder Admin</h1>
-				<p>Create customers and applications.</div>
-		</section>
 		
 		<%@include file="breadcrumbs.jsp"%>
   	
@@ -104,28 +98,41 @@
 					httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/applications/", idsToDelete);
 				}
 			}
-
 		</script>
-    	<div id="wrapper">
-		    <div id="buttonbar">
-	        <button style="position:relative;height:30px;width:75px;left:0px;top:0px;"  class="btn" name="New"    onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
-					<button style="position:relative;height:30px;width:165px;left:0px;top:0px;" class="btn" name="btnRemove"     disabled onclick="btnDelete_onclick(this);" type="button">Remove Application(s)</button>
-		    </div>
-		    <div id="tableDiv">
-			    <table id="example" class="display" cellspacing="0" width="100%">
-			        <thead>
-			            <tr>
-			                <th align="left"></th>
-			                <th align="left">Application Name</th>
-			                <th align="left">Type</th>
-			                <th align="left">Owner</th>
-			                <th align="left">Description</th>
-			                <!--th align="left">Edit</th-->
-			                <!--th align="left">Delete</th-->
-			            </tr>
-			        </thead>
-			    </table>
-			  </div>
+
+		<div id="wrapper" class="container-fluid">
+			<div id="buttonbar">
+				<div class="row page-title">
+					<div class="col-xs-4">
+						<h2>Applications</h2>
+					</div>
+					<div class="col-xs-1 pull-right">
+						<div class="form-group">
+							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
+						</div>
+					</div>
+					<div class="col-xs-1 pull-right">
+						<div class="form-group">
+							<button class="form-control btn btn-danger" name="btnRemove" disabled onclick="btnDelete_onclick(this);" type="button">Remove</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="tableDiv">
+				<table id="example" class="display" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th align="left"></th>
+							<th align="left">Application Name</th>
+							<th align="left">Type</th>
+							<th align="left">Owner</th>
+							<th align="left">Description</th>
+							<!--th align="left">Edit</th-->
+							<!--th align="left">Delete</th-->
+						</tr>
+					</thead>
+				</table>
+			</div>
     </div>
     
 

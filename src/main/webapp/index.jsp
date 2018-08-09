@@ -44,8 +44,6 @@
 					<div class="highlights">
 					
 		<%if (request.getSession().getAttribute("x-access-token")==null){%>
-		<section id="banner2">
-		</section>
 		
 		<script>
 		$(document).ready(function(){
@@ -63,7 +61,6 @@
 					</div>
 				<%}%>
 				<div class="modal-content" style="margin: auto;">
-				<h3>Please login</h3>
 					<div class="modal-body">
 						<form id="loginForm" action="api/pathfinder/login" method="post">
 		          <div class="form-group">
@@ -74,7 +71,7 @@
 		            <label for="password" class="control-label">Password:</label>
 		            <input id="password" name="password" type="password" class="form-control">
 		          </div>
-							<br/><input id="submit" type="submit" value="Submit">
+							<input id="submit" class="btn btn-primary" type="submit" value="Submit">
 						</form>
 					</div>
 				</div>
@@ -93,14 +90,6 @@
 			</div>
 				</div>
 			</section>
-
-		<!-- CTA -->
-			<section id="cta" class="wrapper">
-				<div class="inner">
-					<h2>EMEA Red Hat Value from Technology Team</h2>
-				</div>
-			</section>
-
 
 
 	</body>

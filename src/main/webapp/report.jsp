@@ -5,24 +5,13 @@
   
   <link href="assets/css/main.css" rel="stylesheet" />
   <link href="assets/css/breadcrumbs.css" rel="stylesheet" />
-	
-  <!-- #### DATATABLES DEPENDENCIES ### -->
-  <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css" rel="stylesheet">
-  <link href="assets/css/bootstrap-3.3.7.min.css" rel="stylesheet" />
-	<link href="assets/css/datatables-addendum.css" rel="stylesheet" />
-	<!--
-  <script src="assets/js/jquery-3.3.1.min.js"></script>
-	-->
-  <script src="assets/js/bootstrap-3.3.7.min.js"></script>
-  <script src="assets/js/jquery.dataTables-1.10.16.js"></script>
+
+  <%@include file="datatables-dependencies.jsp"%>
+
   <script src="assets/js/datatables-functions.js?v1"></script>
 	<script src="assets/js/datatables-plugins.js"></script>
 	<script type="text/javascript" src="utils.jsp"></script>
 	
-	<!-- for pie/line/bubble graphing -->
-	<!--
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-	-->
 	<script src="assets/js/Chart-2.6.0.min.js"></script>
 	<script src="https://unpkg.com/lodash@4.17.10/lodash.min.js"></script>
 
@@ -30,12 +19,6 @@
 
   	<%@include file="nav.jsp"%>
   	
-		<section id="banner2">
-			<div class="inner">
-				<h1>Report for <span id="customerName"></span></h1>
-			</div>
-		</section>
-		
   	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><a href="manageCustomers.jsp">Customers</a></li>

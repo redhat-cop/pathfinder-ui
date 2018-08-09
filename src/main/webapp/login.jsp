@@ -14,13 +14,6 @@
 	<body class="is-preload">
 		<%@include file="nav.jsp"%>
 		
-		<section id="banner2">
-			<div class="inner">
-				<h1>Pathfinder Login</h1>
-				<p></p>
-			</div>
-		</section>
-		
 		<script>
 		$(document).ready(function(){
 			$("#loginForm").submit(function () {

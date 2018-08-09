@@ -80,14 +80,6 @@
   } );
 </script>
 
-
-		<!-- Banner -->
-			<section id="banner2">
-				<div class="inner">
-					<h1>Pathfinder Admin</h1>
-					<p>Create customers and applications.</div>
-			</section>
-
 		<!-- Highlights -->
 			<section class="wrapper">
 				<div class="inner">

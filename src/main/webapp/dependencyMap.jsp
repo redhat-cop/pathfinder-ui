@@ -58,8 +58,18 @@
 		  font-family: overpass;        
         }
     </style>
-    
-    
+</head>
+	<body class="is-preload">
+		<%@include file="nav.jsp"%>
+		
+		<div id="breadcrumbs">
+			<ul class="breadcrumb">
+				<li><a href="manageCustomers.jsp">Customers</a></li>
+			</ul>
+		</div>
+		
+		<section class="wrapper">
+			<div class="inner">
 <div id="toggleNodes">		
 <input type="button"  onclick="getRemoveColouredNodes('#FF0000');" value="Remove Red"></input>
 <input type="button"  onclick="getRemoveColouredNodes('#FCC200');" value="Remove Amber"></input>

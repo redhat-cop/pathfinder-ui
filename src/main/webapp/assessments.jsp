@@ -12,27 +12,9 @@
   -->
   <%@include file="datatables-dependencies.jsp"%>
   
-	<!--
-  <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css" rel="stylesheet">
-  <link href="assets/css/bootstrap-3.3.7.min.css" rel="stylesheet" />
-	<link href="assets/css/datatables-addendum.css" rel="stylesheet" />
-  <script src="assets/js/jquery-3.3.1.min.js"></script>
-  <script src="assets/js/bootstrap-3.3.7.min.js"></script>
-  <script src="assets/js/jquery.dataTables-1.10.16.js"></script>
-  <script src="datatables-functions.js"></script>
-	<script src="datatables-plugins.js"></script>
-	-->
-	
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
   	
-		<section id="banner2">
-			<div class="inner">
-				<h1><span id="customerName"></span> Assessment Summary</h1>
-				<p>View the results of an assessment and review output.</p>
-			</div>
-		</section>
-		
   	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><a href="manageCustomers.jsp">Customers</a></li>
@@ -100,14 +82,6 @@
 						
 						
 						<script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
-						<style>
-							.progress-bar {
-							  margin: 20px;
-							  width: 90%;
-							  height: 30px;
-							  background-color: #ccc;
-							}
-						</style>
 						
 						<h2>Progress</h2>
 						<div id="assessedProgress" class="progress-bar"></div>
