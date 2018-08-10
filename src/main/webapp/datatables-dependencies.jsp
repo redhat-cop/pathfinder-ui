@@ -15,6 +15,32 @@
 		}
 	</style>
 
+
+
+
+<script>
+$(document).ready (function(){
+  $("#successNotification").hide();
+  $("#errorNotification").hide();
+});
+
+function showNotification(type, message){
+  $('#'+type+'NotificationMessage').html(message);
+  $("#"+type+"Notification").fadeTo(3000, 500).slideUp(500, function(){
+		$("#"+type+"Notification").slideUp(500);
+	});
+};
+</script>
+
+<div class="alert alert-success" style="display:none;float:right;width:30%" id="successNotification">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success:</strong> <span id="successNotificationMessage">...</span>
+</div>
+<div class="alert alert-danger" style="display:none;float:right;width:30%" id="errorNotification">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Error:</strong> <span id="errorNotificationMessage">...</span>
+</div>
 	
 	
  
+

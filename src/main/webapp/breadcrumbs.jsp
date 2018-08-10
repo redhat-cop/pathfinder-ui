@@ -11,13 +11,12 @@
 .breadcrumb-buttons li {
     display:inline-block;
     text-decoration: none;
-    height:100%;
 }
 .breadcrumb-buttons li a {
     display: block;
     color: white;
     text-align: center;
-    padding: 14px 20px;
+    padding: 13px 20px;
     text-decoration: none;
 }
 .breadcrumb-buttons li a:hover:not(.active) {
@@ -30,18 +29,14 @@
     background-color: #4CAF50;
     
 }
-.breadcrumb-buttons li {
-    background-color: #333;
-}
 .customer-title{
 	  background-color: #ccc !important;
     color: #444;
-    font-size: 16pt;
+    font-size: 18pt;
     /*text-align: center;*/
     padding: 6px 16px;
     width: 300px;
     height: 52px;
-    top: -3px;
     position: relative;
     left: 0px;
 }
@@ -50,10 +45,10 @@ ol, ul {
 }
 
 /* add grey button separator to distinguish between them */
-li {
+.breadcrumb-buttons li {
     border-right: 1px solid #bbb;
 }
-li:last-child {
+.breadcrumb-buttons li:last-child {
     border-right: none;
 }
 .disabledx a{
@@ -101,8 +96,8 @@ li:last-child {
 				<!--
 				<li id="breadcrumb-details"><a href="#">Details</a></li>
 				-->
-				<li id="breadcrumb-assessments"><a href="#">Assessments</a></li>
+				<li id="breadcrumb-assessments"> <a href="#">Assessments</a></li>
 				<li id="breadcrumb-applications"><a href="#">Applications</a></li>
-				<li id="breadcrumb-members"><a href="#">Members</a></li>
+				<li id="breadcrumb-members">     <a href="#">Members</a></li>
 			</ul>
   	</div>

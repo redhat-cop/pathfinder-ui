@@ -32,12 +32,13 @@
 				//var beenReviewed=false;
 				
 				$(document).ready(function() {
-					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"?custom=customer.id,customer.name,BUSPRIORITY", function(application){
+					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"?custom=NOTES,customer.id,customer.name", function(application){
 						//document.getElementById("breadcrumb2").innerHTML=application.Name;
 						
 						document.getElementById("applicationName").innerHTML=application.Name;
-						document.getElementById("applicationDescription").innerHTML=application.Description;
-						document.getElementById("businessCriticality").innerHTML=application.CustomFields['BUSPRIORITY'];
+						document.getElementById("applicationDescription").innerHTML=application.Description!=""?application.Description:"No description provided";
+						//document.getElementById("businessCriticality").innerHTML=application.CustomFields['BUSPRIORITY'];
+						document.getElementById("assessmentNotes").innerHTML=application.CustomFields['NOTES']!=undefined?application.CustomFields['NOTES']:"None";
 
 						// ### Populate the header with the Customer Name
 						//document.getElementById("customerName").innerHTML=customer.CustomerName;
@@ -153,7 +154,7 @@ function onClickHandlers(myChart) {
   })};
 </script>
 				
-				<div class="row">
+				<div class="row title-row">
 					<div class="col-sm-4">
 						<%if ("true".equalsIgnoreCase(request.getParameter("review"))){%>
 							<h2>Architect Review</h2>
@@ -161,9 +162,9 @@ function onClickHandlers(myChart) {
 							<h2>Assessment Summary</h2>
 						<%}%>
 					</div>
-						<div class="col-sm-8">
-							<h2><span id="applicationName">Loading...</span></h2>
-						</div>
+					<div class="col-sm-8">
+						<h2><span id="applicationName">Loading...</span></h2>
+					</div>
 				</div>
 				
 				
@@ -217,13 +218,6 @@ function onClickHandlers(myChart) {
 									
 							    // ### LOAD DATATABLE DATA ###
 									$('#example').DataTable( {
-//							        "ajax": {
-//							            //"url": Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"/assessments/"+assessmentId+"/viewAssessmentSummary",
-////							            "url": '<%=request.getContextPath()%>/api/pathfinder/customers/'+customerId+"/applications/"+appId+"/assessments/"+assessmentId+"/viewAssessmentSummary",
-////							            "dataSrc": "",
-//							            "data": data
-////							            "dataType": "json"
-//							        },
 							        "data": data,
 							        "scrollCollapse": true,
 							        "paging":         false,
@@ -243,29 +237,43 @@ function onClickHandlers(myChart) {
 													}}
 							        ]
 							    } );
-							    
+							    $('#example_filter').css({display:"none"});
 							    
 								});
 							});
 						</script>
 						<canvas id="pieChart"></canvas>
-						<!--
-						-->
-						<style>
-						#example_filter label{
-							display:none; //hide the search box on datatables, but search has to be enabled so the chart can filter the data 
-						}
-						</style>
 						
 					</div>
 					<div class="col-sm-8">
 
 						<div class="row">
 							<div class="col-sm-12">
+
+								<div class="col-sm-3">
+									<b>Application Description:</b>
+								</div>
+								<div class="col-sm-9">
+									 <span id="applicationDescription">Loading...</span><br/>
+								</div>
+								
+								<!-- 
+								put this one in later when we have time: https://codepen.io/trevanhetzel/pen/rOVrGK
+								Business Criticality: <span id="businessCriticality">Loading...</span>
+								-->
+
+								<div class="col-sm-3">
+									<b>Assessment Notes:</b> 
+								</div>
+								<div class="col-sm-9">
+									<span id="assessmentNotes">Loading...</span>
+								</div>
+
+<br/><br/><br/>
+								
 								<%
 								if ("false".equalsIgnoreCase(request.getParameter("review"))){
 								%>
-
 								<div class="row">
 									<div class="col-sm-2">
 										<h4>Proposed Action</h4>
@@ -348,13 +356,6 @@ function onClickHandlers(myChart) {
 								
 								<!-- ### TITLE SECTION GOES HERE -->
 								
-								<span id="applicationDescription">Loading...</span><br/>
-								
-								<!-- 
-								put this one in later when we have time: https://codepen.io/trevanhetzel/pen/rOVrGK
-								-->
-								Business Criticality: <span id="businessCriticality">Loading...</span>
-								</p>
 							
 							</div>
 							
@@ -523,9 +524,6 @@ function onClickHandlers(myChart) {
 					</div>
 				</div>
 				
-				
-				<div class="highlights">
-				</div>
 			</div>
 		</section>
 		

@@ -3,14 +3,15 @@
   
   <%@include file="head.jsp"%>
   
-  <link href="assets/css/main.css" rel="stylesheet" />
-	<link href="assets/css/breadcrumbs.css" rel="stylesheet" />
-
-  <%@include file="datatables-dependencies.jsp"%>
+  <link href="assets/css/breadcrumbs.css" rel="stylesheet" />
 	
+  <!-- #### DATATABLES DEPENDENCIES ### -->
+  <!-- Firefox doesnt support link imports yet
+  <link rel="import" href="datatables-dependencies.jsp">
+  -->
+  <%@include file="datatables-dependencies.jsp"%>
 	<script src="assets/js/datatables-plugins.js"></script>
 	<script type="text/javascript" src="utils.jsp"></script>
-	
 	<!-- for pie/line/bubble graphing -->
 	<!--
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
@@ -18,25 +19,22 @@
 	-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
 	<script src="https://unpkg.com/lodash@4.17.10/lodash.min.js"></script>
-
+  
 	<body class="is-preload">
-
   	<%@include file="nav.jsp"%>
   	
+		<%@include file="breadcrumbs.jsp"%>
+		
+		<div class="container-fluid">
+		
+	<!--
 		<section id="banner2">
 			<div class="inner">
 				<h1>Report for <span id="customerName"></span></h1>
 			</div>
 		</section>
+	-->
 		
-  	<div id="breadcrumbs">
-			<ul class="breadcrumb">
-				<li><a href="manageCustomers.jsp">Customers</a></li>
-				<li><span id="breadcrumb1"></span></li>
-				<li><span id="breadcrumb2">Report</span></li>
-			</ul>
-		</div>
-
 		<script>
 		var customerId=Utils.getParameterByName("customerId");
 		
@@ -45,8 +43,8 @@
 			// ### Get Customer Details
 			httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
 				// ### Populate the header with the Customer Name
-				document.getElementById("customerName").innerHTML=customer.CustomerName;
-				document.getElementById("breadcrumb1").innerHTML="<a href='assessments-v2.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
+				//document.getElementById("customerName").innerHTML=customer.CustomerName;
+				if (undefined!=setBreadcrumbs) setBreadcrumbs("assessments", customer);
 			});
 			
 		});
@@ -86,9 +84,6 @@
 								padding: 0px;
 								line-height: 1;
 							}
-							.dataTables_filter{
-								width:150px;
-							}
 							.dataTables_length label select{
 								height: 23px;
 								width:  50px;
@@ -100,6 +95,10 @@
 							}
 							table.dataTable thead th, table.dataTable thead td{
 								padding: 0px 0px !important;
+								font-size:10pt;
+							}
+							table.dataTable tbody tr td{
+								font-size:10pt;
 							}
 						</style>
 						<script>
@@ -123,7 +122,7 @@
 							            { "data": "Name" },
 							            { "data": "BusinessPriority" },
 							            { "data": "WorkPriority" },
-							            { "data": "Confidence" },
+							            { "data": "Confidence", width:"15%" },
 							            { "data": "Decision" },
 							            { "data": "WorkEffort" },
 							        ]
@@ -142,16 +141,9 @@
 							//);
 						</script>
 				  	<div id="wrapper">
-					    <div 							}; 
-							//);
-r">
+					    <div>
 					    </div>
 					    <div id="tableDiv">
-					    	<style>
-					    		#appFilter tr td{
-					    			font-size:10pt;
-					    		}
-					    	</style>
 						    <table id="appFilter" class="display" cellspacing="0" width="100%">
 					        <thead>
 				            <tr>
@@ -520,8 +512,8 @@ r">
 								redrawBubble(applicationAssessmentSummary, false);
 							}
 						</script>
-						<input style="height:28px;padding:0px;width:120px;font-size:10pt;line-height:1rem;" type="button" id="greyscale" value="Show Decisions" onclick="greyscaleToggle(this);"/>
-						<input style="height:28px;padding:0px;width:150px;font-size:10pt;line-height:1rem;" disabled type="button" id="dependencies" value="Show Dependencies" onclick="dependenciesToggle(this);"/>
+						<input class="btn btn-default form-control" style="height:28px;padding:0px;width:120px;font-size:10pt;line-height:1rem;" type="button" id="greyscale" value="Show Decisions" onclick="greyscaleToggle(this);"/>
+						<input class="btn btn-default form-control" style="height:28px;padding:0px;width:150px;font-size:10pt;line-height:1rem;" disabled type="button" id="dependencies" value="Show Dependencies" onclick="dependenciesToggle(this);"/>
 						
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
@@ -540,7 +532,7 @@ r">
 				
 				<br/><br/><br/>
 				<h2>
-				<a class="twisty" role="button" aria-expanded="false" aria-controls="collapser" data-toggle="collapse" href="#collapser" >
+				<a class="twisty" style="text-decoration:none" role="button" aria-expanded="false" aria-controls="collapser" data-toggle="collapse" href="#collapser" >
 					<img src="assets/images/twisty-off.png" style="width:30px;"/>
 					<img src="assets/images/twisty-on.png"  style="width:30px;display:none"/>
 				</a>

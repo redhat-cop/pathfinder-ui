@@ -19,74 +19,81 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-3">
-					<div class="row">
+					<div class="row title-row">
 						<div class="col-xs-12">
 							<h2>Progress</h2>
 						</div>
 					</div>
-					<div class="row progress-bar-margin-offset">
-						<div class="col-xs-12 form-group">
-							<div id="assessedProgress" class="progress-bar"></div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 form-group">
-							<div id="reviewedProgress" class="progress-bar"></div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-4">
-							<div class="form-group">
-								<a class="btn btn-default form-control" href="report.jsp?customerId=<%=request.getParameter("customerId")%>">Report</a>
+					<div class="section2">
+						<div class="row progress-bar-margin-offset">
+							<div class="col-xs-12 form-group">
+								<div id="assessedProgress" class="progress-bar"></div>
 							</div>
 						</div>
-						<div class="col-xs-4">
-							<div class="form-group">
-								<a class="btn btn-default form-control" href="report-quadrant.jsp?customerId=<%=request.getParameter("customerId")%>">Quadrant</a>
+						<div class="row">
+							<div class="col-xs-12 form-group">
+								<div id="reviewedProgress" class="progress-bar"></div>
+							</div>
+						</div>
+						<div class="row">
+							<!--
+							<div class="col-xs-4">
+								<div class="form-group">
+									<a class="btn btn-default form-control" href="report.jsp?customerId=<%=request.getParameter("customerId")%>">Report</a>
+								</div>
+							</div>
+							-->
+							<div class="col-xs-4">
+								<div class="form-group">
+									<a class="btn btn-default form-control" href="report-quadrant.jsp?customerId=<%=request.getParameter("customerId")%>">Report</a>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
 				<div class="col-xs-9">
-					<div class="row">
+					<div class="row title-row">
 						<div class="col-xs-4">
-							<h2>Applications</h2>
-						</div>
-						<div class="button-bar">
-							<div class="col-xs-2 pull-right form-group">
-								<button class="btn btn-primary form-control" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">Add</button>
-							</div>
-							<div class="col-xs-2 pull-right form-group">
-								<button class="btn btn-danger form-control" name="btnRemoveApps" disabled onclick="btnDelete_onclick(this);" type="button">Remove</button>
-							</div>
-							<!-- <div class="col-xs-2 pull-right form-group">
-								<button class="btn btn-warning form-control" name="removeAssessments" disabled onclick="" type="button">Clear Assessment(s)</button>
-							</div> -->
-							<!-- <div class="col-xs-2 pull-right form-group">
-								<button class="btn btn-warning form-control" name="removeReviews" disabled onclick="" type="button">Clear Review(s)</button>
-							</div> -->
-							<div class="col-xs-2 pull-right form-group">
-								<button class="btn btn-default form-control" name="btnCloneApps" disabled onclick="showCloneDialog(this);" type="button">Clone</button>
-							</div>
+							<h2>Assessments</h2>
 						</div>
 					</div>
-						
-					<div id="tableDiv">
-						<table id="example" class="display" cellspacing="0" width="100%">
-							<thead>
-								<tr>
-									<th align="left"></th>
-									<th align="left">Name</th>
-									<th align="left">Assessed</th>
-									<th align="left">Reviewed</th>
-									<th align="left" title="Business Criticality">Criticality</th>
-									<th align="left">Decision</th>
-									<th align="left">Effort</th>
-									<th align="left">Review Date</th>
-								</tr>
-							</thead>
-						</table>
+					<div class="section">
+						<div id="tableDiv">
+							<div class="button-bar">
+								<div class="col-xs-2 pull-right form-group">
+									<button class="btn btn-danger form-control" name="btnRemoveApps" disabled onclick="btnDelete_onclick(this);" type="button">Remove Application(s)</button>
+								</div>
+								<!-- 
+								<div class="col-xs-2 pull-right form-group">
+									<button class="btn btn-warning form-control" name="removeAssessments" disabled onclick="" type="button">Clear Assessment(s)</button>
+								</div>
+								<div class="col-xs-2 pull-right form-group">
+									<button class="btn btn-warning form-control" name="removeReviews" disabled onclick="" type="button">Clear Review(s)</button>
+								</div>
+								-->
+								<div class="col-xs-2 pull-right form-group">
+									<button class="btn btn-primary form-control" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">Add Application</button>
+								</div>
+								<div class="col-xs-2 pull-right form-group">
+									<button class="btn btn-default form-control" name="btnCloneApps" disabled onclick="showCloneDialog(this);" type="button">Clone Application</button>
+								</div>
+							</div>
+							<table id="example" class="display" cellspacing="0" width="100%">
+								<thead>
+									<tr>
+										<th align="left"></th>
+										<th align="left">Name</th>
+										<th align="left">Assessed</th>
+										<th align="left">Reviewed</th>
+										<th align="left" title="Business Criticality">Criticality</th>
+										<th align="left">Decision</th>
+										<th align="left">Effort</th>
+										<th align="left">Review Date</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
 					</div>
 				</div>
 
@@ -175,12 +182,12 @@
 					columns: [
 							{ data: "Id", width: "3%"},
 							{ data: "Name"},
-							{ data: "Assessed" },
-							{ data: "ReviewDate", width: "20%" },
+							{ data: "Assessed", width: "12%" },
+							{ data: "ReviewDate", width: "12%" },
 							{ data: "BusinessPriority" },
 							{ data: "Decision" },
 							{ data: "WorkEffort" },
-							{ data: "ReviewDate" }
+							{ data: "ReviewDate", width: "12%" }
 					],
 					"columnDefs": [
 							{
@@ -205,9 +212,10 @@
 								"targets": 2,
 								"orderable": true,
 								"render": function (data,type,row){
-									var title = row.CompleteAnswersCount + " completed answers &amp; " + row.IncompleteAnswersCount + " answered as 'UNKNOWN'"
-									var completeIncomplete = row.IncompleteAnswersCount > 0 ? "<span title='" + title + "'>(" + row.CompleteAnswersCount + "/<span class='messageRed'>" + row.IncompleteAnswersCount + "</span>)</span>" : ""
-									return "<span class='" + (row.Assessed ? "messageGreen'>Yes " + completeIncomplete : "messageRed'><a href='survey-v2.jsp?customerId=" + customerId + "&applicationId=" + row.Id + "'>No</a>") + "</span>"
+									var title = row.IncompleteAnswersCount+" answer(s) out of "+(row.CompleteAnswersCount+row.IncompleteAnswersCount)+" were answered as UNKNOWN";
+									var color=row.IncompleteAnswersCount > 0?"Amber":"Green";
+									var completeIncomplete = row.IncompleteAnswersCount > 0 ? "<span title='" + title + "'>(" + row.CompleteAnswersCount + "/<span class='messageAmber'>" + row.IncompleteAnswersCount + "</span>)</span>" : ""
+									return "<span class='" + (row.Assessed ? "message"+color+"'>Yes " + completeIncomplete : "messageRed'><a href='survey-v2.jsp?customerId=" + customerId + "&applicationId=" + row.Id + "' class='messageRed'>No</a>") + "</span>"
 								}
 							},
 							{
@@ -215,9 +223,9 @@
 								"orderable": true,
 								"render": function (data, type, row) {
 									if (row.ReviewDate) {
-										return 'Yes'
+										return '<span class="messageGreen">Yes</span>'
 									} else if (row.Assessed) {
-										return '<a href="viewAssessment.jsp?review=true&app=' + row.Id + '&assessment=' + row.LatestAssessmentId + '&customer=' + customerId + '">No</a>'
+										return '<a href="viewAssessment.jsp?review=true&app=' + row.Id + '&assessment=' + row.LatestAssessmentId + '&customer=' + customerId + '" class="messageRed">No</a>'
 									} else {
 										return ''
 									}

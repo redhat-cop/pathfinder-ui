@@ -46,11 +46,14 @@
 			        },
 			        "scrollCollapse": true,
 			        "paging":         false,
-			        
+			        "oLanguage": { 
+			        	sSearch: "",             // remove the "Search" label text
+			        	sLengthMenu: "_MENU_" }, // remove the "show X entries" text
 			        "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]], // page entry options
 			        "pageLength" : 10, // default page entries
 			        "bInfo" : false, // removes "Showing N entries" in the table footer
 			        "order" : [[1,"asc"]],
+			        "searching": true,
 			        "columns": [
 			            { "data": "Id" },
 			            { "data": "Name" },
@@ -69,8 +72,25 @@
 			        	{ "targets": 2, "orderable": true, "render": function (data,type,row){
 									return row['Stereotype']=="TARGETAPP"?"Assessable Application":"Dependency Only";
 								}},
-			        ]
+			        ],
 			    } );
+			    
+			    // Search functionality (redirect search to button bar search box)
+			    $('#search').keyup(function (e) {
+					    $('#example').DataTable().search( this.value ).draw();
+					});
+					$('#example_filter').css({display:"none"});
+					
+					// alternative search /buttonbar impl where we move the button bar into the dtable itself, which would provide more consistency but is complex and hacky looking...
+					//var buttons=$('.button-bar').html();
+					//$('.button-bar').html("");
+					//$('#example_wrapper div div[class=col-sm-6]:nth-child(2)').append(buttons);
+					//$('#example_filter').addClass("pull-right form-group");
+					//
+					//$('#example_wrapper div:nth-child(1) div[class=col-sm-6]:nth-child(1)').removeClass("col-sm-6");
+					//$('#example_wrapper div:nth-child(1) div[class=col-sm-6]:nth-child(2)').removeClass("col-sm-6").addClass("col-sm-9").css({float:"right"});// .addClass("col-sm-9");
+					
+					
 			} );
 			
 			// ### enable/disable handlers for buttons on datatable buttonbar
@@ -99,39 +119,37 @@
 				}
 			}
 		</script>
-
 		<div id="wrapper" class="container-fluid">
-			<div id="buttonbar">
-				<div class="row page-title">
-					<div class="col-xs-4">
-						<h2>Applications</h2>
-					</div>
-					<div class="col-xs-1 pull-right">
-						<div class="form-group">
-							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
-						</div>
-					</div>
-					<div class="col-xs-1 pull-right">
-						<div class="form-group">
-							<button class="form-control btn btn-danger" name="btnRemove" disabled onclick="btnDelete_onclick(this);" type="button">Remove</button>
-						</div>
-					</div>
+			<div class="row title-row">
+				<div class="col-xs-4">
+					<h2>Applications</h2>
 				</div>
 			</div>
-			<div id="tableDiv">
-				<table id="example" class="display" cellspacing="0" width="100%">
-					<thead>
-						<tr>
-							<th align="left"></th>
-							<th align="left">Application Name</th>
-							<th align="left">Type</th>
-							<th align="left">Owner</th>
-							<th align="left">Description</th>
-							<!--th align="left">Edit</th-->
-							<!--th align="left">Delete</th-->
-						</tr>
-					</thead>
-				</table>
+			<div class="section">
+				<div id="tableDiv">
+					<div class="button-bar col-sm-9" style="float:right">
+						<div class="col-xs-2 pull-right form-group">
+							<input id="search" type="search" class="form-control" aria-controls="example" placeholder="Search"/>
+						</div>
+						<div class="col-xs-2 pull-right form-group">
+							<button class="btn btn-danger form-control" name="btnRemove" disabled onclick="btnDelete_onclick(this);" type="button">Remove Application</button>
+						</div>
+						<div class="col-xs-2 pull-right form-group">
+							<button class="btn btn-primary form-control" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">Add Application</button>
+						</div>
+					</div>
+					<table id="example" class="display" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th align="left"></th>
+								<th align="left">Application Name</th>
+								<th align="left">Type</th>
+								<th align="left">Owner</th>
+								<th align="left">Description</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
     </div>
     

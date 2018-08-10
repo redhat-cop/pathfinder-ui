@@ -7,7 +7,7 @@ function send(action, uri, data){
   xhr.open(action, addAuthToken(url), true);
   if (data != undefined){
     xhr.setRequestHeader("Content-type", "application/json");
-    console.log("send data = "+JSON.stringify(data));
+    console.log("POSTing url="+url+", data="+JSON.stringify(data));
     xhr.send(JSON.stringify(data));
   }else{
     xhr.send();
@@ -18,13 +18,22 @@ function send(action, uri, data){
   	//console.log("table="+JSON.stringify(table1));
   	//console.log("oSettings="+JSON.stringify(oSettings));
   	
-  	$('#example').DataTable().ajax.reload(
-  		function(json){
-  		  // ideally we'd just call fnInitComplete but sadly i can't find that function embedded in the datatable object yet
-  			if (undefined!=onDatatableRefresh) onDatatableRefresh(json);
-  			//table.fnSettings.fnInitComplete(null, json);
-  		}
-  	);
+  	if (this.status == 200){
+	  	
+	  	$('#example').DataTable().ajax.reload(
+	  		function(json){
+	  		  // ideally we'd just call fnInitComplete but sadly i can't find that function embedded in the datatable object yet
+	  			if (undefined!=onDatatableRefresh) onDatatableRefresh(json);
+	  			//table.fnSettings.fnInitComplete(null, json);
+	  		}
+	  	);
+  		
+  	}else if(xhr.status>=400){
+  		
+  		showNotification("error", xhr.responseText);
+  		
+  	}
+  	
   	
     //$('#example').dataTable().ajax.reload();// new function(json){console.log("json="+json);}, true );
     //$('#example').dataTable().fnReloadAjax(null, onDatatableRefresh, null);
@@ -32,10 +41,6 @@ function send(action, uri, data){
 //    	postAction();
 //    }
   };
-}
-
-function afterRefresh(json){
-	console.log("afterRefresh: "+json);
 }
 
 function post(uri, data){
@@ -122,15 +127,15 @@ function save(sender, formId){
   for (var i = 0, ii = form.length; i < ii; ++i) {
     if (form[i].name) data[form[i].name]=form[i].value;
   }
-  console.log("button sender="+sender);
-  var isUpdate=sender.innerHTML=="Update"; // don't like this, it's too "magic"
+  //console.log("button sender="+sender);
+  var isUpdate=sender.innerHTML=="Update"; // don't like this, it's too fragile
   //var url=isUpdate?getUpdateUrl():getCreateUrl();
   
   //post(getSaveUrl(), data);
   
   var id=document.getElementById(getIdFieldName()).value;
   var url=!isUpdate?entityManagementUrls["create"]:entityManagementUrls["update"].replace("$ID", id);
-  console.log("url is:"+url);
+  //console.log("Save url:"+url);
   post(url, data);
   
   editFormReset();

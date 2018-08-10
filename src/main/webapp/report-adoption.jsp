@@ -67,17 +67,9 @@ function compareValues(key, order='asc') {
 	  adoptionSize['LARGE']=80;
 	  adoptionSize['XLarge']=160;
 		
-		//var xxx=[{n:'A',s:1},{n:'Z',s:3},{n:'B',s:2}];
-		//console.log("XXXXXXXXXXXXXX"+xxx.length);
-		//xxx.sort(function(a,b){
-		//	return a['s']-b['s'];
-		//});
-		//for(j=0;j<xxx.length;j++){
-		//	console.log("YYYYYYYY"+xxx[j].n);
-		//}
-			
 		var adoptionChart;
 		function redrawAdoptionPlan(applicationAssessmentSummary){
+			lastColor=0;
 			
 			//if (!undefined==adoptionChart)
 			//	adoptionChart.destroy();
@@ -112,7 +104,9 @@ function compareValues(key, order='asc') {
 					for(d=0;d<summary[i]['OutboundDeps'].length;d++)
 						dependsOn.push(appIdToAppMap[summary[i]['OutboundDeps'][d]]);
 					
-					summary[i]["AdoptionOrder"]=summary[i]["AdoptionOrder"]*((dependsOn.length)*100)+summary[i]['Size'];
+					//summary[i]["AdoptionOrder"]=summary[i]["AdoptionOrder"]*((dependsOn.length)*100)+summary[i]['Size'];
+					summary[i]["AdoptionOrder"]=i*1000;
+					//summary[i]["AdoptionOrder"]+=dependsOn.length*10;
 					
 					// sort the dependsOn by size order to be able to set the AdoptionOrder
 					dependsOn.sort(function(a,b){
@@ -121,9 +115,10 @@ function compareValues(key, order='asc') {
 					for(d=0;d<dependsOn.length;d++){
 						summary[i]['DependsOn'].push(dependsOn[d]['Name']);
 						if (dependsOn[d]['Size']>biggestDependencySize)
-						  biggestDependencySize=dependsOn[d]['Size'];
-						
-						dependsOn[d]['AdoptionOrder']=summary[i]["AdoptionOrder"]+(d+1);
+						  biggestDependencySize=dependsOn[d]['Size']+dependsOn[d]['Padding'];
+						console.log(summary[i]['Name']+" depends on "+dependsOn[d]['Name']);
+						//dependsOn[d]['AdoptionOrder']=summary[i]["AdoptionOrder"]+(d+1);
+						dependsOn[d]['AdoptionOrder']=summary[i]["AdoptionOrder"]-1;
 					}
 					summary[i]["Padding"]=biggestDependencySize;
 				}
@@ -141,7 +136,7 @@ function compareValues(key, order='asc') {
 			summary.sort(function(a,b){
 				return a['AdoptionOrder']-b['AdoptionOrder'];
 			});
-			summary.reverse();
+			//summary.reverse();
 			
 			//function bubbleSort(a, key){
 		  //  var swapped;
@@ -201,18 +196,26 @@ function compareValues(key, order='asc') {
 			
 			console.log(JSON.stringify(data));
 			
+			
+			// if the chart has been drawn already, then just update the data
+			if (adoptionChart!=null){
+				adoptionChart.data=data;
+				adoptionChart.update();
+				return;
+			}
+			
 			var ctx = document.getElementById('adoption').getContext('2d');
 			adoptionChart = new Chart(ctx, {
 		    type: 'horizontalBar',
 		    data: data,
 				options:{
 							plugins: {
-            					datalabels: {
-            						display: false
-            					}
+      					datalabels: {
+      						display: false
+      					}
             	},
 					    hover :{
-					        animationDuration:10
+				        animationDuration:10
 					    },
 					    scales: {
 					        xAxes: [{

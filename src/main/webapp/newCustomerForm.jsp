@@ -14,8 +14,6 @@
 	}
 </script>
 
-
-
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
   <div class="modal-dialog" role="document"> <!-- make wider by adding " modal-lg" to class -->
     <div class="modal-content">
@@ -69,10 +67,10 @@
       </div>
       <script>
 	      function formValidate(){
-		      $('#edit-ok').attr('disabled', isEmpty($('#CustomerName').val() || isEmpty('#CustomerAssessor').val()));
+		      $('#edit-ok').attr('disabled', isEmpty($('#CustomerName').val()) || isEmpty($('#CustomerAssessor').val()));
 	      }
 	      function isEmpty(val){
-	      	return val==null || val=="";
+	      	return val==null || val==undefined || val=="";
 	      }
       	$(document).ready(function() {
 	      	$("#exampleModal select").change(function(){
@@ -81,6 +79,7 @@
 					$("#exampleModal input").keyup(function(){
 						formValidate();
 					});
+					formValidate();
 				});
       </script>
       <div class="modal-footer">

@@ -4,21 +4,31 @@
   <%@include file="head.jsp"%>
   
   <link href="assets/css/main.css" rel="stylesheet" />
-  <link href="assets/css/breadcrumbs.css" rel="stylesheet" />
+	<link href="assets/css/breadcrumbs.css" rel="stylesheet" />
 
   <%@include file="datatables-dependencies.jsp"%>
-
-  <script src="assets/js/datatables-functions.js?v1"></script>
+	
 	<script src="assets/js/datatables-plugins.js"></script>
 	<script type="text/javascript" src="utils.jsp"></script>
 	
+	<!-- for pie/line/bubble graphing -->
+	<!--
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 	<script src="assets/js/Chart-2.6.0.min.js"></script>
+	-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
 	<script src="https://unpkg.com/lodash@4.17.10/lodash.min.js"></script>
 
 	<body class="is-preload">
 
   	<%@include file="nav.jsp"%>
   	
+		<section id="banner2">
+			<div class="inner">
+				<h1>Report for <span id="customerName"></span></h1>
+			</div>
+		</section>
+		
   	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><a href="manageCustomers.jsp">Customers</a></li>
@@ -61,20 +71,11 @@
 					</div>
 				</div>
 				<%@include file="report-summary.jsp"%>
-				<script>
-					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/report", function(report){
-						new Chart(document.getElementById("gauge-1"),buildGuage(report.assessmentSummary.Easy,report.assessmentSummary.Total, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
-						new Chart(document.getElementById("gauge-2"),buildGuage(report.assessmentSummary.Medium,report.assessmentSummary.Total, "rgb(240,171,0)","rgb(220, 220, 220)","Modernizable"));
-						new Chart(document.getElementById("gauge-3"),buildGuage(report.assessmentSummary.Hard,report.assessmentSummary.Total, "rgb(204, 0, 0)","rgb(220, 220, 220)","Unsuitable for Containers"));
-						drawRisks(report);
-					});
-				</script>
+
 				
 				
 				<br/><br/><br/>
-				
-				
-				<h2>Bubble Chart Title</h2>
+				<h2>Adoption Candidate Distribution</h2>
 				<div class="row">
 					<div class="col-sm-4">
 						<style>
@@ -105,12 +106,6 @@
 							//$(document).ready(function() {
 							function redrawApplications(applicationAssessmentSummary){
 							    $('#appFilter').DataTable( {
-							        //"ajax": {
-							        //    "url": Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applicationAssessmentSummary",
-							        //    "data":{"_t":jwtToken},
-							        //    "dataSrc": "",
-							        //    "dataType": "json"
-							        //},
 							        "data": applicationAssessmentSummary,
 							        "oLanguage": { 
 							        	sSearch: "",             // remove the "Search" label text
@@ -122,7 +117,7 @@
 							        "searching" :     true,
 							        "bInfo" :         false, // removes "Showing N entries" in the table footer
 							        //"order" :         [[1,"desc"],[2,"desc"],[0,"asc"]],
-							        "order" :         [[4,"desc"]],
+							        "order" :         [[4,"desc"],[6,"asc"]],
 							        "columns": [
 							            { "data": "Id" },
 							            { "data": "Name" },
@@ -133,16 +128,23 @@
 							            { "data": "WorkEffort" },
 							        ]
 							        ,"columnDefs": [
-							        		{ "targets": 0, "orderable": false, "render": function (data,type,row){
-							              return "<input onclick='onChange2(this);' checked type='checkbox' value='"+row['Id']+"' style='background-color:red;width:10px'/>";
-													}},
+							            { "targets": 0, "orderable": false, "render": function (data,type,row){
+							              return "<input onclick='onChange2(this);' "+(row['Decision']!=null?"checked":"")+" type='checkbox' value='"+row['Id']+"' style='margin-right: 0rem;'/>";
+							            }},
 							        ]
 							    } );
-							}; 
+							};
+							
+							function checkAppByDefaultIf(row){
+								return row['Decision']!=null
+											&& (row['Decision']=="REHOST" || row['Decision']=="REFACTOR" || row['Decision']=="REPLATFORM")
+							}
 							//);
 						</script>
 				  	<div id="wrapper">
-					    <div id="buttonbar">
+					    <div 							}; 
+							//);
+r">
 					    </div>
 					    <div id="tableDiv">
 					    	<style>
@@ -158,7 +160,7 @@
 			                <th align="left" title="Business Criticality">Critical</th>
 			                <th align="left" title="Work Priority">Priority</th>
 			                <th align="left" title="Confidence">Confidence</th>
-			                <th align="left" title="Recommended Action">Action</th>
+			                <th align="left" title="Recommended Decision or Action to take">Decision</th>
 			                <th align="left" title="Estimated Effort">Effort</th>
 				            </tr>
 					        </thead>
@@ -171,17 +173,18 @@
 							function onChange2(t){
 								t.checked?appFilter.push(t.value):appFilter.splice(appFilter.indexOf(t.value),1);
 								redrawBubble(applicationAssessmentSummary, false);
+								redrawAdoptionPlan(applicationAssessmentSummary);
 							}
 						</script>
-
+				  	
 					</div> <!-- /col-sm-? -->
 					
 					<div class="col-sm-8">
-					<!--
+					<!--\
 						x=business priority, y=# of dependencies, size=effort, color=Action (REHOST=red, )
 						x=business criticality, y=work priority, size=effort, color=Action (REHOST=red, )
-					-->
 						x=confidence, y=business criticality, size=effort, color=Action (REHOST=red, )
+					-->
 					
 						<!--
 						bubble chart
@@ -204,10 +207,10 @@
 						  decisionColors['NULL']      ="#808080"; //grey
 						  var sizing=[];
 						  sizing['0']=10;
-						  sizing['SMALL']=20;
-						  sizing['MEDIUM']=40;
-						  sizing['LARGE']=60;
-						  sizing['EXTRA LARGE']=80;
+						  sizing['SMALL']=15;
+						  sizing['MEDIUM']=27;
+						  sizing['LARGE']=36;
+						  sizing['XLarge']=45;
 						  var randomNumbers=[];
 						  
 						  var bubbleChart;
@@ -262,11 +265,15 @@
 									
 									//data points
 									dataset['data']=[];
-									dataset['data'].push({"x":confidence,"y":businessPriority,"r":sizing[workEffort]});
+									dataset['data'].push({"x":confidence-50,"y":businessPriority-5,"r":sizing[workEffort]});
 									
 									// color
 									if (decision!=null){
-										dataset['backgroundColor']=decisionColors[decision];
+										if (greyscale){
+											dataset['backgroundColor']=decisionColors.NULL;
+										}else{
+											dataset['backgroundColor']=decisionColors[decision];
+										}
 									}else{
 										dataset['backgroundColor']=decisionColors.NULL;
 									}
@@ -275,22 +282,26 @@
 								}
 								
 								var result={datasets};
-								console.log(JSON.stringify(datasets));
+								//console.log(JSON.stringify(datasets));
 								return result;
 						  }
 						  
 						  function redrawBubble(summary, initial){
-						  	console.log("redraw -> "+initial);
+						  	//console.log("redraw -> "+initial);
 								
 								if (!initial){
-									bubbleChart.destroy();
+									//bubbleChart.destroy();
 								}else{
-									// add all apps to begin with
-									for(i=0;i<summary.length;i++){
-										appFilter.push(summary[i]['Id']);
-									}
+									$('#appFilter tbody tr td input[type=checkbox]:checked').each(function () {
+										appFilter.push(this.value);
+									});
 								}
 								
+								if (bubbleChart!=null){
+									bubbleChart.data=getDataOriginal(summary);
+									bubbleChart.update();
+									return;
+								}
 							  var ctx=document.getElementById("bubbleChart").getContext('2d');
 								bubbleChart=new Chart(ctx,{
 									"type":"bubble",
@@ -316,8 +327,9 @@
 												},
 												display: true,
 												ticks: {
-													suggestedMin: 1,
-													suggestedMax: 10,
+													display: false,
+													suggestedMin: -5,
+													suggestedMax: 5,
 													beginAtZero: true
 												},
 												scaleLabel:{
@@ -328,8 +340,9 @@
 											xAxes: [{
 												display: true,
 												ticks: {
-													suggestedMin: 1,
-													suggestedMax: 100,
+													display: false,
+													suggestedMin: -50,
+													suggestedMax: 50,
 													beginAtZero: true
 												},
 												scaleLabel:{
@@ -340,112 +353,214 @@
 										}
 									}
 								});
-								bubbleChart.generateLegend();
+								//bubbleChart.generateLegend();
+								
+								
+								Chart.pluginService.register({
+								  beforeDraw: function(chart) {
+								    var width = chart.chart.width,
+								        height = chart.chart.height,
+								        ctx = chart.chart.ctx,
+								        type = chart.config.type;
+								    
+								    if (type == 'bubble'){
+								      //ctx.restore();
+									    ctx.clearRect(0, 0, chart.chart.width, chart.chart.height);
+								      var fontSize = 1.1;
+								      ctx.font = fontSize + "em sans-serif";
+								      ctx.textBaseline = "middle"
+								      ctx.fillStyle="#555";
+											
+											var topLeftText    ="Impactful but not advisable to move",  topLeftX=((width/4)*1)-(ctx.measureText(topLeftText).width/2), topLeftTextY=15;
+											var topRightText   ="Impactful and migratable",              topRightX=((width/4)*3)-(ctx.measureText(topRightText).width/2), topRightTextY=15;
+											var bottomLeftText ="Inadvisable",    bottomLeftX=((width/4)*1)-(ctx.measureText(bottomLeftText).width/2), bottomLeftTextY=chart.chartArea.bottom-15;
+											var bottomRightText="Trivial but migratable",                bottomRightX=((width/4)*3)-(ctx.measureText(bottomRightText).width/2), bottomRightTextY=chart.chartArea.bottom-15;
+											
+											// quadrant text
+									    ctx.fillText(topLeftText, topLeftX, topLeftTextY);
+									    ctx.fillText(topRightText, topRightX, topRightTextY);
+									    ctx.fillText(bottomLeftText, bottomLeftX, bottomLeftTextY);
+									    ctx.fillText(bottomRightText, bottomRightX, bottomRightTextY);
+									    
+									    //var goldilocks=$('#goldilocks').val();
+											var x=(width/2)+15, y=0, w=(width/2)-15, h=(height/2)-13;
+									    
+									    //if (goldilocks=="Solid"){
+										  //  // quadrant color / fill top right
+										  //  ctx.fillStyle = "rgba(46, 212, 0, 0.5)";
+											//	ctx.globalAlpha = 0.4;
+										  //  ctx.fillRect(x,y,w,h);
+										  //  ctx.globalAlpha = 1.0;
+									    //}else if (goldilocks=="Gradient"){
+									    	// adjust the width of the green gradient area (higher = wider)
+										    var adjustment=140;
+										    x=x-adjustment;
+										    w=w+adjustment;
+										    
+												var grd=ctx.createLinearGradient(x,0,width-150,0);
+												var grdOpacity=0.12;
+												grd.addColorStop(0,"rgba(255,255,255,0)");
+												grd.addColorStop(1,"rgba(46, 212, 0, "+grdOpacity+")");
+												
+												ctx.fillStyle=grd;
+												ctx.fillRect(x,y,w,(h*2)-5);
+									    //}
+									    
+									    for(i=0;i<chart.config.data.datasets.length;i++){
+									    	var bubble=chart.config.data.datasets[i];
+									    	var r=bubble.data[0].r;
+									    	var x=bubble.data[0].x;
+									    	var y=bubble.data[0].y;
+									    	var label=bubble.label[0];
+									    	
+									    	//console.log(label);
+									    	
+									    	// TODO: MAT! you're drawing your dependency lines on the bubble chart here
+									    	
+									    }
+									    
+									    
+									    //console.log("chart="+JSON.stringify(chart.config));
+									    
+											ctx.save();
+										}								    
+									}
+								});
 								
 						  }
 						  
 							var data;
 							var applicationAssessmentSummary;
+							var appIdToNameMap=[];
 							httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/applicationAssessmentSummary", function(summary){
 								applicationAssessmentSummary=summary;
+								for(i=0;i<summary.length;i++){
+									appIdToNameMap[summary.Id]=summary.Name;
+								}
 								redrawApplications(applicationAssessmentSummary);
 								redrawBubble(applicationAssessmentSummary, true);
+								redrawAdoptionPlan(applicationAssessmentSummary);
 							});
 							
 						</script>
 						
-						<div id="bubbleLegend" style="float:right;position:relative;top:30px;left:-30px;">
-							<div class="row">
-								<div class="col-sm-1">
+						<style>
+						#bubbleLegend{
+					    justify-content:space-around;
+					    list-style-type:none;
+						}
+						#bubbleLegend ul li{
+//							float: right;
+//							position: relative;
+//							top: 30px;
+//							left: -30px;
+							display: inline-block;
+							width: 120px;
+						}
+						</style>
+						
+						<div id="bubbleLegend">
+							<ul>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#92d400;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#333">REHOST</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#f0ab00;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REFACTOR</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#cc0000;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REPLATFORM</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#3B0083;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REPURCHASE</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#A3DBE8;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#333">RETAIN</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#004153;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">RETIRE</text>
 									</svg>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-1">
+								</li>
+								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#808080;stroke-width:0;stroke:rgb(0,0,0)" />
 									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">NOT REVIEWED</text>
 									</svg>
-								</div>
-							</div>
+								</li>
+							</ul>
 						</div>
 						
-						<div class="chartjs-wrapper" style="width:850px;height:600px;">
-							<canvas id="bubbleChart" class="chartjs" width="800px" height="500px;"></canvas>
+						
+						<div class="chartjs-wrapper" style="width:850px;height:530px;">
+							<canvas id="bubbleChart" class="chartjs" width="850" height="531"></canvas>
 						</div>
-
+   					
+						<!--select id="goldilocks" onchange="redrawBubble(applicationAssessmentSummary, false);">
+							<option>None</option>
+							<option>Solid</option>
+							<option>Gradient</option>
+						</select-->
+						<script>
+							var greyscale=true;
+							
+							function greyscaleToggle(t){
+								t.value=="Show Decisions"?t.value="Hide Decisions":t.value="Show Decisions";
+								greyscale=(t.value=="Show Decisions");
+								redrawBubble(applicationAssessmentSummary, false);
+							}
+						</script>
+						<input style="height:28px;padding:0px;width:120px;font-size:10pt;line-height:1rem;" type="button" id="greyscale" value="Show Decisions" onclick="greyscaleToggle(this);"/>
+						<input style="height:28px;padding:0px;width:150px;font-size:10pt;line-height:1rem;" disabled type="button" id="dependencies" value="Show Dependencies" onclick="dependenciesToggle(this);"/>
+						
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
-				
 				
 				
 				<br/><br/><br/>
 				<h2>Suggested Adoption Plan</h2>
 				<div class="row">
 					<div class="col-sm-8">
-						
-						<div style="width: 1000px; height: 100px;">
-							<canvas id="adoption" style="width: 500px; height: 100px;"></canvas>
-						</div>
-						
+						<canvas id="adoption" style="width: 500px; height: 100px;"></canvas>
 						<%@include file="report-adoption.jsp"%>
-						
-					</div>
-						
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->
 				
 				
 				
 				<br/><br/><br/>
-				<h2>Identified Risks</h2>
+				<h2>
+				<a class="twisty" role="button" aria-expanded="false" aria-controls="collapser" data-toggle="collapse" href="#collapser" >
+					<img src="assets/images/twisty-off.png" style="width:30px;"/>
+					<img src="assets/images/twisty-on.png"  style="width:30px;display:none"/>
+				</a>
+				<!--
+				<i class="glyphicon glyphicon-triangle-right"></i>
+				-->
+				Identified Risks</h2>
 				<div class="row">
-					<div class="col-sm-9">
+					<div class="col-sm-10">
 						
 						<script>
+							$(".twisty").click(function(){
+							  $('img',this).toggle();
+							});
+							
 							function drawRisks(data){
 							  var risks=[];
 							  if (data.risks!=undefined) risks=data.risks;
@@ -470,41 +585,74 @@
 						  }
 						</script>
 						A list of questions with answers that that could cause migratory risk to a container platform.
-				  	<div id="wrapper">
-					    <div id="tableDiv">
-						    <table id="risks" class="display" cellspacing="0" width="100%">
-						        <thead>
-						            <tr>
-						                <th align="left">Question</th>
-						                <th align="left">Answer</th>
-						                <th align="left">Application(s)</th>
-						            </tr>
-						        </thead>
-						    </table>
-						  </div>
-				  	</div>
+						<div class="collapse" id="collapser">
+					  	<div id="wrapper">
+						    <div id="tableDiv">
+							    <table id="risks" class="display" cellspacing="0" width="100%">
+							        <thead>
+							            <tr>
+							                <th align="left">Question</th>
+							                <th align="left">Answer</th>
+							                <th align="left">Application(s)</th>
+							            </tr>
+							        </thead>
+							    </table>
+							  </div>
+					  	</div>
+						</div>
+					
+					
+<!--
+<div class="card">
+    <div class="card-header" id="heading-example">
+        <h5 class="mb-0">
+            <a data-toggle="collapse" href="#collapse-example" aria-expanded="true" aria-controls="collapse-example">
+                <i class="fa glyphicon glyphicon-triangle-right pull-right"></i>
+                this is some text
+            </a>
+        </h5>
+    </div>
+    <div id="collapse-example" class="collapsed hidden" aria-labelledby="heading-example">
+        <div class="card-block">
+            and this is more text
+            safsdfsdf
+            gfdlkjldfg
+        </div>
+    </div>
+</div>
+						<style>
+						.card-header .fa {
+						  transition: .3s transform ease-in-out;
+						}
+						.card-header .collapsed .fa {
+						  transform: rotate(90deg);
+						}
+						</style>
+-->
+					
 					</div>
 				</div>
-				
-				
-				
 
-<div class="row">
-&nbsp;
-</div>
+				<div class="row">
+				&nbsp;
+				</div>
 
 			</div>
 		</section>
 
 	</body>
 	
+	<br/><br/><br/><br/><br/><br/><br/><br/>
 </html>
 
 
 
 
-						<!--
-					  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-					  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-				
-						-->
+				<script>
+					httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId+"/report", function(report){
+						new Chart(document.getElementById("gauge-1"),buildGuage(report.assessmentSummary.Easy,report.assessmentSummary.Total, "rgb(146,212,0)","rgb(220, 220, 220)","Cloud-Native Ready"));
+						new Chart(document.getElementById("gauge-2"),buildGuage(report.assessmentSummary.Medium,report.assessmentSummary.Total, "rgb(240,171,0)","rgb(220, 220, 220)","Modernizable"));
+						new Chart(document.getElementById("gauge-3"),buildGuage(report.assessmentSummary.Hard,report.assessmentSummary.Total, "rgb(204, 0, 0)","rgb(220, 220, 220)","Unsuitable for Containers"));
+						drawRisks(report);
+					});
+				</script>

@@ -1,6 +1,5 @@
 <%@ page import="com.redhat.pathfinder.Controller" %>
 
-
 function addAuthToken(url){
   var separator;
   if (!url.includes("_t=") && (jwtToken!="" || jwtToken!=undefined || jwtToken!=null)){

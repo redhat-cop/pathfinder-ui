@@ -66,6 +66,12 @@
 								}},
 			        ]
 			    } );
+			    
+			    // Search functionality (redirect search to button bar search box)
+			    $('#search').keyup(function (e) {
+					    $('#example').DataTable().search( this.value ).draw();
+					});
+					$('#example_filter').css({display:"none"});
 			} );
 			
 			// ### enable/disable handlers for buttons on datatable buttonbar
@@ -96,34 +102,35 @@
 		</script>
 
 		<div id="wrapper" class="container-fluid">
-			<div id="buttonbar">
-				<div class="row page-title">
-					<div class="col-xs-4">
-						<h2>Members</h2>
-					</div>
-					<div class="col-xs-1 pull-right">
-						<div class="form-group">
-							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">New</button>
-						</div>
-					</div>
-					<div class="col-xs-1 pull-right">
-						<div class="form-group">
-							<button class="form-control btn btn-danger" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove</button>
-						</div>
-					</div>
+			<div class="row title-row">
+				<div class="col-xs-4">
+					<h2>Members</h2>
 				</div>
 			</div>
-			<div id="tableDiv">
-				<table id="example" class="display" cellspacing="0" width="100%">
-					<thead>
-						<tr>
-							<th align="left"></th>
-							<th align="left">Username</th>
-							<th align="left">DisplayName</th>
-							<th align="left">Email</th>
-						</tr>
-					</thead>
-				</table>
+			<div class="section">
+				<div id="tableDiv">
+					<div class="button-bar col-sm-9" style="float:right">
+						<div class="col-xs-2 pull-right form-group">
+							<input id="search" type="search" class="form-control" aria-controls="example" placeholder="Search"/>
+						</div>
+						<div class="col-xs-2 pull-right form-group">
+							<button class="form-control btn btn-danger" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove Application</button>
+						</div>
+						<div class="col-xs-2 pull-right form-group">
+							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">Add Member</button>
+						</div>
+					</div>
+					<table id="example" class="display" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th align="left"></th>
+								<th align="left">Username</th>
+								<th align="left">DisplayName</th>
+								<th align="left">Email</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
     </div>
     

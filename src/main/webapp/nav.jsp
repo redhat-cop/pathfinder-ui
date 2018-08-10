@@ -1,14 +1,18 @@
-
-<link rel="stylesheet" href="assets/css/main.css" />
-
 <!-- Header -->
 <header id="header">
 	
+	<style>
+	</style>
+	
 	<%if (request.getSession().getAttribute("x-access-token")==null){%>
-	<a class="logo" href="index.jsp">Pathfinder</a>
-	<a class="logo" href="index.jsp">Login</a> 
+	<a id="logo" href="index.jsp">
+		<img class="logo" src="assets/images/pathfinder.png"/>
+	</a>
+	<a  href="index.jsp">Login</a> 
 	<%}else{%>
-	<a class="logo" href="manageCustomers.jsp">Pathfinder</a>
+	<a href="manageCustomers.jsp">
+		<img id="logo" src="assets/images/pathfinder.png"/>
+	</a>
 		<p>Logged in as <%=request.getSession().getAttribute("x-displayName")%> <a href="api/pathfinder/logout"> (Logout)</a></p>
 	<%}%>
 </header>

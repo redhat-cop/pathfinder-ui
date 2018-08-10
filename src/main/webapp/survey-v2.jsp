@@ -1,112 +1,87 @@
+<!DOCTYPE HTML>
 <html>
+  
   <%@include file="head.jsp"%>
-  <body class="is-preload">
-  	<link href="assets/css/bootstrap-3.3.7.min.css" rel="stylesheet" />
-  	<script src="assets/js/bootstrap-3.3.7.min.js"></script>
-
-  	
+  
+  <link href="assets/css/breadcrumbs.css" rel="stylesheet" />
+	
+  <%@include file="datatables-dependencies.jsp"%>
+  
+	<body class="is-preload">
   	<%@include file="nav.jsp"%>
   	
 		<%@include file="breadcrumbs.jsp"%>
-		
-		<section class="wrapper">
-			<div class="inner">
-				
-				<script src="assets/js/datatables-functions.js"></script>
-				<script src="utils.jsp"></script>
-				<script>
-					$(document).ready(function() {
-						// ### Get Customer Details
-						httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId"), function(customer){
-							if (undefined!=setBreadcrumbs){
-				        setBreadcrumbs("assessments", customer);
-				      }
-						});
-					});
-					
-				</script>
-				
-				<!-- #### page content here #### -->
-		    <script src="https://unpkg.com/jquery"></script>
-		
-		    <script src="https://surveyjs.azureedge.net/1.0.23/survey.jquery.js"></script>
-		    <link href="https://surveyjs.azureedge.net/1.0.23/survey.css" type="text/css" rel="stylesheet"/>
-		    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
 
-		    <!--
-		    <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
-		    -->
-		    <script src="https://unpkg.com/surveyjs-widgets"></script>
-
-		    <!--<link rel="stylesheet" href="./context/index.css">-->
-
-		    <script src="https://unpkg.com/icheck@1.0.2"></script>
-		    <link rel="stylesheet" href="https://unpkg.com/icheck@1.0.2/skins/square/blue.css">
-
-		    <div id="surveyElement"></div>
-		    <div id="surveyResult"></div>
+		<script>
+			$(document).ready(function() {
+				// ### Get Customer Details
+				httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId"), function(customer){
+					if (undefined!=setBreadcrumbs) setBreadcrumbs("assessments", customer);
+				});
 				
-				<script src="utils.jsp"></script>
+				httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+applicationId+"?custom=customer.id,customer.name", function(application){
+					$('#applicationName').html(application['Name']);
+					var customerId=application.CustomFields['customer.id'];
+					var customerName=application.CustomFields['customer.name'];
+					if (undefined!=setBreadcrumbs) initTabs("assessments", customerId, customerName);
+				});
 				
-				<style>
+			});
+		</script>
+						
+		<div class="container-fluid">
+			<!-- #### page content here #### -->
+	    <script src="https://unpkg.com/jquery"></script>
+	
+	    <script src="https://surveyjs.azureedge.net/1.0.23/survey.jquery.js"></script>
+	    <link href="https://surveyjs.azureedge.net/1.0.23/survey.css" type="text/css" rel="stylesheet"/>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
+          <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
+
+	    <!--
+	    <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+	    -->
+	    <script src="https://unpkg.com/surveyjs-widgets"></script>
+
+	    <!--<link rel="stylesheet" href="./context/index.css">-->
+
+	    <script src="https://unpkg.com/icheck@1.0.2"></script>
+	    <link rel="stylesheet" href="https://unpkg.com/icheck@1.0.2/skins/square/blue.css">
+			
+			<div class="row title-row">
+				<div class="col-xs-10">
+					<h2><span id="applicationName"></span> Assessment</h2>
+				</div>
+			</div>
+			
+	    <div id="surveyElement"></div>
+	    <div id="surveyResult"></div>
+			
+			<style>
+				.sv_header{
+					display:none;
+				}
 				.sv_main .sv_container .sv_body .sv_p_root fieldset.sv_qcbc {
 				  line-height: 0em;
           padding-top: 0.0em;
 				}
-				.sv_header{
-					display:none;
+				label{
+					font-weight:400;
+					font-size: 0.8rem; /* answer - text size */
+					margin: 0 0 0.4rem 0; /* answer - spacing between radio options*/
 				}
-				.sv_main.sv_default_css .sv_body {
-					border-color: #111;
-				}
-				/*
-				.sv_main.sv_default_css .sv_q_dropdown_control {
-					border-color: #111;
-				}
-				.sv_q_dropdown_control ::Before{
-					border-color: #111;
-					background-color: #111;
-				}
-				.sv_main.sv_default_css select {
-					border-color: #111;
-				}
-				*/
-				.sv_main .sv_p_root > .sv_row {
-					border-bottom: 1px solid #e7e7e7;
-					border-color: #111;
-					background-color: #111;
-					
-				}
-				/* buttons */
-				.sv_main.sv_default_css input[type="button"], .sv_default_css button {
-					color: white;
-					background-color: #1B5564;
-					border: #4E7A86 solid 1px;
-				}
-				/* buttons:hover */
-				.sv_main.sv_default_css input[type="button"]:hover, .sv_default_css button:hover {
-					background-color: #4E7A86;
-					border: #80A0A9 solid 1px;
-				}
-				/*
-				.sv_main.sv_default_css .sv_progress {
-				    background-color: #111;
-				}
-				*/
-				</style>
-				<script>
-					$(document).ready(function() {
-					});
-
-					var surveyJsUrl=Utils.SERVER+"/api/pathfinder/survey";
-					var surveyJSElement=document.createElement('script');
-					surveyJSElement.src=surveyJsUrl;
-					document.getElementsByTagName('head')[0].appendChild(surveyJSElement);
-				</script>
+			</style>
+			<!--
+			<script src="utils.jsp"></script>
+			-->
+			<script>
+				var surveyJsUrl=Utils.SERVER+"/api/pathfinder/survey";
+				var surveyJSElement=document.createElement('script');
+				surveyJSElement.src=surveyJsUrl;
+				document.getElementsByTagName('head')[0].appendChild(surveyJSElement);
+			</script>
 				
-			</div>
-		</section>	
-		
+		</div>
 	</body>
 </html>
+

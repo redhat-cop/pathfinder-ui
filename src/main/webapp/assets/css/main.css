@@ -9,8 +9,14 @@
 
 /* Basic */
 
+
 @-ms-viewport {
   width: device-width;
+}
+
+#logo{
+	margin: 0px 15px 6px;
+	height:60px;
 }
 
 body {
@@ -19,7 +25,7 @@ body {
 }
 
 td {
-  padding: 0.75em 0;
+  padding: 0.5em 0.3em;
 }
 td a {
   text-decoration: underline;
@@ -28,22 +34,41 @@ td input[type="checkbox"] {
   margin-left: 0.5em;
 }
 th {
-  padding: 1em 0;
+  padding: 0.5em 0.3em;
   color: white;
   background-color: #80A0A9;
+/*
+  background-color: #777;
+  background-color: rgb(146,212,0);
+  background-color: rgb(63,156,53);
+
+*/
 }
 
+.btn-danger:disabled {
+  color: #333 !important;
+}
 .btn-danger {
   color: white !important;
 }
 
 .btn-primary {
   background-color: #004153;
+/*
+  background-color: #777;
+  background-color: rgb(63,156,53);
+*/
   text-decoration: none;
+  border-color: #777;
 }
 
 .btn-primary:hover {
   background-color: #4E7A86;
+/*
+  background-color: #444;
+  background-color: rgb(146,212,0);
+*/
+
 }
 
 .progress-bar {
@@ -59,10 +84,6 @@ th {
 
 .button-bar {
   margin-top: 1em;
-}
-
-.page-title .form-group {
-  margin-top: 20px;
 }
 
 .progress-bar-margin-offset {
@@ -329,6 +350,8 @@ h1 {
 h2 {
   font-size: 2.25rem;
   line-height: 1.3;
+  font-weight: 300;
+  text-transform: uppercase;
 }
 
 h3 {
@@ -647,8 +670,18 @@ ul.alt li {
   width: 30%;
 }
 
+.title-row{
+  margin: 0rem 0 0rem 0;
+}
+.section {
+  margin: 0rem 0 2rem 0;
+}
+.section2 {
+  margin: 3.8rem 0 2rem 0;
+}
+
 table {
-  margin: 0 0 2rem 0;
+  margin: 0 0 0 0;
   width: 100%;
 }
 
@@ -673,11 +706,13 @@ table.alt tfoot {
 }
 
 table tbody tr {
-  border-color: rgba(0, 0, 0, 0.25);
+  border-color: rgba(0, 0, 0, 0.05);
+  border-width: 1px 0px;
+  border-style: solid solid;
 }
 
 table tbody tr:nth-child(2n+1) {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: rgba(0, 0, 0, 0.035);
 }
 
 table tfoot {
@@ -687,6 +722,33 @@ table tfoot {
 table.alt tbody tr td {
   border-color: rgba(0, 0, 0, 0.25);
 }
+
+/* table sorted highligting */
+table tbody tr > .sorting_1,
+table tbody tr > .sorting_2,
+table tbody tr > .sorting_3{
+	background-color: rgba(0, 0, 0, 0.020);
+}
+
+/* assessment summary screen assessment & review column colors */
+.messageGreen{
+	color: green;
+}
+
+.messageRed,
+.messageRed:active,
+.messageRed:focus,
+.messageRed:visited{
+	color: rgb(163,0,0);
+}
+.messageRed,
+.messageRed:hover{
+	color: rgb(130,0,0);
+}
+.messageAmber{
+	color: rgb(236,122,8);
+}
+
 
 /* Highlights */
 
