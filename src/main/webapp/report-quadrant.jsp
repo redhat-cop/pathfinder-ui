@@ -423,30 +423,23 @@
 												ctx.fillRect(x,y,w,(h*2)-5);
 									    //}
 									    
-								    	// TODO: MAT! you're drawing your dependency lines on the bubble chart here
+									    
+								    	// draw the dependency line(s)
 									    if (!dependencies){
 									    	//ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
 									    	ctx.strokeStyle = 'rgba(0,0,0,0.2)';
 										    ctx.lineWidth=5;
 									    	
-										    var bubbleMap=[];
 										    var bubbleMapModels=[];
-										    for(i=0;i<chart.config.data.datasets.length;i++){
-										      bubbleMap[chart.config.data.datasets[i].label[0]]=chart.config.data.datasets[i];
-										    }
-										    
 										    for(i=0;i<chart.config.data.datasets.length;i++){
 										    	var model_x=chart.getDatasetMeta(i).data[0]._model.x;
 										    	var model_y=chart.getDatasetMeta(i).data[0]._model.y;
 										    	var model_r=chart.getDatasetMeta(i).data[0]._model.radius;
 										    	bubbleMapModels[chart.config.data.datasets[i].label[0]]={Name:chart.config.data.datasets[i].label[0],x:model_x,y:model_y,r:model_r};
-										    	
-										    	console.log(chart.config.data.datasets[i].label[0] +" = "+JSON.stringify({x:model_x,y:model_y}));
+										    	//console.log(chart.config.data.datasets[i].label[0] +" = "+JSON.stringify({x:model_x,y:model_y}));
 										    }
 										    
-										    
 										    for(i=0;i<chart.config.data.datasets.length;i++){
-										    
 										    	var bubble=chart.config.data.datasets[i];
 										    	var r=bubble.data[0].r;
 										    	var label=bubble.label[0];
@@ -456,20 +449,9 @@
 										    	if (undefined==appNameToAppMap[label].DependsOn) continue;
 										    	
 										    	for (var d=0;d<appNameToAppMap[label].DependsOn.length;d++){
-										    		//var targetBubble=bubbleMap[appNameToAppMap[label].DependsOn[d]];
 										    		var targetBubble=bubbleMapModels[appNameToAppMap[label].DependsOn[d]];
 										    		
-										    		
 										    		if (targetBubble==null) continue; //dependency may not be displayed on the graph
-										    		
-										    		// draw the line!
-										    		//ctx.beginPath();
-										    		//ctx.moveTo(x,y);
-										    		//ctx.lineTo(targetBubble.x, targetBubble.y);
-										    		//ctx.stroke();
-										    		
-										    		//x-=50;
-										    		//y-=50;
 										    		
 										    		var radius=targetBubble.r;
 										    		var angle  = Math.atan2(targetBubble.y - y, targetBubble.x - x) * 180 / 3.14;
@@ -482,21 +464,22 @@
 										    		targetBubble.x-=subtractWidth;
 										    		targetBubble.y-=subtractHeight;
 										    		
-										    		//targetBubble.x-=r/2;
-										    		//targetBubble.y-=r/2;
-										    		
-										    		//var headlen = 10;
-										    		//var angle = Math.atan2(targetBubble.y-y,targetBubble.x-x);
 										    		ctx.beginPath();
-										    		//ctx.moveTo(x,y);
-										    		//ctx.lineTo(targetBubble.x, targetBubble.y);
-										    		canvas_arrow(ctx,x,y,targetBubble.x, targetBubble.y);
+										    		//canvas_arrow(ctx,x,y,targetBubble.x, targetBubble.y);
+										    		
+										    		// draw arrow
+												    var arrowSize=20;   // length of arrow head in pixels
+												    var angle=Math.atan2(targetBubble.y-y,targetBubble.x-x);
+												    context.moveTo(x, y);
+												    context.lineTo(targetBubble.x, targetBubble.y);
+												    context.lineTo(targetBubble.x-arrowSize*Math.cos(angle-Math.PI/6),targetBubble.y-arrowSize*Math.sin(angle-Math.PI/6));
+												    context.moveTo(targetBubble.x, toy);
+												    context.lineTo(targetBubble.x-arrowSize*Math.cos(angle+Math.PI/6),targetBubble.y-arrowSize*Math.sin(angle+Math.PI/6));
+												    
 										    		ctx.stroke();
 										    		console.log("drawn dependency line from '"+label+"' to '"+targetBubble.Name+"' which is from '"+x+","+y+"' to '"+targetBubble.x+","+targetBubble.y+"'");
 										    		
 										    	}
-										    	
-										    	//console.log(label);
 										    	
 										    }
 										  }
@@ -510,16 +493,6 @@
 								
 						  }
 						  
-							function canvas_arrow(context, fromx, fromy, tox, toy){
-							    var headlen = 20;   // length of head in pixels
-							    var angle = Math.atan2(toy-fromy,tox-fromx);
-							    context.moveTo(fromx, fromy);
-							    context.lineTo(tox, toy);
-							    context.lineTo(tox-headlen*Math.cos(angle-Math.PI/6),toy-headlen*Math.sin(angle-Math.PI/6));
-							    context.moveTo(tox, toy);
-							    context.lineTo(tox-headlen*Math.cos(angle+Math.PI/6),toy-headlen*Math.sin(angle+Math.PI/6));
-							}
-							
 							var data;
 							var applicationAssessmentSummary;
 							var appIdToNameMap=[];
