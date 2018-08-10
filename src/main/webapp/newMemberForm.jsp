@@ -29,23 +29,23 @@
           </div>
           -->
           <div class="form-group">
-            <label for="Username" class="control-label">Username:</label>
+            <label for="Username" class="control-label">Username *</label>
             <input id="Username" name="Username" type="text" class="form-control">
           </div>
           <div class="form-group">
-            <label for="Password" class="control-label">Password:</label>
+            <label for="Password" class="control-label">Password *</label>
             <input id="Password" name="Password" type="password" class="form-control">
           </div>
           <div class="form-group">
-            <label for="Password2" class="control-label">Password Confirmation:</label>
+            <label for="Password2" class="control-label">Password Confirmation *</label>
             <input id="Password2" name="Password2" type="password" class="form-control">
           </div>
           <div class="form-group">
-            <label for="Email" class="control-label">Email:</label>
+            <label for="Email" class="control-label">Email *</label>
             <input id="Email" name="Email" type="text" class="form-control" onkeyup="validate()">
           </div>
           <div class="form-group">
-            <label for="DisplayName" class="control-label">Display Name:</label>
+            <label for="DisplayName" class="control-label">Display Name *</label>
             <input id="DisplayName" name="DisplayName" type="text" class="form-control">
           </div>
         </form>
@@ -68,8 +68,8 @@
       </script>
       
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button id="edit-ok" type="button" data-dismiss="modal" disabled onclick="save(this, 'form'); return false;">Create</button>
+        <a data-dismiss="modal">Cancel</a>
+        <button class="btn btn-primary" id="edit-ok" type="button" data-dismiss="modal" disabled onclick="save(this, 'form'); return false;">Create</button>
       </div>
     </div>
   </div>
