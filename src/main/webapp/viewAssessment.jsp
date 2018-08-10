@@ -37,22 +37,32 @@
 						
 						document.getElementById("applicationName").innerHTML=application.Name;
 						document.getElementById("applicationDescription").innerHTML=application.Description!=""?application.Description:"No description provided";
-						//document.getElementById("businessCriticality").innerHTML=application.CustomFields['BUSPRIORITY'];
 						document.getElementById("assessmentNotes").innerHTML=application.CustomFields['NOTES']!=undefined?application.CustomFields['NOTES']:"None";
-
-						// ### Populate the header with the Customer Name
-						//document.getElementById("customerName").innerHTML=customer.CustomerName;
-						//document.getElementById("breadcrumb1").innerHTML="<a href='assessments-v2.jsp?customerId="+customer.CustomerId+"'>"+customer.CustomerName+"</a>";
 						
 				    if (undefined!=setBreadcrumbs){
 				      setBreadcrumbs("assessments", customer);
 				      initTabs("assessments", application.CustomFields['customer.id'], application.CustomFields['customer.name']);
 				    }
 						
+						if (null!=application['Review']){
+							httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"/review/"+application['Review'], function(review){
+								
+								$('#ReviewDecision').val(review['ReviewDecision']);
+								$('#WorkEffort').val(review['WorkEffort']);
+								$('#BusinessPriority').val(review['BusinessPriority']);
+								$('#WorkPriority').val(review['WorkPriority']);
+								$('#ReviewNotes').val(review['ReviewNotes']);
+								
+								//console.log(JSON.stringify("review2="+review));
+							});						
+						}
 						
-						//beenReviewed=application.Review!=null;
-					  //console.log("app.count="+progress.Appcount+", assessed="+progress.Assessed+", reviewed="+progress.Reviewed);
 					});
+					
+					
+					//httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"/review", function(review){
+					//	console.log(JSON.stringify("review1="+review));
+					//});
 					
 					//// ### Get Customer Details
 					//httpGetObject(Utils.SERVER+"/api/pathfinder/customers/"+customerId, function(customer){
@@ -271,86 +281,6 @@ function onClickHandlers(myChart) {
 
 <br/><br/><br/>
 								
-								<%
-								if ("false".equalsIgnoreCase(request.getParameter("review"))){
-								%>
-								<div class="row">
-									<div class="col-sm-2">
-										<h4>Proposed Action</h4>
-									</div>
-									<div class="col-sm-2">
-										<h4>Effort Estimate</h4>
-									</div>
-									<div class="col-sm-2">
-										<h4>Business Criticality</h4>
-										(1=low, 10=high)
-									</div>
-									<div class="col-sm-2">
-										<h4>Work Priority</h4>
-										(1=low, 10=high)
-									</div>
-									<div class="col-sm-4">
-										<h4>Supporting Notes</h4>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-sm-2">
-										<select name="ReviewDecision" id="ReviewDecision">
-											<option value="REHOST">Re-host</option>
-											<option value="REPLATFORM">Re-platform</option>
-											<option value="REFACTOR">Refactor</option>
-											<option value="REPURCHASE">Repurchase</option>
-											<option value="RETIRE">Retire</option>
-											<option value="RETAIN">Retain</option>
-										</select>
-									</div>
-									<div class="col-sm-2">
-										<select name="WorkEffort" id="WorkEffort">
-											<option value="SMALL">Small</option>
-											<option value="MEDIUM">Medium</option>
-											<option value="LARGE">Large</option>
-											<option value="XLarge">Extra Large</option>
-										</select> 
-									</div>
-									<div class="col-sm-2">
-										<select type="text" name="BusinessPriority">
-											<option>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
-											<option>5</option>
-											<option>6</option>
-											<option>7</option>
-											<option>8</option>
-											<option>9</option>
-											<option>10</option>
-										</select>
-									</div>
-									<div class="col-sm-2">
-										<select type="text" name="WorkPriority">
-											<option>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
-											<option>5</option>
-											<option>6</option>
-											<option>7</option>
-											<option>8</option>
-											<option>9</option>
-											<option>10</option>
-										</select>
-									</div>
-									<div class="col-sm-4">
-										<textarea name="ReviewNotes" style="width:325px;height:100px;"></textarea>
-									</div>
-								</div>
-
-								<%
-								}
-								%>
-							</div>
-						</div>
-							
 						<div class="row">
 							<div class="col-sm-8">
 								
@@ -410,7 +340,7 @@ function onClickHandlers(myChart) {
 											</select> 
 										</div>
 										<div class="col-sm-2">
-											<select type="text" name="BusinessPriority">
+											<select type="text" id="BusinessPriority" name="BusinessPriority">
 												<option>1</option>
 												<option>2</option>
 												<option>3</option>
@@ -424,7 +354,7 @@ function onClickHandlers(myChart) {
 											</select>
 										</div>
 										<div class="col-sm-2">
-											<select type="text" name="WorkPriority">
+											<select type="text" id="WorkPriority" name="WorkPriority">
 												<option>1</option>
 												<option>2</option>
 												<option>3</option>
@@ -438,7 +368,7 @@ function onClickHandlers(myChart) {
 											</select>
 										</div>
 										<div class="col-sm-4">
-											<textarea name="ReviewNotes" style="width:325px;height:100px;"></textarea>
+											<textarea id="ReviewNotes" name="ReviewNotes" style="width:325px;height:100px;"></textarea>
 										</div>
 									</div>
 									

@@ -14,7 +14,7 @@
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
   	
-		<%@include file="breadcrumbs-v2.jsp"%>
+		<%@include file="breadcrumbs.jsp"%>
 		
 		<div class="container-fluid">
 			<div class="row">
@@ -224,7 +224,8 @@
 								"orderable": true,
 								"render": function (data, type, row) {
 									if (row.ReviewDate) {
-										return '<span class="messageGreen">Yes</span>'
+									  var edit='<a href="viewAssessment.jsp?review=true&app=' + row.Id + '&assessment=' + row.LatestAssessmentId + '&customer=' + customerId + '"><span class="editLink">(edit)</span></a>';
+										return '<span class="messageGreen">Yes</span>'+' '+edit;
 									} else if (row.Assessed) {
 										return '<a href="viewAssessment.jsp?review=true&app=' + row.Id + '&assessment=' + row.LatestAssessmentId + '&customer=' + customerId + '" class="messageRed">No</a>'
 									} else {
@@ -331,8 +332,8 @@
 		</script>
 
 <!--
--->
 <%@include file="corporate-color-swatches.jsp"%>
+-->
 
 	</body>
 </html>
