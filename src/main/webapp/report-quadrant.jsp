@@ -278,16 +278,47 @@
 								return result;
 						  }
 						  
-						  function redrawBubble(summary, initial){
+						  function redrawBubble(applicationAssessmentSummary, initial){
 						  	//console.log("redraw -> "+initial);
+						  	
+						  	var summary=JSON.parse(JSON.stringify(applicationAssessmentSummary));
+								
+								// build a map of AppId's to App
+								var appIdToAppMap=[];
+								var appNameToAppMap=[];
+								for(i=0;i<summary.length;i++){
+									appIdToAppMap[summary[i].Id]=summary[i];
+									appNameToAppMap[summary[i].Name]=summary[i];
+								}
+								
+								// reference the OutboundDeps App Id's into App Names and add them in a field called DependsOn for easy reference when building the charts
+								for(i=0;i<summary.length;i++){
+									if (null!=summary[i]['OutboundDeps']){
+										summary[i]['DependsOn']=[];
+										//var dependsOn=[];
+										for(d=0;d<summary[i]['OutboundDeps'].length;d++)
+										  summary[i]['DependsOn'].push(appIdToAppMap[summary[i]['OutboundDeps'][d]].Name);
+									}
+								}
+								
+								//console.log(JSON.stringify(summary));
 								
 								if (!initial){
-									bubbleChart.destroy();
+									//bubbleChart.destroy();
 								}else{
 									$('#appFilter tbody tr td input[type=checkbox]:checked').each(function () {
 										appFilter.push(this.value);
 									});
 								}
+								
+								if (bubbleChart!=null){
+									bubbleChart.data=getDataOriginal(summary);
+									bubbleChart.options.animation.duration=initial?1000:1;
+									bubbleChart.update();
+									return;
+								}
+								
+								//console.log(JSON.stringify(getDataOriginal(summary)));
 								
 							  var ctx=document.getElementById("bubbleChart").getContext('2d');
 								bubbleChart=new Chart(ctx,{
@@ -300,11 +331,11 @@
 									  	display: false,
 									  	position: "top"
 									  },
-									  //legendCallback: function(chart) {
-									  //	return "ASDKJHASKHDKADSA";
-									  //},
 										animation: {
 											duration: initial?1000:1 //so when you click a radio they appear quickly, but animate on startup
+										},
+										tooltips:{
+											enabled: false
 										},
 										aspectRatio: 1,
 										scales: {
@@ -341,7 +372,6 @@
 									}
 								});
 								//bubbleChart.generateLegend();
-								
 								
 								Chart.pluginService.register({
 								  beforeDraw: function(chart) {
@@ -393,19 +423,83 @@
 												ctx.fillRect(x,y,w,(h*2)-5);
 									    //}
 									    
-									    for(i=0;i<chart.config.data.datasets.length;i++){
-									    	var bubble=chart.config.data.datasets[i];
-									    	var r=bubble.data[0].r;
-									    	var x=bubble.data[0].x;
-									    	var y=bubble.data[0].y;
-									    	var label=bubble.label[0];
+								    	// TODO: MAT! you're drawing your dependency lines on the bubble chart here
+									    if (!dependencies){
+									    	//ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+									    	ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+										    ctx.lineWidth=5;
 									    	
-									    	//console.log(label);
-									    	
-									    	// TODO: MAT! you're drawing your dependency lines on the bubble chart here
-									    	
-									    }
-									    
+										    var bubbleMap=[];
+										    var bubbleMapModels=[];
+										    for(i=0;i<chart.config.data.datasets.length;i++){
+										      bubbleMap[chart.config.data.datasets[i].label[0]]=chart.config.data.datasets[i];
+										    }
+										    
+										    for(i=0;i<chart.config.data.datasets.length;i++){
+										    	var model_x=chart.getDatasetMeta(i).data[0]._model.x;
+										    	var model_y=chart.getDatasetMeta(i).data[0]._model.y;
+										    	var model_r=chart.getDatasetMeta(i).data[0]._model.radius;
+										    	bubbleMapModels[chart.config.data.datasets[i].label[0]]={Name:chart.config.data.datasets[i].label[0],x:model_x,y:model_y,r:model_r};
+										    	
+										    	console.log(chart.config.data.datasets[i].label[0] +" = "+JSON.stringify({x:model_x,y:model_y}));
+										    }
+										    
+										    
+										    for(i=0;i<chart.config.data.datasets.length;i++){
+										    
+										    	var bubble=chart.config.data.datasets[i];
+										    	var r=bubble.data[0].r;
+										    	var label=bubble.label[0];
+										    	var x=bubbleMapModels[label].x;
+										    	var y=bubbleMapModels[label].y;
+										    	
+										    	if (undefined==appNameToAppMap[label].DependsOn) continue;
+										    	
+										    	for (var d=0;d<appNameToAppMap[label].DependsOn.length;d++){
+										    		//var targetBubble=bubbleMap[appNameToAppMap[label].DependsOn[d]];
+										    		var targetBubble=bubbleMapModels[appNameToAppMap[label].DependsOn[d]];
+										    		
+										    		
+										    		if (targetBubble==null) continue; //dependency may not be displayed on the graph
+										    		
+										    		// draw the line!
+										    		//ctx.beginPath();
+										    		//ctx.moveTo(x,y);
+										    		//ctx.lineTo(targetBubble.x, targetBubble.y);
+										    		//ctx.stroke();
+										    		
+										    		//x-=50;
+										    		//y-=50;
+										    		
+										    		var radius=targetBubble.r;
+										    		var angle  = Math.atan2(targetBubble.y - y, targetBubble.x - x) * 180 / 3.14;
+										    		var height = targetBubble.y - y;
+												    var width  = targetBubble.x - x;
+												    var length = Math.sqrt(Math.pow(height, 2) + Math.pow(width, 2));
+												    var subtractWidth = radius * width / length;
+												    var subtractHeight = radius * height / length;
+										    		
+										    		targetBubble.x-=subtractWidth;
+										    		targetBubble.y-=subtractHeight;
+										    		
+										    		//targetBubble.x-=r/2;
+										    		//targetBubble.y-=r/2;
+										    		
+										    		//var headlen = 10;
+										    		//var angle = Math.atan2(targetBubble.y-y,targetBubble.x-x);
+										    		ctx.beginPath();
+										    		//ctx.moveTo(x,y);
+										    		//ctx.lineTo(targetBubble.x, targetBubble.y);
+										    		canvas_arrow(ctx,x,y,targetBubble.x, targetBubble.y);
+										    		ctx.stroke();
+										    		console.log("drawn dependency line from '"+label+"' to '"+targetBubble.Name+"' which is from '"+x+","+y+"' to '"+targetBubble.x+","+targetBubble.y+"'");
+										    		
+										    	}
+										    	
+										    	//console.log(label);
+										    	
+										    }
+										  }
 									    
 									    //console.log("chart="+JSON.stringify(chart.config));
 									    
@@ -416,6 +510,16 @@
 								
 						  }
 						  
+							function canvas_arrow(context, fromx, fromy, tox, toy){
+							    var headlen = 20;   // length of head in pixels
+							    var angle = Math.atan2(toy-fromy,tox-fromx);
+							    context.moveTo(fromx, fromy);
+							    context.lineTo(tox, toy);
+							    context.lineTo(tox-headlen*Math.cos(angle-Math.PI/6),toy-headlen*Math.sin(angle-Math.PI/6));
+							    context.moveTo(tox, toy);
+							    context.lineTo(tox-headlen*Math.cos(angle+Math.PI/6),toy-headlen*Math.sin(angle+Math.PI/6));
+							}
+							
 							var data;
 							var applicationAssessmentSummary;
 							var appIdToNameMap=[];
@@ -505,15 +609,22 @@
 						</select-->
 						<script>
 							var greyscale=true;
+							var dependencies=true;
 							
 							function greyscaleToggle(t){
 								t.value=="Show Decisions"?t.value="Hide Decisions":t.value="Show Decisions";
 								greyscale=(t.value=="Show Decisions");
 								redrawBubble(applicationAssessmentSummary, false);
 							}
+							function dependenciesToggle(t){
+								t.value=="Show Dependencies"?t.value="Hide Dependencies":t.value="Show Dependencies";
+								dependencies=(t.value=="Show Dependencies");
+								redrawBubble(applicationAssessmentSummary, false);
+							}
+							
 						</script>
 						<input class="btn btn-default form-control" style="height:28px;padding:0px;width:120px;font-size:10pt;line-height:1rem;" type="button" id="greyscale" value="Show Decisions" onclick="greyscaleToggle(this);"/>
-						<input class="btn btn-default form-control" style="height:28px;padding:0px;width:150px;font-size:10pt;line-height:1rem;" disabled type="button" id="dependencies" value="Show Dependencies" onclick="dependenciesToggle(this);"/>
+						<input class="btn btn-default form-control" style="height:28px;padding:0px;width:150px;font-size:10pt;line-height:1rem;" type="button" id="dependencies" value="Show Dependencies" onclick="dependenciesToggle(this);"/>
 						
 					</div> <!-- col-sm-? -->
 				</div> <!-- /row -->

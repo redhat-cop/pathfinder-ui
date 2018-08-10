@@ -14,7 +14,7 @@
 	<body class="is-preload">
   	<%@include file="nav.jsp"%>
   	
-		<%@include file="breadcrumbs.jsp"%>
+		<%@include file="breadcrumbs-v2.jsp"%>
 		
 		<div class="container-fluid">
 			<div class="row">
@@ -331,8 +331,8 @@
 		</script>
 
 <!--
-<%@include file="corporate-color-swatches.jsp"%>
 -->
+<%@include file="corporate-color-swatches.jsp"%>
 
 	</body>
 </html>

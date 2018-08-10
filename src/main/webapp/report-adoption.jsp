@@ -49,10 +49,50 @@ function compareValues(key, order='asc') {
 		adoptionPlanColors[1]='rgb(240,171,0)';
 		adoptionPlanColors[2]='rgb(204, 0, 0)';
 		adoptionPlanColors[3]='rgb(0, 65, 83)';
-		
 		adoptionPlanColors[4]='#3B0083';
 		adoptionPlanColors[5]='#A3DBE8';
 		adoptionPlanColors[6]='#808080';
+		
+		adoptionPlanColors[7]='#a30000';
+		adoptionPlanColors[8]='#004254';
+		adoptionPlanColors[9]='#0088ce';
+		adoptionPlanColors[10]='#409c36';
+		adoptionPlanColors[11]='#7aa4ae';
+		adoptionPlanColors[12]='#820000';
+		adoptionPlanColors[13]='#40717f';
+		adoptionPlanColors[14]='#40a6da';
+		adoptionPlanColors[15]='#70b568';
+		adoptionPlanColors[16]='#516d74';
+
+/*		
+		red bright darker
+		cc0000
+		a30000
+		820000
+		
+		teals
+		004254
+		40717f
+		00313f
+		
+		blues
+		0088ce
+		bfe1f3
+		40a6da
+		00669a
+		004467
+		
+		greens
+		409c36
+		a0ce9b
+		70b568
+		307528
+		204e1b
+		
+		blue/greys
+		7aa4ae
+		516d74
+		*/
 		
 		function getNextColor(){
 		  var c=lastColor++;
@@ -61,7 +101,7 @@ function compareValues(key, order='asc') {
 		}
 		
 	  var adoptionSize=[];
-	  adoptionSize['null']=1;
+	  adoptionSize['null']=0;
 	  adoptionSize['SMALL']=20;
 	  adoptionSize['MEDIUM']=40;
 	  adoptionSize['LARGE']=80;
@@ -70,16 +110,6 @@ function compareValues(key, order='asc') {
 		var adoptionChart;
 		function redrawAdoptionPlan(applicationAssessmentSummary){
 			lastColor=0;
-			
-			//if (!undefined==adoptionChart)
-			//	adoptionChart.destroy();
-			//adoptionChart=null;
-			//
-			//var cxx=document.getElementById('adoption').getContext('2d');
-			//cxx.clearRect(0, 0, cxx.width, cxx.height);
-			
-			//TODO: need to clear the canvas somehow
-			
 			
 			// deep copy
 			var summary=JSON.parse(JSON.stringify(applicationAssessmentSummary));
@@ -194,7 +224,7 @@ function compareValues(key, order='asc') {
 				c++;
 			}
 			
-			console.log(JSON.stringify(data));
+			//console.log(JSON.stringify(data));
 			
 			
 			// if the chart has been drawn already, then just update the data
