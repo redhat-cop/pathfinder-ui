@@ -60,6 +60,7 @@ td input[type="checkbox"] {
   margin-left: 0.5em;
 }
 
+/* PRIMARY COLOR SET */
 th,
 .breadcrumb-buttons .active,
 .btn-primary:hover,
@@ -72,7 +73,10 @@ th,
 	background-color: #a30000;
 */
 }
-.btn-primary{
+
+/* SECONDARY COLOR SET (accented/darker than PRIMARY) */
+.btn-primary,
+.btn-primary[disabled]:hover{
 	background-color: #29373a;
 /*
 	background-color: #890000;
@@ -82,13 +86,6 @@ th,
 th {
   padding: 0.5em 0.3em;
   color: white;
-/*
-  background-color: #80A0A9;
-  background-color: #777;
-  background-color: rgb(146,212,0);
-  background-color: rgb(63,156,53);
-
-*/
 }
 
 .btn-danger:disabled {
@@ -99,22 +96,10 @@ th {
 }
 
 .btn-primary {
-/*
-  background-color: #004153;
-  background-color: #777;
-  background-color: rgb(63,156,53);
-*/
+/* color is elsewhere */
   text-decoration: none;
   border-color: #777;
 }
-
-/*
-.btn-primary:hover {
-  background-color: #4E7A86;
-  background-color: #444;
-  background-color: rgb(146,212,0);
-}
-*/
 
 .progress-bar {
   width: 100%;
@@ -161,6 +146,11 @@ table.dataTable thead .sorting {
 }
 .progress-bar-success a:hover {
   color: #ddd;
+}
+
+
+#logged-status{
+	padding-right: 10px;
 }
 
 /* HACK */

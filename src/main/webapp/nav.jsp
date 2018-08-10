@@ -8,12 +8,14 @@
 		<a href="index.jsp">
 			<img class="logo" style="height:60px;margin:0px 10px 6px" src="assets/images/pathfinder.png"/>
 		</a>
-		<a  href="index.jsp">Login</a> 
+		<%if (!"index.jsp".equals(this.getClass().getSimpleName().replaceAll("_", "."))){%>
+			<a id="logged-status" href="index.jsp">Login</a> 
+		<%}%>
 	<%}else{%>
 		<a href="manageCustomers.jsp">
 			<img id="logo" style="height:60px;margin:0px 10px 6px" src="assets/images/pathfinder.png"/>
 		</a>
-		<p>Logged in as <%=request.getSession().getAttribute("x-displayName")%> <a href="api/pathfinder/logout"> (Logout)</a></p>
+		<p id="logged-status">Logged in as <%=request.getSession().getAttribute("x-displayName")%> <a href="api/pathfinder/logout"> (Logout)</a></p>
 	<%}%>
 </header>
 
