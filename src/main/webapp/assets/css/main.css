@@ -14,14 +14,24 @@
   width: device-width;
 }
 
-#logo{
-	margin: 0px 15px 6px;
-	height:60px;
-}
-
 body {
   -ms-overflow-style: scrollbar;
   font-family: 'overpass'
+}
+body:before {
+  content: ' ';
+  background-image: url(../../assets/images/Pattern_0C_RH_Services_RGB_Fill_Gray.png);
+  background-attachment: fixed;
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.05;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
 }
 /*
 body:before {
@@ -49,11 +59,31 @@ td a {
 td input[type="checkbox"] {
   margin-left: 0.5em;
 }
+
+th,
+.breadcrumb-buttons .active,
+.btn-primary:hover,
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover
+ {
+  background-color: #516d74;
+  border-color: #29373a;
+/*
+	border-color: #890000
+	background-color: #a30000;
+*/
+}
+.btn-primary{
+	background-color: #29373a;
+/*
+	background-color: #890000;
+*/
+}
+
 th {
   padding: 0.5em 0.3em;
   color: white;
-  background-color: #80A0A9;
 /*
+  background-color: #80A0A9;
   background-color: #777;
   background-color: rgb(146,212,0);
   background-color: rgb(63,156,53);
@@ -69,8 +99,8 @@ th {
 }
 
 .btn-primary {
-  background-color: #004153;
 /*
+  background-color: #004153;
   background-color: #777;
   background-color: rgb(63,156,53);
 */
@@ -78,14 +108,13 @@ th {
   border-color: #777;
 }
 
+/*
 .btn-primary:hover {
   background-color: #4E7A86;
-/*
   background-color: #444;
   background-color: rgb(146,212,0);
-*/
-
 }
+*/
 
 .progress-bar {
   width: 100%;
@@ -120,6 +149,20 @@ table.dataTable thead .sorting {
   background-image: none;
 }
 
+
+/* progressbar styling on the "customers" page */
+.progress-bar-success {
+  background-color: #4caf50;
+}
+.progress-bar-success a,
+.progress-bar-success a:visited {
+  margin: 0px 0px 0px 10px;
+  color: white;
+}
+.progress-bar-success a:hover {
+  color: #ddd;
+}
+
 /* HACK */
 
 .sorting_desc::after {
@@ -148,6 +191,7 @@ input[type="search"] {
   top: 0;
 }
 
+
 /* TODO moved from elsewhere. still needed? */
 
 .editLink {
@@ -159,9 +203,6 @@ input[type="search"] {
   margin-bottom: 0;
 }
 
-.progress-bar-success {
-  background-color: rgba(146, 212, 0, 0.5)
-}
 
 #mynetwork {
   height: 120%;
@@ -691,9 +732,13 @@ ul.alt li {
 }
 .section {
   margin: 0rem 0 2rem 0;
+  position: relative;
+  top:-30px;
 }
 .section2 {
   margin: 3.8rem 0 2rem 0;
+  position: relative;
+  top:-30px;
 }
 
 table {

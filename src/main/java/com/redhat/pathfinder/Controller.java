@@ -230,7 +230,7 @@ public class Controller{
     
     if (loginResp.statusCode()!=200){
       String error="Username and/or password is unknown or incorrect"; // would grab the text from server side but spring wraps some debug info in there so until we can strip that we cant give details of failure
-      return Response.status(302).location(new URI("../login.jsp?error="+URLEncoder.encode(error, "UTF-8"))).build();
+      return Response.status(302).location(new URI("../index.jsp?error="+URLEncoder.encode(error, "UTF-8"))).build();
     }
     
     System.out.println("Controller:login():: loginResp.asString() = "+loginResp.asString());

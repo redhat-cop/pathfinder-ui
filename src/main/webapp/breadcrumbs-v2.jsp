@@ -20,8 +20,6 @@
     padding: 10px 20px;
     text-decoration: none;
     font-size: 13pt;
-		position: relative;
-    top: 0px;
 }
 /*
 */
@@ -34,17 +32,27 @@
     background-color: #111;
     background-color: #80A0A9;
 }
+.stretch{
+	width: 50%;
+	text-align: center;
+	color: white;
+	font-size: 18pt;
+}
+#customer{
+	position: relative;
+	top:3px;
+}
 */
 .breadcrumb-customer{
 	  background-color: #ccc !important;
     color: #444;
     font-size: 18pt;
-    padding: 3px 16px;
+    /*text-align: center;*/
+    padding: 6px 16px;
     width: 300px;
-}
-#customer{
+    height: 52px;
     position: relative;
-    top: 3px;
+    left: 0px;
 }
 /*
 */
@@ -68,9 +76,6 @@ ol, ul {
   	
   	<script>
   		function setBreadcrumbs(active, customer){
-		    //$('#breadcrumb-name').attr('innerHTML', customer.CustomerName);
-		    //$('#customer').get().innerHTML="X="+customer.CustomerName;
-		    //document.getElementById("customer").innerHTML=customer.CustomerName;
 		    
 		    document.getElementById("customer").innerHTML=customer.CustomerName;
 		    
@@ -98,14 +103,16 @@ ol, ul {
   		}
   	</script>
   	
+  	
   	<div>
 			<ul class="breadcrumb-buttons">
-				<li class="breadcrumb-customer"><span id="customer">Loading...</span></li>
 				<!--
+				<li id="customer" class="breadcrumb-customer">Loading...</li>
 				<li id="breadcrumb-details"><a href="#">Details</a></li>
 				-->
 				<li id="breadcrumb-assessments"> <a href="#">Assessments</a></li>
 				<li id="breadcrumb-applications"><a href="#">Applications</a></li>
 				<li id="breadcrumb-members">     <a href="#">Members</a></li>
+				<li id="breadcrumb-customer" class="stretch"><span id="customer">Loading...</span></li>
 			</ul>
   	</div>

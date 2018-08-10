@@ -330,5 +330,9 @@
 			// ### End: enable/disable handlers for buttons on buttonbar
 		</script>
 
+<!--
+<%@include file="corporate-color-swatches.jsp"%>
+-->
+
 	</body>
 </html>
