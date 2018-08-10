@@ -75,12 +75,24 @@
 			<script src="utils.jsp"></script>
 			-->
 			<script>
-				var surveyJsUrl=Utils.SERVER+"/api/pathfinder/survey";
-				var surveyJSElement=document.createElement('script');
-				surveyJSElement.src=surveyJsUrl;
-				document.getElementsByTagName('head')[0].appendChild(surveyJSElement);
-			</script>
+				var results=null;
+				if (null!=Utils.getParameterByName("assessmentId")){
+					httpGetObject(Utils.SERVER+'/api/pathfinder/assessmentResults?assessmentId='+assessmentId, function(assessmentResults){
+						results=assessmentResults;
+						loadSurvey();
+					});
+				}else{
+					loadSurvey();
+				}
 				
+				function loadSurvey(){
+					var surveyJsUrl=Utils.SERVER+"/api/pathfinder/survey";
+					var surveyJSElement=document.createElement('script');
+					surveyJSElement.src=surveyJsUrl;
+					document.getElementsByTagName('head')[0].appendChild(surveyJSElement);
+				}
+			</script>
+			
 		</div>
 	</body>
 </html>

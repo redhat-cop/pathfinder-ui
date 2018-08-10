@@ -214,8 +214,9 @@
 								"render": function (data,type,row){
 									var title = row.IncompleteAnswersCount+" answer(s) out of "+(row.CompleteAnswersCount+row.IncompleteAnswersCount)+" were answered as UNKNOWN";
 									var color=row.IncompleteAnswersCount > 0?"Amber":"Green";
+									var editUrl="<a href='survey-v2.jsp?customerId="+ customerId +"&applicationId="+ row.Id +"&assessmentId="+ row.LatestAssessmentId +"'><span class='editLink'>(edit)</span></a>";
 									var completeIncomplete = row.IncompleteAnswersCount > 0 ? "<span title='" + title + "'>(" + row.CompleteAnswersCount + "/<span class='messageAmber'>" + row.IncompleteAnswersCount + "</span>)</span>" : ""
-									return "<span class='" + (row.Assessed ? "message"+color+"'>Yes " + completeIncomplete : "messageRed'><a href='survey-v2.jsp?customerId=" + customerId + "&applicationId=" + row.Id + "' class='messageRed'>No</a>") + "</span>"
+									return "<span class='" + (row.Assessed ? "message"+color+"'>Yes " + completeIncomplete +editUrl : "messageRed'><a href='survey-v2.jsp?customerId=" + customerId + "&applicationId=" + row.Id + "' class='messageRed'>No</a>") + "</span>"
 								}
 							},
 							{
