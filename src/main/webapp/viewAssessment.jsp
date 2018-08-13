@@ -32,19 +32,20 @@
 				//var beenReviewed=false;
 				
 				$(document).ready(function() {
-					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"?custom=assessment.NOTES,customer.id,customer.name", function(application){
+					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"?custom=assessment.NOTES,customer.name", function(application){
 						//document.getElementById("breadcrumb2").innerHTML=application.Name;
 						
 						document.getElementById("applicationName").innerHTML=application.Name;
 						document.getElementById("applicationDescription").innerHTML=application.Description!=""?application.Description:"No description provided";
-						document.getElementById("assessmentNotes").innerHTML=application.CustomFields['NOTES']!=undefined?application.CustomFields['NOTES']:"None";
+						document.getElementById("assessmentNotes").innerHTML=application.CustomFields['assessment.NOTES']!=undefined?application.CustomFields['assessment.NOTES']:"None";
 						
-				    if (undefined!=setBreadcrumbs){
-				      setBreadcrumbs("assessments", customer);
-				      initTabs("assessments", application.CustomFields['customer.id'], application.CustomFields['customer.name']);
-				    }
+						console.log("application.CustomFields = "+JSON.stringify(application.CustomFields));
 						
-						if (null!=application['Review']){
+						if (undefined!=initTabs){
+				      initTabs("assessments", customerId, application.CustomFields['customer.name']);
+						}
+						
+						if (null!=application['Review'] && Utils.getParameterByName("review")!=null){
 							httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"/review/"+application['Review'], function(review){
 								
 								$('#ReviewDecision').val(review['ReviewDecision']);
