@@ -26,12 +26,12 @@
             <input id="Id" name="Id" type="text" class="form-control"/>
           </div>
           <div class="form-group">
-            <label for="Name" class="control-label">Application Name</label>
-            <input id="Name" name="Name" type="text" class="form-control">
+            <label for="Name" class="control-label">Application Name *</label>
+            <input id="Name" name="Name" type="text" class="form-control mandatory">
           </div>
           <div class="form-group">
-            <label for="Stereotype" class="control-label">Type</label>
-						<select name="Stereotype" id="Stereotype">
+            <label for="Stereotype" class="control-label">Type *</label>
+						<select name="Stereotype" id="Stereotype" onchange="formValidate();" class="mandatory">
 							<option value="" selected disabled hidden>Choose...</option>
 							<option value="TARGETAPP" selected>Assessable Application</option>
 							<option value="DEPENDENCY">Dependency Only (ie. database or LDAP Server)</option>
@@ -50,27 +50,29 @@
       </div>
       <script>
       	
+      	// dynamic validation by class name inclusion
 	      function formValidate(){
-	      	//var disabled=false;
-	      	//$("#exampleModal input[type=text]").each(function() {
-	      	//	if ($(this).attr('class')!=undefined && $(this).attr('class').includes("mandatory")){
-	      	//		disabled=disabled || isEmpty($(this).val());
-	      	//	}
-	      	//});
-	      	//$("#exampleModal select").each(function() {
-	      	//	if ($(this).attr('class')!=undefined && $(this).attr('class').includes("mandatory"))
-	      	//		disabled=disabled || isEmpty($(this).val());
-	      	//});
-	      	//
-	      	//console.log("#edit-ok -> enabled="+!disabled);
-	      	//$('#edit-ok').attr('disabled', disabled);
-		      $('#edit-ok').attr('disabled', isEmpty($('#Stereotype').val()) || isEmpty($('#Name').val()));
+      		var disabled=false;
+	      	$("#exampleModal input[type=text]").each(function() {
+	      		console.log("class=="+$(this).attr('class'));
+	      		if ($(this).attr('class')!=undefined && $(this).attr('class').includes("mandatory")){
+	      			disabled=disabled || isEmpty($(this).val());
+	      		}
+	      	});
+	      	$("#exampleModal select").each(function() {
+	      		if ($(this).attr('class')!=undefined && $(this).attr('class').includes("mandatory"))
+	      			disabled=disabled || isEmpty($(this).val());
+	      	});
+	      	console.log("#edit-ok -> enabled="+!disabled);
+	      	$('#edit-ok').attr('disabled', disabled);
+		      //$('#edit-ok').attr('disabled', isEmpty($('#Stereotype').val()) || isEmpty($('#Name').val()));
 	      }
 	      
 	      function isEmpty(val){
 	      	return val==null || val=="";
 	      }
       	
+      	// attach validation onchange events
       	$(document).ready(function() {
 	      	$("#exampleModal select").change(function(){
 						formValidate();
@@ -79,7 +81,12 @@
 						formValidate();
 					});
 				});
-      	
+				
+				// focus the first box
+      	$('#exampleModal').on('shown.bs.modal', function() {
+			    $("#Name").focus();
+			    formValidate();
+				})
       </script>
       
       <div class="modal-footer">

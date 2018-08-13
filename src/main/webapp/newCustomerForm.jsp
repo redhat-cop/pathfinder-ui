@@ -60,18 +60,24 @@
 						</select>
           </div>
           <div class="form-group">
-            <label for="CustomerAssessor" class="control-label">Customer Assessor *</label>
+            <label for="CustomerAssessor" class="control-label">Customer Assessor</label>
             <input id="CustomerAssessor" name="CustomerAssessor" type="text" class="form-control">
           </div>
         </form>
       </div>
       <script>
 	      function formValidate(){
-		      $('#edit-ok').attr('disabled', isEmpty($('#CustomerName').val()) || isEmpty($('#CustomerAssessor').val()));
+		      //$('#edit-ok').attr('disabled', isEmpty($('#CustomerName').val()) || isEmpty($('#CustomerAssessor').val()));
+		      $('#edit-ok').attr('disabled', isEmpty($('#CustomerName').val()) );
 	      }
 	      function isEmpty(val){
 	      	return val==null || val==undefined || val=="";
 	      }
+      	
+      	$('#exampleModal').on('shown.bs.modal', function() {
+			    $("#CustomerName").focus();
+				});
+				
       	$(document).ready(function() {
 	      	$("#exampleModal select").change(function(){
 						formValidate();

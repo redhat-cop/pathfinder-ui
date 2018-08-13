@@ -57,7 +57,7 @@
 			        ]
 			        ,"columnDefs": [
 			        	{ "targets": 0, "orderable": false, "render": function (data,type,row){
-									return "<input type='checkbox' name='id' value='"+row['Id']+"'></input>";
+									return "<input type='checkbox' name='id' value='"+row['Username']+"'></input>";
 								}},
 				      	{ "targets": 1, "orderable": true, "render": function (data,type,row){
 								  return row['Username']+"&nbsp;<span class='editLink'>(<a href='#' onclick='loadEntity(\""+row["Username"]+"\");' data-toggle='modal' data-target='#exampleModal'>edit</a>)</span>";
@@ -95,6 +95,7 @@
 						}
 					});
 					caller.disabled=true;
+					console.log("ids = "+idsToDelete);
 					httpDelete(Utils.SERVER+"/api/pathfinder/customers/"+Utils.getParameterByName("customerId")+"/members/", idsToDelete);
 				}
 			}
@@ -114,7 +115,7 @@
 							<input id="search" type="search" class="form-control" aria-controls="example" placeholder="Search"/>
 						</div>
 						<div class="col-xs-2 pull-right form-group">
-							<button class="form-control btn btn-danger" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove Application</button>
+							<button class="form-control btn btn-danger" name="btnDelete" disabled onclick="btnDelete_onclick(this);" type="button">Remove Member</button>
 						</div>
 						<div class="col-xs-2 pull-right form-group">
 							<button class="form-control btn btn-primary" name="New" onclick="editFormReset();" type="button" data-toggle="modal" data-target="#exampleModal" data-whatever="@new">Add Member</button>

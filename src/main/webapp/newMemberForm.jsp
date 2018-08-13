@@ -41,22 +41,28 @@
             <input id="Password2" name="Password2" type="password" class="form-control">
           </div>
           <div class="form-group">
-            <label for="Email" class="control-label">Email *</label>
-            <input id="Email" name="Email" type="text" class="form-control" onkeyup="validate()">
+            <label for="Email" class="control-label">Email</label>
+            <input id="Email" name="Email" type="text" class="form-control">
           </div>
           <div class="form-group">
-            <label for="DisplayName" class="control-label">Display Name *</label>
+            <label for="DisplayName" class="control-label">Display Name</label>
             <input id="DisplayName" name="DisplayName" type="text" class="form-control">
           </div>
         </form>
       </div>
       <script>
 	      function formValidate(){
-		      $('#edit-ok').attr('disabled', isEmpty($('#Username').val()) ||  $('#Password').val()!=$('#Password2').val())
+	      console.log("pwd="+$('#Password').val());
+		      $('#edit-ok').attr('disabled', isEmpty($('#Username').val()) || $('#Password').val()=="" || $('#Password').val()!=$('#Password2').val())
 	      }
 	      function isEmpty(val){
 	      	return val==null || val=="";
 	      }
+	      
+      	$('#exampleModal').on('shown.bs.modal', function() {
+			    $("#Username").focus();
+				});
+				
       	$(document).ready(function() {
 	      	$("#exampleModal select").change(function(){
 						formValidate();

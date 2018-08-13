@@ -63,7 +63,9 @@ td input[type="checkbox"] {
 /* PRIMARY COLOR SET */
 th,
 .breadcrumb-buttons .active,
-.btn-primary:hover,
+.btn-primary,
+.btn-primary:visited,
+.btn-primary[disabled]:hover,
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover
  {
   background-color: #516d74;
@@ -75,8 +77,10 @@ th,
 }
 
 /* SECONDARY COLOR SET (accented/darker than PRIMARY) */
-.btn-primary,
-.btn-primary[disabled]:hover{
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:hover
+{
 	background-color: #29373a;
 /*
 	background-color: #890000;
