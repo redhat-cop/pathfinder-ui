@@ -32,7 +32,7 @@
 				//var beenReviewed=false;
 				
 				$(document).ready(function() {
-					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"?custom=NOTES,customer.id,customer.name", function(application){
+					httpGetObject(Utils.SERVER+'/api/pathfinder/customers/'+customerId+"/applications/"+appId+"?custom=assessment.NOTES,customer.id,customer.name", function(application){
 						//document.getElementById("breadcrumb2").innerHTML=application.Name;
 						
 						document.getElementById("applicationName").innerHTML=application.Name;
