@@ -477,7 +477,7 @@
 												    ctx.lineTo(targetBubble.x-arrowSize*Math.cos(angle+Math.PI/6),targetBubble.y-arrowSize*Math.sin(angle+Math.PI/6));
 												    
 										    		ctx.stroke();
-										    		console.log("drawn dependency line from '"+label+"' to '"+targetBubble.Name+"' which is from '"+x+","+y+"' to '"+targetBubble.x+","+targetBubble.y+"'");
+										    		console.log("BubbleGraph:: drawn dependency line from '"+label+"' to '"+targetBubble.Name+"' which is from '"+x+","+y+"' to '"+targetBubble.x+","+targetBubble.y+"'");
 										    		
 										    	}
 										    	

@@ -123,6 +123,7 @@ function compareValues(key, order='asc') {
 			
 			// manipulate dependsOn into a list of app NAME's rather than ID's
 			for(i=0;i<summary.length;i++){
+				summary[i]['Padding']=0;
 				if (null!=summary[i]['OutboundDeps']){
 					summary[i]['DependsOn']=[];
 					summary[i]["Size"]=adoptionSize[summary[i].WorkEffort];
@@ -146,7 +147,7 @@ function compareValues(key, order='asc') {
 						summary[i]['DependsOn'].push(dependsOn[d]['Name']);
 						if (dependsOn[d]['Size']>biggestDependencySize)
 						  biggestDependencySize=dependsOn[d]['Size']+dependsOn[d]['Padding'];
-						console.log(summary[i]['Name']+" depends on "+dependsOn[d]['Name']);
+						console.log("AdoptionGraph::"+ summary[i]['Name']+" depends on "+dependsOn[d]['Name']);
 						//dependsOn[d]['AdoptionOrder']=summary[i]["AdoptionOrder"]+(d+1);
 						dependsOn[d]['AdoptionOrder']=summary[i]["AdoptionOrder"]-1;
 					}
