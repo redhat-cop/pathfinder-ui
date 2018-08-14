@@ -114,10 +114,9 @@ function compareValues(key, order='asc') {
 	  adoptionSize['XLarge']=80;
 		
 		function getOrder(app, map){
-			var order=app['Size'];
+			var order=app['Size']-app['OutboundDeps'].length;
 			for(x=0;x<app['OutboundDeps'].length;x++){
 				var dependsOn=map[app['OutboundDeps'][x]];
-				//order+=dependsOn['Size'];
 				if (app['Id']==dependsOn['Id']) continue; //infinite loop protection
 				order+=getOrder(dependsOn, map);
 			}
