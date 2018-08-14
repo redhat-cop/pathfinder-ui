@@ -154,12 +154,16 @@ function compareValues(key, order='asc') {
 				}
 			}
 			
+			
 			// remove any apps that are not selected (because this screws up the sorting)
 			for(i=0;i<summary.length;i++){
-				if (!appFilter.includes(summary[i]['Id']))
+				if (!appFilter.includes(summary[i]['Id'])){
 					summary.splice(i,1);
-				console.log(summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
+					continue;
+				}
+				console.log("AdoptionGraph:: "+summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
 			}
+			
 			
 			// sort in size order (small to large)
 			//summary.sort(compareValues("AdoptionOrder"));
@@ -188,7 +192,7 @@ function compareValues(key, order='asc') {
 			
 			for(i=0;i<summary.length;i++){
 				if (!appFilter.includes(summary[i]['Id'])) continue;
-				console.log(summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
+				//console.log("AdoptionGraph:: "+summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
 			}
 			
 			//console.log(JSON.stringify(summary));
