@@ -107,6 +107,16 @@ function compareValues(key, order='asc') {
 	  adoptionSize['LARGE']=80;
 	  adoptionSize['XLarge']=160;
 		
+		function getOrder(app, map){
+			var order=app['Size'];
+			for(x=0;x<app['OutboundDeps'].length;x++){
+				var dependsOn=map[app['OutboundDeps'][x]];
+				order+=dependsOn['Size'];
+				order+=getOrder(dependsOn, map);
+			}
+			return order;
+		}
+		
 		var adoptionChart;
 		function redrawAdoptionPlan(applicationAssessmentSummary){
 			lastColor=0;
@@ -135,22 +145,26 @@ function compareValues(key, order='asc') {
 					for(d=0;d<summary[i]['OutboundDeps'].length;d++)
 						dependsOn.push(appIdToAppMap[summary[i]['OutboundDeps'][d]]);
 					
-					//summary[i]["AdoptionOrder"]=summary[i]["AdoptionOrder"]*((dependsOn.length)*100)+summary[i]['Size'];
-					summary[i]["AdoptionOrder"]=i*1000;
-					//summary[i]["AdoptionOrder"]+=dependsOn.length*10;
+					//summary[i]["AdoptionOrder"]=i*1000;
+					//summary[i]["AdoptionOrder"]=summary[i]["AdoptionOrder"]*dependsOn.length;
 					
 					// sort the dependsOn by size order to be able to set the AdoptionOrder
 					dependsOn.sort(function(a,b){
 						return b['Size']-a['Size'];
 					});
 					for(d=0;d<dependsOn.length;d++){
+						//if (!appFilter.includes(dependsOn[d]['Id']))
+						//	continue;
+						
 						summary[i]['DependsOn'].push(dependsOn[d]['Name']);
 						if (dependsOn[d]['Size']>biggestDependencySize)
 						  biggestDependencySize=dependsOn[d]['Size']+dependsOn[d]['Padding'];
 						console.log("AdoptionGraph::"+ summary[i]['Name']+" depends on "+dependsOn[d]['Name']);
-						//dependsOn[d]['AdoptionOrder']=summary[i]["AdoptionOrder"]+(d+1);
-						dependsOn[d]['AdoptionOrder']=summary[i]["AdoptionOrder"]-1;
+						//dependsOn[d]['AdoptionOrder']=summary[i]["AdoptionOrder"]-1;
 					}
+					
+					summary[i]["AdoptionOrder"]=i+getOrder(summary[i], appIdToAppMap);
+					
 					summary[i]["Padding"]=biggestDependencySize;
 				}
 			}
@@ -162,7 +176,7 @@ function compareValues(key, order='asc') {
 					summary.splice(i,1);
 					continue;
 				}
-				console.log("AdoptionGraph:: "+summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
+				console.log("AdoptionGraph:: DisplayOrder->"+summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
 			}
 			
 			
