@@ -68,6 +68,7 @@
 			            { "data": "CustomerId" },
 			            { "data": "CustomerName" },
 			            { "data": "CustomerDescription" },
+			            { "data": "CustomerVertical" },
 			            { "data": "CustomerId" },
 			            { "data": "CustomerPercentageComplete" },
 			            { "data": "CustomerId" },
@@ -90,14 +91,14 @@
 									}
 								},
 								{
-									targets: 3,
+									targets: 4,
 									orderable: false,
 									render: function (data,type,row){
 								    return "";
 									}
 								},
 								{
-									targets: 4,
+									targets: 5,
 									orderable: false,
 									render: function (data,type,row){
 							     var percentComplete=row['CustomerPercentageComplete'];
@@ -106,14 +107,14 @@
 									}
 								},
 			          {
-									targets: 5,
+									targets: 6,
 									orderable: false,
 									render: function (data,type,row){
 								    return "<a href='manageCustomerApplications.jsp?customerId="+row["CustomerId"]+"'>Applications ("+row['CustomerAppCount']+")</a>";
 									}
 								},
 			          {
-									targets: 6,
+									targets: 7,
 									orderable: false,
 									render: function (data,type,row){
 								    return "<a href='members.jsp?customerId="+row["CustomerId"]+"'>Members ("+row['CustomerMemberCount']+")</a>";
@@ -188,6 +189,7 @@
 									<th align="left"></th>
 									<th align="left">Name</th>
 									<th align="left">Description</th>
+									<th align="left">Industry</th>
 									<th align="left"></th>
 									<th align="left"></th>
 									<th align="left"></th>
