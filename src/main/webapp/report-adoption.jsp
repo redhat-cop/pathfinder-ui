@@ -110,8 +110,8 @@ function compareValues(key, order='asc') {
 	  adoptionSize['null']=0;
 	  adoptionSize['SMALL']=10;
 	  adoptionSize['MEDIUM']=20;
-	  adoptionSize['LARGE']=30;
-	  adoptionSize['XLarge']=40;
+	  adoptionSize['LARGE']=40;
+	  adoptionSize['XLarge']=80;
 		
 		function getOrder(app, map){
 			var order=app['Size'];
@@ -279,6 +279,7 @@ function compareValues(key, order='asc') {
 					        xAxes: [{
 					            label:"Duration",
 					            ticks: {
+							        		stepSize: 10,
 							        		display: false,
 					                beginAtZero:true,
 					                fontFamily: "'Open Sans Bold', sans-serif",
