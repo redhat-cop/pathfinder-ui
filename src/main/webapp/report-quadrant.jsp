@@ -470,11 +470,11 @@
 										    		// draw arrow
 												    var arrowSize=20;   // length of arrow head in pixels
 												    var angle=Math.atan2(targetBubble.y-y,targetBubble.x-x);
-												    context.moveTo(x, y);
-												    context.lineTo(targetBubble.x, targetBubble.y);
-												    context.lineTo(targetBubble.x-arrowSize*Math.cos(angle-Math.PI/6),targetBubble.y-arrowSize*Math.sin(angle-Math.PI/6));
-												    context.moveTo(targetBubble.x, toy);
-												    context.lineTo(targetBubble.x-arrowSize*Math.cos(angle+Math.PI/6),targetBubble.y-arrowSize*Math.sin(angle+Math.PI/6));
+												    ctx.moveTo(x, y);
+												    ctx.lineTo(targetBubble.x, targetBubble.y);
+												    ctx.lineTo(targetBubble.x-arrowSize*Math.cos(angle-Math.PI/6),targetBubble.y-arrowSize*Math.sin(angle-Math.PI/6));
+												    ctx.moveTo(targetBubble.x, targetBubble.y);
+												    ctx.lineTo(targetBubble.x-arrowSize*Math.cos(angle+Math.PI/6),targetBubble.y-arrowSize*Math.sin(angle+Math.PI/6));
 												    
 										    		ctx.stroke();
 										    		console.log("drawn dependency line from '"+label+"' to '"+targetBubble.Name+"' which is from '"+x+","+y+"' to '"+targetBubble.x+","+targetBubble.y+"'");

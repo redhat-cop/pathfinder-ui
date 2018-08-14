@@ -158,7 +158,7 @@ function compareValues(key, order='asc') {
 			for(i=0;i<summary.length;i++){
 				if (!appFilter.includes(summary[i]['Id']))
 					summary.splice(i,1);
-				//console.log(summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
+				console.log(summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
 			}
 			
 			// sort in size order (small to large)

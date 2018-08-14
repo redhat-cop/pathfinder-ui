@@ -23,6 +23,7 @@
 				e.preventDefault();
 				return true;
 			});
+		  $("#username").focus();
 		});
 	</script>
 	
