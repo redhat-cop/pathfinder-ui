@@ -101,17 +101,23 @@ function compareValues(key, order='asc') {
 		}
 		
 	  var adoptionSize=[];
+	  //adoptionSize['null']=0;
+	  //adoptionSize['SMALL']=20;
+	  //adoptionSize['MEDIUM']=40;
+	  //adoptionSize['LARGE']=80;
+	  //adoptionSize['XLarge']=160;
+
 	  adoptionSize['null']=0;
-	  adoptionSize['SMALL']=20;
-	  adoptionSize['MEDIUM']=40;
-	  adoptionSize['LARGE']=80;
-	  adoptionSize['XLarge']=160;
+	  adoptionSize['SMALL']=10;
+	  adoptionSize['MEDIUM']=20;
+	  adoptionSize['LARGE']=30;
+	  adoptionSize['XLarge']=40;
 		
 		function getOrder(app, map){
 			var order=app['Size'];
 			for(x=0;x<app['OutboundDeps'].length;x++){
 				var dependsOn=map[app['OutboundDeps'][x]];
-				order+=dependsOn['Size'];
+				//order+=dependsOn['Size'];
 				if (app['Id']==dependsOn['Id']) continue; //infinite loop protection
 				order+=getOrder(dependsOn, map);
 			}
@@ -164,7 +170,9 @@ function compareValues(key, order='asc') {
 						//dependsOn[d]['AdoptionOrder']=summary[i]["AdoptionOrder"]-1;
 					}
 					
-					summary[i]["AdoptionOrder"]=i+getOrder(summary[i], appIdToAppMap);
+					var order=i+getOrder(summary[i], appIdToAppMap);
+					//console.log(summary[i]['Name'] +" -> "+order);
+					summary[i]["AdoptionOrder"]=order;
 					
 					summary[i]["Padding"]=biggestDependencySize;
 				}
