@@ -112,6 +112,7 @@ function compareValues(key, order='asc') {
 			for(x=0;x<app['OutboundDeps'].length;x++){
 				var dependsOn=map[app['OutboundDeps'][x]];
 				order+=dependsOn['Size'];
+				if (app['Id']==dependsOn['Id']) continue; //infinite loop protection
 				order+=getOrder(dependsOn, map);
 			}
 			return order;
