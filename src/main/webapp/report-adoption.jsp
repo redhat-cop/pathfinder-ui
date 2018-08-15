@@ -101,30 +101,28 @@ function compareValues(key, order='asc') {
 		}
 		
 	  var adoptionSize=[];
-	  //adoptionSize['null']=0;
-	  //adoptionSize['SMALL']=20;
-	  //adoptionSize['MEDIUM']=40;
-	  //adoptionSize['LARGE']=80;
-	  //adoptionSize['XLarge']=160;
-
 	  adoptionSize['null']=0;
 	  adoptionSize['SMALL']=10;
 	  adoptionSize['MEDIUM']=20;
 	  adoptionSize['LARGE']=40;
 	  adoptionSize['XLarge']=80;
 		
+		var maxRecursion=100;
+		var recursion=0;
 		function getOrder(app, map){
 			var order=app['Size']-app['OutboundDeps'].length;
 			for(x=0;x<app['OutboundDeps'].length;x++){
 				var dependsOn=map[app['OutboundDeps'][x]];
 				if (app['Id']==dependsOn['Id']) continue; //infinite loop protection
+				if (recursion>100) break;
+				recursion+=1;
 				order+=getOrder(dependsOn, map);
 			}
 			return order;
 		}
 		
-		var adoptionChart;
-		function redrawAdoptionPlan(applicationAssessmentSummary){
+		var adoptionChart=null;
+		function redrawAdoptionPlan(applicationAssessmentSummary, initial){
 			lastColor=0;
 			
 			// deep copy
@@ -169,10 +167,6 @@ function compareValues(key, order='asc') {
 						//dependsOn[d]['AdoptionOrder']=summary[i]["AdoptionOrder"]-1;
 					}
 					
-					var order=i+getOrder(summary[i], appIdToAppMap);
-					//console.log(summary[i]['Name'] +" -> "+order);
-					summary[i]["AdoptionOrder"]=order;
-					
 					summary[i]["Padding"]=biggestDependencySize;
 				}
 			}
@@ -184,9 +178,15 @@ function compareValues(key, order='asc') {
 					summary.splice(i,1);
 					continue;
 				}
-				console.log("AdoptionGraph:: DisplayOrder->"+summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
 			}
 			
+			summary.sort(function(a,b){
+				return a['Size']-b['Size'];
+			});
+			
+			for(i=0;i<summary.length;i++){
+				summary[i]["AdoptionOrder"]=i+getOrder(summary[i], appIdToAppMap);
+			}
 			
 			// sort in size order (small to large)
 			//summary.sort(compareValues("AdoptionOrder"));
@@ -215,7 +215,7 @@ function compareValues(key, order='asc') {
 			
 			for(i=0;i<summary.length;i++){
 				if (!appFilter.includes(summary[i]['Id'])) continue;
-				//console.log("AdoptionGraph:: "+summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
+				console.log("AdoptionGraph:: DisplayOrder->"+summary[i]['AdoptionOrder'] +" - "+summary[i]['Padding']+"/"+summary[i]['Size'] +"-"+ summary[i]['Name']);
 			}
 			
 			//console.log(JSON.stringify(summary));
@@ -257,6 +257,7 @@ function compareValues(key, order='asc') {
 			// if the chart has been drawn already, then just update the data
 			if (adoptionChart!=null){
 				adoptionChart.data=data;
+				adoptionChart.options.animation.duration=initial?1000:1;
 				adoptionChart.update();
 				return;
 			}
@@ -271,6 +272,9 @@ function compareValues(key, order='asc') {
       						display: false
       					}
             	},
+							animation: {
+								duration: 1000
+							},
 					    hover :{
 				        animationDuration:10
 					    },
