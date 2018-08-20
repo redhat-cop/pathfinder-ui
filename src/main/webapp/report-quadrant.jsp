@@ -164,7 +164,7 @@
 							var appFilter=[];
 							function onChange2(t){
 								t.checked?appFilter.push(t.value):appFilter.splice(appFilter.indexOf(t.value),1);
-								redrawBubble(applicationAssessmentSummary, false);
+								redrawBubble(applicationAssessmentSummary);
 								redrawAdoptionPlan(applicationAssessmentSummary);
 							}
 						</script>
@@ -191,8 +191,8 @@
 						  var decisionColors=[];
 						  // colors got from https://brand.redhat.com/elements/color/
 						  decisionColors['REHOST']    ="#92d400"; //green
-						  decisionColors['REFACTOR']  ="#f0ab00"; //amber
-						  decisionColors['REPLATFORM']="#cc0000"; //red
+						  decisionColors['REPLATFORM']="#f0ab00"; //amber
+						  decisionColors['REFACTOR']  ="#cc0000"; //red
 						  decisionColors['REPURCHASE']="#3B0083"; //purple
 						  decisionColors['RETAIN']    ="#A3DBE8"; //light blue
 						  decisionColors['RETIRE']    ="#004153"; //dark blue
@@ -332,7 +332,7 @@
 									  	position: "top"
 									  },
 										animation: {
-											duration: initial?1000:1 //so when you click a radio they appear quickly, but animate on startup
+											duration: 1000
 										},
 										tooltips:{
 											enabled: false
@@ -503,7 +503,7 @@
 								}
 								redrawApplications(applicationAssessmentSummary);
 								redrawBubble(applicationAssessmentSummary, true);
-								redrawAdoptionPlan(applicationAssessmentSummary);
+								redrawAdoptionPlan(applicationAssessmentSummary, true);
 							});
 							
 						</script>
@@ -534,13 +534,13 @@
 								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#f0ab00;stroke-width:0;stroke:rgb(0,0,0)" />
-									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REFACTOR</text>
+									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REPLATFORM</text>
 									</svg>
 								</li>
 								<li>
 									<svg height="25" width="200">
 									  <rect width="120" height="25" stroke="black" style="fill:#cc0000;stroke-width:0;stroke:rgb(0,0,0)" />
-									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REPLATFORM</text>
+									  <text x="7" y="17" font-family="Overpass" font-size="13" fill="#EEE">REFACTOR</text>
 									</svg>
 								</li>
 								<li>

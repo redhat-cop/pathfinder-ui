@@ -107,10 +107,12 @@ function compareValues(key, order='asc') {
 	  adoptionSize['LARGE']=40;
 	  adoptionSize['XLarge']=80;
 		
+		
+		// ugly fix - do something like embed the order so we dont need external variables
 		var maxRecursion=100;
 		var recursion=0;
 		function getOrder(app, map){
-			var order=app['Size']-app['OutboundDeps'].length;
+			var order=app['Size']-(app['OutboundDeps']!=null?app['OutboundDeps'].length:0);
 			for(x=0;x<app['OutboundDeps'].length;x++){
 				var dependsOn=map[app['OutboundDeps'][x]];
 				if (app['Id']==dependsOn['Id']) continue; //infinite loop protection
